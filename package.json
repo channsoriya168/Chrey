@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^2.0.17",
+        "@inertiaui/modal-vue": "file:vendor/inertiaui/modal/vue",
         "@mdi/font": "^7.4.47",
         "@vitejs/plugin-vue": "^6.0.0",
         "ziggy-js": "^1.7.1"

@@ -15,7 +15,7 @@
 
         <v-list density="compact" nav class="pa-2 bg-white">
             <v-list-item prepend-icon="mdi-apps" value="dashboard" :active="isActive('dashboard')"
-                @click="navigateCallback('dashboard')" class="mb-1 rounded-lg hover:bg-grey-lighten-3" :class="{
+                @click="navigateCallback('dashboard.index')" class="mb-1 rounded-lg hover:bg-grey-lighten-3" :class="{
                     'bg-teal-lighten-4 text-teal-darken-2': isActive('dashboard'),
                     'text-grey-darken-2': !isActive('dashboard')
                 }">
