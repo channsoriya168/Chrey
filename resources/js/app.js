@@ -1,10 +1,8 @@
 import "./bootstrap";
 import "../css/app.css";
 import { createApp, h } from "vue";
-import { renderApp } from "@inertiaui/modal-vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
-import DataTabeServer from "./Components/DataTabeServer.vue";
 
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
@@ -24,28 +22,6 @@ import { Link } from "@inertiajs/vue3";
 
 import DashboardLayout from "./Layouts/DashboardLayout.vue";
 import FrontendLayout from "./Layouts/FrontendLayout.vue";
-
-import { Modal, putConfig } from "@inertiaui/modal-vue"; // Ensure correct import for Vue 3
-putConfig({
-    type: "modal",
-    navigate: false,
-    modal: {
-        closeButton: true,
-        closeExplicitly: false,
-        maxWidth: "2xl",
-        paddingClasses: "p-4 sm:p-6",
-        panelClasses: "bg-white rounded",
-        position: "center",
-    },
-    slideover: {
-        closeButton: true,
-        closeExplicitly: false,
-        maxWidth: "md",
-        paddingClasses: "p-4 sm:p-6",
-        panelClasses: "bg-white min-h-screen",
-        position: "right",
-    },
-});
 
 createInertiaApp({
     resolve: (name) => {
@@ -74,14 +50,12 @@ createInertiaApp({
         return page;
     },
     setup({ el, App, props, plugin }) {
-        createApp({ render: renderApp(App, props) })
+        createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(vuetify)
             .use(ZiggyVue, Ziggy)
             .component("Head", Head)
             .component("Link", Link)
-            .component("Modal", Modal)
-            .component("DataTabeServer", DataTabeServer)
             .mount(el);
     },
 });

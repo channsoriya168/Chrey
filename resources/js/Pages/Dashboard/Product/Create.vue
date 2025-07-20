@@ -1,8 +1,3 @@
 <template>
-    <Modal>
-        <h1>Create Product</h1>
-
-    </Modal>
+    dashboard-product-create
 </template>
-<script setup>
-</script>

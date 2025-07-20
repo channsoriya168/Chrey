@@ -24,7 +24,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::modal('Dashboard/Product/Create')->baseRoute('dashboard.products.index');
+        return inertia('Dashboard/Product/Create');
     }
 
     /**
@@ -32,7 +32,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock_quantity' => 'nullable|integer|min:0'
+        ]);
+
+        Product::create($validated);
+
+        return redirect()->route('dashboard.products.index')
+            ->with('success', 'Product created successfully!');
     }
 
     /**
