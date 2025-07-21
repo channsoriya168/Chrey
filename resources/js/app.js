@@ -22,7 +22,7 @@ import { Link } from "@inertiajs/vue3";
 
 import DashboardLayout from "./Layouts/DashboardLayout.vue";
 import FrontendLayout from "./Layouts/FrontendLayout.vue";
-
+// Modal imports removed
 createInertiaApp({
     resolve: (name) => {
         const pages = import.meta.glob("./Pages/**/*.vue", { eager: true });
