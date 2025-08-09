@@ -7,15 +7,13 @@
         <v-main class="main-content">
             <slot />
         </v-main>
-
-        <footer class="footer">
-            <p>&copy; 2025 Your App Name. All rights reserved.</p>
-        </footer>
+        <Footer />
     </v-app>
 </template>
 
 <script setup>
     import Menu from '@/Components/Frontend/Menu.vue'
+    import Footer from '../Components/Frontend/footer.vue';
 </script>
 
 <style scoped>

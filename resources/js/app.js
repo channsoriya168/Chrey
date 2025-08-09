@@ -19,6 +19,7 @@ const vuetify = createVuetify({
 import { ZiggyVue } from "ziggy-js";
 import { Ziggy } from "./ziggy";
 import { Link } from "@inertiajs/vue3";
+import { Form, Field } from "vee-validate";
 
 import DashboardLayout from "./Layouts/DashboardLayout.vue";
 import FrontendLayout from "./Layouts/FrontendLayout.vue";
@@ -56,6 +57,8 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .component("Head", Head)
             .component("Link", Link)
+            .component("vee-form", Form)
+            .component("vee-field", Field)
             .mount(el);
     },
 });

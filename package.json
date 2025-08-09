@@ -20,6 +20,8 @@
         "@inertiajs/vue3": "^2.0.17",
         "@mdi/font": "^7.4.47",
         "@vitejs/plugin-vue": "^6.0.0",
+        "vee-validate": "^4.15.1",
+        "yup": "^1.6.1",
         "ziggy-js": "^1.7.1"
     }
 }
