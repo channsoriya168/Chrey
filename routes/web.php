@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DataController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 
 Route::get('/', function () {
@@ -15,6 +17,9 @@ Route::get('about', function () {
 Route::get('contact', function () {
     return Inertia::render('Frontend/Contact');
 })->name('contact');
+
+Route::get('categories', [DataController::class, 'categories'])
+    ->name('categories');
 
 Route::get('login', [AuthController::class, 'Login'])
     ->name('login');

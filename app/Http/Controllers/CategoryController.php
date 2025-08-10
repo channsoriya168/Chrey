@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -23,7 +24,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Dashboard/Category/Create');
     }
 
     /**
@@ -31,7 +32,21 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $category = new Category();
+        $category->name = $request->name;
+
+        if ($request->hasFile('image_url')) {
+            $category->image_url = $request->file('image_url')->store('categories', 'public');
+        }
+
+        $category->save();
+
+        return redirect()->route('dashboard.categories.index')->with('success', 'Category created successfully.');
     }
 
     /**
@@ -39,7 +54,9 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return inertia('Dashboard/Category/Show', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -47,7 +64,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return inertia('Dashboard/Category/Edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -55,7 +74,25 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $category->name = $request->name;
+        $category->slug = Str::slug($request->name);
+
+        if ($request->hasFile('image_url')) {
+            // Delete old image if exists
+            if ($category->image_url && \Storage::disk('public')->exists($category->image_url)) {
+                \Storage::disk('public')->delete($category->image_url);
+            }
+            $category->image_url = $request->file('image_url')->store('categories', 'public');
+        }
+
+        $category->save();
+
+        return redirect()->route('dashboard.categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -63,6 +100,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        // Delete associated image if exists
+        if ($category->image_url && \Storage::disk('public')->exists($category->image_url)) {
+            \Storage::disk('public')->delete($category->image_url);
+        }
+
+        $category->delete();
+
+        return redirect()->route('dashboard.categories.index')->with('success', 'Category deleted successfully.');
     }
 }
