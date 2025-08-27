@@ -16,8 +16,8 @@
                     <div class="d-flex align-center">
                         <v-icon size="40" class="mr-3">mdi-account-multiple</v-icon>
                         <div>
-                            <div class="text-h4 font-weight-bold">150</div>
-                            <div class="text-body-2">អ្នកប្រើប្រាស់សរុប</div>
+                            <div class="text-h4 font-weight-bold">{{ countCategories }}</div>
+                            <div class="text-body-2">ប្រភេទផលិតផល</div>
                         </div>
                     </div>
                 </v-card>
@@ -62,5 +62,7 @@
     </div>
 </template>
 <script setup>
-
+    const props = defineProps({
+        countCategories: Number
+    });
 </script>

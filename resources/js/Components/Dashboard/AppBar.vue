@@ -1,69 +1,71 @@
 <template>
-    <v-app-bar elevation="1" color="teal-darken-1" dark app>
-        <v-app-bar-nav-icon @click="toggleDrawer" color="white"></v-app-bar-nav-icon>
+    <header class="flex items-center justify-between bg-teal-600 text-white p-4 shadow-sm">
+        <Button variant="ghost" size="icon" @click="toggleDrawer" class="text-white hover:bg-teal-700">
+            <Menu class="w-5 h-5" />
+        </Button>
 
-        <v-spacer></v-spacer>
+        <div class="flex items-center space-x-2">
+            <!-- Settings button -->
+            <Button variant="ghost" size="icon" class="text-white hover:bg-teal-700">
+                <Settings class="w-4 h-4" />
+            </Button>
 
-        <!-- Action buttons -->
-        <v-btn icon size="small" class="mr-2">
-            <v-icon color="white">mdi-cog</v-icon>
-        </v-btn>
+            <!-- User menu -->
+            <DropdownMenu>
+                <template #trigger>
+                    <User class="w-4 h-4 text-white" />
+                </template>
+                <DropdownMenuItem @click="logout">
+                    <LogOut class="w-4 h-4 mr-2" />
+                    ចាកចេញ
+                </DropdownMenuItem>
+            </DropdownMenu>
 
-        <v-menu>
-            <template #activator="{ props }">
-                <v-btn icon size="small" class="mr-2" v-bind="props">
-                    <v-icon color="white">mdi-account</v-icon>
-                </v-btn>
-            </template>
-            <v-list class="pa-0">
-                <v-list-item>
-                    <v-list-item-title> <v-icon>mdi-logout</v-icon> ចាកចេញ</v-list-item-title>
-                </v-list-item>
-
-            </v-list>
-        </v-menu>
-
-        <!-- Language selector -->
-        <v-menu>
-            <template v-slot:activator="{ props }">
-                <v-btn icon size="small" class="mr-2" v-bind="props">
-                    <v-icon color="white">mdi-translate</v-icon>
-                </v-btn>
-            </template>
-            <v-list class="pa-0">
-                <v-list-item v-for="language in languages" :key="language.code" @click="changeLanguage(language.code)"
-                    :class="{ 'bg-grey-lighten-2': currentLanguage === language.code }">
-                    <template v-slot:prepend>
-                        <v-icon>{{ language.icon }}</v-icon>
-                    </template>
-                    <v-list-item-title>{{ language.name }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu>
-
-        <!-- <v-btn icon size="small">
-            <v-icon color="white">mdi-bell</v-icon>
-        </v-btn> -->
-    </v-app-bar>
+            <!-- Language selector -->
+            <DropdownMenu>
+                <template #trigger>
+                    <Languages class="w-4 h-4 text-white" />
+                </template>
+                <DropdownMenuItem 
+                    v-for="language in languages" 
+                    :key="language.code" 
+                    @click="changeLanguage(language.code)"
+                    :class="{ 'bg-accent': currentLanguage === language.code }"
+                >
+                    <Flag class="w-4 h-4 mr-2" />
+                    {{ language.name }}
+                </DropdownMenuItem>
+            </DropdownMenu>
+        </div>
+    </header>
 </template>
 
 <script setup>
-    import { ref } from 'vue';
+import { ref } from 'vue';
+import Button from '@/components/ui/Button.vue';
+import DropdownMenu from '@/components/ui/DropdownMenu.vue';
+import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
+import { Menu, Settings, User, LogOut, Languages, Flag } from 'lucide-vue-next';
 
-    const emit = defineEmits(['toggle-drawer']);
+const emit = defineEmits(['toggle-drawer']);
 
-    const currentLanguage = ref('en');
+const currentLanguage = ref('en');
 
-    const languages = ref([
-        { code: 'en', name: 'English', icon: 'mdi-flag' },
-        { code: 'km', name: 'ខ្មែរ (Khmer)', icon: 'mdi-flag' },
-    ]);
+const languages = ref([
+    { code: 'en', name: 'English' },
+    { code: 'km', name: 'ខ្មែរ (Khmer)' },
+]);
 
-    const toggleDrawer = () => {
-        emit('toggle-drawer');
-    };
+const toggleDrawer = () => {
+    emit('toggle-drawer');
+};
 
-    const changeLanguage = (languageCode) => {
-        currentLanguage.value = languageCode;
-    };
+const changeLanguage = (languageCode) => {
+    currentLanguage.value = languageCode;
+};
+
+const logout = () => {
+    // Handle logout logic here
+    console.log('Logging out...');
+};
 </script>

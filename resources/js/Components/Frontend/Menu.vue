@@ -55,20 +55,52 @@
 
                     <!-- Auth Buttons -->
                     <div class="flex items-center space-x-3">
-                        <button 
-                            @click="LoginView"
-                            class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
-                            :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }"
-                        >
-                            Login
-                        </button>
-                        <button 
-                            @click="RegisterView"
-                            class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
-                            :class="{ 'bg-indigo-700': $page.url === '/register' }"
-                        >
-                            Register
-                        </button>
+                        <div v-if="$page.props.auth.user">
+                            <!-- User dropdown -->
+                            <div class="relative" ref="userMenu">
+                                <button 
+                                    @click="toggleUserMenu"
+                                    class="flex items-center p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                                >
+                                    <span class="text-sm mr-2">{{ $page.props.auth.user.name }}</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <div v-if="showUserMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                                    <Link 
+                                        v-if="$page.props.auth.user.roles.includes('admin')"
+                                        :href="route('dashboard.index')"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                    <button 
+                                        @click="logout"
+                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <button 
+                                @click="LoginView"
+                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
+                                :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }"
+                            >
+                                Login
+                            </button>
+                            <button 
+                                @click="RegisterView"
+                                class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
+                                :class="{ 'bg-indigo-700': $page.url === '/register' }"
+                            >
+                                Register
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -127,20 +159,41 @@
                     
                     <!-- Auth Buttons Mobile -->
                     <div class="px-2 space-y-2">
-                        <button 
-                            @click="LoginView"
-                            class="w-full text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
-                            :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }"
-                        >
-                            Login
-                        </button>
-                        <button 
-                            @click="RegisterView"
-                            class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
-                            :class="{ 'bg-indigo-700': $page.url === '/register' }"
-                        >
-                            Register
-                        </button>
+                        <div v-if="$page.props.auth.user">
+                            <div class="px-3 py-2 text-sm text-gray-500">
+                                Logged in as: {{ $page.props.auth.user.name }}
+                            </div>
+                            <Link 
+                                v-if="$page.props.auth.user.roles.includes('admin')"
+                                :href="route('dashboard.index')"
+                                @click="closeMobileMenu"
+                                class="w-full text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium block text-center"
+                            >
+                                Dashboard
+                            </Link>
+                            <button 
+                                @click="logout"
+                                class="w-full text-red-700 hover:text-red-800 px-4 py-2 rounded-md border border-red-300 hover:border-red-400 transition-colors font-medium"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                        <div v-else>
+                            <button 
+                                @click="LoginView"
+                                class="w-full text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
+                                :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }"
+                            >
+                                Login
+                            </button>
+                            <button 
+                                @click="RegisterView"
+                                class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
+                                :class="{ 'bg-indigo-700': $page.url === '/register' }"
+                            >
+                                Register
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -167,7 +220,9 @@
     const currentLanguage = ref('en');
     const showMobileMenu = ref(false);
     const showLanguageMenu = ref(false);
+    const showUserMenu = ref(false);
     const languageMenu = ref(null);
+    const userMenu = ref(null);
 
     function getCurrentLanguageName() {
         return languages.value.find(lang => lang.code === currentLanguage.value)?.name || 'English';
@@ -186,6 +241,12 @@
 
     function toggleLanguageMenu() {
         showLanguageMenu.value = !showLanguageMenu.value;
+        showUserMenu.value = false;
+    }
+
+    function toggleUserMenu() {
+        showUserMenu.value = !showUserMenu.value;
+        showLanguageMenu.value = false;
     }
 
     function closeMobileMenu() {
@@ -195,11 +256,15 @@
     function closeMenus() {
         showMobileMenu.value = false;
         showLanguageMenu.value = false;
+        showUserMenu.value = false;
     }
 
     function handleClickOutside(event) {
         if (languageMenu.value && !languageMenu.value.contains(event.target)) {
             showLanguageMenu.value = false;
+        }
+        if (userMenu.value && !userMenu.value.contains(event.target)) {
+            showUserMenu.value = false;
         }
     }
 
@@ -219,6 +284,14 @@
             preserveScroll: true,
         });
         closeMobileMenu();
+    };
+
+    const logout = () => {
+        router.post('/logout', {}, {
+            onSuccess: () => {
+                closeMenus();
+            }
+        });
     };
 
     onMounted(() => {

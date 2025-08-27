@@ -4,17 +4,6 @@ import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 
-import "vuetify/styles";
-import { createVuetify } from "vuetify";
-import * as components from "vuetify/components";
-import * as directives from "vuetify/directives";
-import "@mdi/font/css/materialdesignicons.css";
-import "vuetify/styles";
-const vuetify = createVuetify({
-    components,
-    directives,
-});
-
 // ziggy
 import { ZiggyVue } from "ziggy-js";
 import { Ziggy } from "./ziggy";
@@ -23,7 +12,7 @@ import { Form, Field } from "vee-validate";
 
 import DashboardLayout from "./Layouts/DashboardLayout.vue";
 import FrontendLayout from "./Layouts/FrontendLayout.vue";
-// Modal imports removed
+
 createInertiaApp({
     resolve: (name) => {
         const pages = import.meta.glob("./Pages/**/*.vue", { eager: true });
@@ -53,7 +42,6 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(vuetify)
             .use(ZiggyVue, Ziggy)
             .component("Head", Head)
             .component("Link", Link)
