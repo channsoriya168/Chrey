@@ -1,54 +1,61 @@
 <template>
-    <v-container>
-        <v-card class="w-lg">
-            <v-card-title class="text-center">
-                Register
-            </v-card-title>
-            <v-card-text>
-                <vee-form class="pa-4" :validation-schema="schema" @submit.prevent="register">
-                    <vee-field name="name" v-slot="{ field, errors }">
-                        <v-text-field v-bind="field" variant="outlined" label="Name" required name="name"
-                            :error-messages="errors" v-model="item.name"></v-text-field>
-                    </vee-field>
-                    <vee-field name="email" v-slot="{ field, errors }">
-                        <v-text-field v-bind="field" variant="outlined" label="Email" type="email" required name="email"
-                            :error-messages="errors" v-model="item.email"></v-text-field>
-                    </vee-field>
-                    <vee-field name="password" v-slot="{ field, errors }">
-                        <v-text-field v-bind="field" variant="outlined" label="Password" type="password" required
-                            name="password" :error-messages="errors" v-model="item.password"></v-text-field>
-                    </vee-field>
-                    <vee-field name="password_confirmation" v-slot="{ field, errors }">
-                        <v-text-field v-bind="field" variant="outlined" label="Confirm Password" type="password"
-                            required name="password_confirmation" :error-messages="errors"
-                            v-model="item.password_confirmation"></v-text-field>
-                    </vee-field>
-                    <v-btn color="primary" type="submit" class="w-100 mb-3">Register</v-btn>
-                    <div class="text-center">
-                        <v-btn variant="text" @click="$inertia.visit(route('login'))">
-                            Already have an account? Login
-                        </v-btn>
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <Card class="w-full max-w-md p-6 space-y-6">
+            <CardHeader>
+                <CardTitle class="text-center">Register</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form @submit.prevent="register" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium">Name</label>
+                        <input id="name" type="text" v-model="item.name" required
+                            class="input input-bordered w-full mt-1" :class="{ 'border-red-500': item.errors.name }"
+                            autocomplete="name" />
+                        <div v-if="item.errors.name" class="text-red-500 text-xs mt-1">{{ item.errors.name }}</div>
                     </div>
-                </vee-form>
-            </v-card-text>
-        </v-card>
-    </v-container>
+                    <div>
+                        <label for="email" class="block text-sm font-medium">Email</label>
+                        <input id="email" type="email" v-model="item.email" required
+                            class="input input-bordered w-full mt-1" :class="{ 'border-red-500': item.errors.email }"
+                            autocomplete="email" />
+                        <div v-if="item.errors.email" class="text-red-500 text-xs mt-1">{{ item.errors.email }}</div>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium">Password</label>
+                        <input id="password" type="password" v-model="item.password" required
+                            class="input input-bordered w-full mt-1" :class="{ 'border-red-500': item.errors.password }"
+                            autocomplete="new-password" />
+                        <div v-if="item.errors.password" class="text-red-500 text-xs mt-1">{{ item.errors.password }}
+                        </div>
+                    </div>
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium">Confirm Password</label>
+                        <input id="password_confirmation" type="password" v-model="item.password_confirmation" required
+                            class="input input-bordered w-full mt-1"
+                            :class="{ 'border-red-500': item.errors.password_confirmation }"
+                            autocomplete="new-password" />
+                        <div v-if="item.errors.password_confirmation" class="text-red-500 text-xs mt-1">{{
+                            item.errors.password_confirmation }}</div>
+                    </div>
+                    <Button type="submit" class="w-full">Register</Button>
+                </form>
+                <div class="text-center mt-4">
+                    <Button variant="link" @click="$inertia.visit(route('login'))">
+                        Already have an account? Login
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    </div>
 </template>
 
 <script setup>
     import { useForm } from '@inertiajs/vue3';
-    import * as yup from 'yup';
-    import { router } from '@inertiajs/vue3';
-
-    const schema = yup.object().shape({
-        name: yup.string().required(),
-        email: yup.string().email().required(),
-        password: yup.string().min(8).required(),
-        password_confirmation: yup
-            .string()
-            .oneOf([yup.ref("password"), null])
-            .required(),
-    });
+    import Card from '@/components/ui/Card.vue';
+    import CardHeader from '@/components/ui/CardHeader.vue';
+    import CardTitle from '@/components/ui/CardTitle.vue';
+    import CardContent from '@/components/ui/CardContent.vue';
+    import Button from '@/components/ui/Button.vue';
 
     const item = useForm({
         name: '',
@@ -57,16 +64,14 @@
         password_confirmation: '',
     });
 
-
     const register = () => {
         item.post(route('register.store'), {
             onSuccess: () => {
-                console.log('Registration successful');
+                // handle success
             },
             onError: (errors) => {
-                // Handle registration errors
+                // handle errors
             }
         });
     };
-
 </script>

@@ -5,99 +5,59 @@
                 <!-- Logo/Brand -->
                 <div class="flex-shrink-0 flex items-center">
                     <Link href="/" class="text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
-                        Chrey
+                    Chrey
                     </Link>
                 </div>
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <Link 
-                        v-for="pageItem in pages" 
-                        :key="pageItem.path" 
-                        :href="pageItem.path" 
-                        class="nav-link"
-                        :class="{ 'active': $page.url === pageItem.path }"
-                    >
-                        {{ pageItem.name }}
+                    <Link v-for="pageItem in pages" :key="pageItem.path" :href="pageItem.path" class="nav-link"
+                        :class="{ 'active': $page.url === pageItem.path }">
+                    {{ pageItem.name }}
                     </Link>
                 </div>
 
                 <!-- Right Side Actions -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <!-- Language Switcher -->
-                    <div class="relative" ref="languageMenu">
-                        <button 
-                            @click="toggleLanguageMenu"
-                            class="flex items-center p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-                        >
-                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-                            </svg>
-                            <span class="text-sm">{{ getCurrentLanguageName() }}</span>
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        
-                        <!-- Language Dropdown -->
-                        <div v-if="showLanguageMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                            <button 
-                                v-for="language in languages" 
-                                :key="language.code"
-                                @click="changeLanguage(language.code)"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                                :class="{ 'bg-indigo-50 text-indigo-700': currentLanguage === language.code }"
-                            >
-                                {{ language.name }}
-                            </button>
-                        </div>
-                    </div>
 
                     <!-- Auth Buttons -->
                     <div class="flex items-center space-x-3">
-                        <div v-if="$page.props.auth.user">
+                        <div v-if="authUser">
                             <!-- User dropdown -->
                             <div class="relative" ref="userMenu">
-                                <button 
-                                    @click="toggleUserMenu"
-                                    class="flex items-center p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-                                >
-                                    <span class="text-sm mr-2">{{ $page.props.auth.user.name }}</span>
+                                <button @click="toggleUserMenu"
+                                    class="flex items-center p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
+                                    <span class="text-sm mr-2">{{ authUser ? authUser.name : '' }}</span>
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
-                                
-                                <div v-if="showUserMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                                    <Link 
-                                        v-if="$page.props.auth.user.roles.includes('admin')"
+
+                                <div v-if="showUserMenu"
+                                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                                    <!-- Admin link -->
+                                    <Link v-if="authUser && authUser.roles && authUser.roles.includes('admin')"
                                         :href="route('dashboard.index')"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                                    >
-                                        Dashboard
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                    Dashboard
                                     </Link>
-                                    <button 
-                                        @click="logout"
-                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                                    >
+                                    <button @click="logout"
+                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                                         Logout
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div v-else>
-                            <button 
-                                @click="LoginView"
+                            <button @click="LoginView"
                                 class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
-                                :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }"
-                            >
+                                :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }">
                                 Login
                             </button>
-                            <button 
-                                @click="RegisterView"
+                            <button @click="RegisterView"
                                 class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
-                                :class="{ 'bg-indigo-700': $page.url === '/register' }"
-                            >
+                                :class="{ 'bg-indigo-700': $page.url === '/register' }">
                                 Register
                             </button>
                         </div>
@@ -106,15 +66,16 @@
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button 
-                        @click="toggleMobileMenu"
-                        class="text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-md transition-colors"
-                    >
-                        <svg v-if="!showMobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    <button @click="toggleMobileMenu"
+                        class="text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-md transition-colors">
+                        <svg v-if="!showMobileMenu" class="w-6 h-6" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                         <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
@@ -124,73 +85,41 @@
         <!-- Mobile Navigation Menu -->
         <div v-if="showMobileMenu" class="md:hidden bg-white border-t border-gray-200">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <Link 
-                    v-for="pageItem in pages" 
-                    :key="pageItem.path" 
-                    :href="pageItem.path"
-                    @click="closeMobileMenu"
-                    class="mobile-nav-link"
-                    :class="{ 'active': $page.url === pageItem.path }"
-                >
-                    {{ pageItem.name }}
+                <Link v-for="pageItem in pages" :key="pageItem.path" :href="pageItem.path" @click="closeMobileMenu"
+                    class="mobile-nav-link" :class="{ 'active': $page.url === pageItem.path }">
+                {{ pageItem.name }}
                 </Link>
             </div>
-            
+
             <!-- Mobile Actions -->
             <div class="pt-4 pb-3 border-t border-gray-200">
                 <div class="px-2 space-y-1">
-                    <!-- Language Switcher Mobile -->
-                    <div class="px-3 py-2">
-                        <p class="text-sm font-medium text-gray-500 mb-2">Language</p>
-                        <div class="space-y-1">
-                            <button 
-                                v-for="language in languages" 
-                                :key="language.code"
-                                @click="changeLanguage(language.code)"
-                                class="block w-full text-left px-3 py-2 text-sm rounded-md transition-colors"
-                                :class="currentLanguage === language.code ? 
-                                    'bg-indigo-100 text-indigo-700' : 
-                                    'text-gray-700 hover:bg-gray-100'"
-                            >
-                                {{ language.name }}
-                            </button>
-                        </div>
-                    </div>
-                    
+
                     <!-- Auth Buttons Mobile -->
                     <div class="px-2 space-y-2">
-                        <div v-if="$page.props.auth.user">
+                        <div v-if="authUser">
                             <div class="px-3 py-2 text-sm text-gray-500">
-                                Logged in as: {{ $page.props.auth.user.name }}
+                                Logged in as: {{ authUser ? authUser.name : '' }}
                             </div>
-                            <Link 
-                                v-if="$page.props.auth.user.roles.includes('admin')"
-                                :href="route('dashboard.index')"
-                                @click="closeMobileMenu"
-                                class="w-full text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium block text-center"
-                            >
-                                Dashboard
+                            <Link v-if="authUser && authUser.roles && authUser.roles.includes('admin')"
+                                :href="route('dashboard.index')" @click="closeMobileMenu"
+                                class="w-full text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium block text-center">
+                            Dashboard
                             </Link>
-                            <button 
-                                @click="logout"
-                                class="w-full text-red-700 hover:text-red-800 px-4 py-2 rounded-md border border-red-300 hover:border-red-400 transition-colors font-medium"
-                            >
+                            <button @click="logout"
+                                class="w-full text-red-700 hover:text-red-800 px-4 py-2 rounded-md border border-red-300 hover:border-red-400 transition-colors font-medium">
                                 Logout
                             </button>
                         </div>
                         <div v-else>
-                            <button 
-                                @click="LoginView"
+                            <button @click="LoginView"
                                 class="w-full text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
-                                :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }"
-                            >
+                                :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }">
                                 Login
                             </button>
-                            <button 
-                                @click="RegisterView"
+                            <button @click="RegisterView"
                                 class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
-                                :class="{ 'bg-indigo-700': $page.url === '/register' }"
-                            >
+                                :class="{ 'bg-indigo-700': $page.url === '/register' }">
                                 Register
                             </button>
                         </div>
@@ -201,10 +130,15 @@
     </nav>
 </template>
 <script setup>
-    import { ref, onMounted, onUnmounted } from 'vue';
+    import { ref, computed, onMounted, onUnmounted } from 'vue';
     import { usePage, router, Link } from '@inertiajs/vue3';
 
     const page = usePage();
+
+    // computed safe reference to authenticated user (may be null)
+    const authUser = computed(() => {
+        return page && page.props && page.props.auth && page.props.auth.user ? page.props.auth.user : null;
+    });
 
     const pages = ref([
         { name: 'ទំព័រដើម', path: '/' },
@@ -212,10 +146,6 @@
         { name: 'ទំនាក់ទំនង', path: '/contact' },
     ]);
 
-    const languages = ref([
-        { code: 'en', name: 'English' },
-        { code: 'km', name: 'ខ្មែរ (Khmer)' },
-    ]);
 
     const currentLanguage = ref('en');
     const showMobileMenu = ref(false);
@@ -223,16 +153,6 @@
     const showUserMenu = ref(false);
     const languageMenu = ref(null);
     const userMenu = ref(null);
-
-    function getCurrentLanguageName() {
-        return languages.value.find(lang => lang.code === currentLanguage.value)?.name || 'English';
-    }
-
-    function changeLanguage(code) {
-        currentLanguage.value = code;
-        showLanguageMenu.value = false;
-        showMobileMenu.value = false;
-    }
 
     function toggleMobileMenu() {
         showMobileMenu.value = !showMobileMenu.value;

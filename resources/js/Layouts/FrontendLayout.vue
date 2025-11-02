@@ -1,14 +1,14 @@
 <template>
-    <v-app class="frontend-layout">
+    <div class="frontend-layout">
         <header>
             <Menu />
         </header>
 
-        <v-main class="main-content">
+        <main class="main-content">
             <slot />
-        </v-main>
+        </main>
         <Footer />
-    </v-app>
+    </div>
 </template>
 
 <script setup>
