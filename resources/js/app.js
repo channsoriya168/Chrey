@@ -30,10 +30,14 @@ createInertiaApp({
 
         // Only set layout if page exists and has a default export
         if (page && page.default) {
-            if (name.includes("Dashboard")) {
-                page.default.layout = DashboardLayout;
-            } else {
-                page.default.layout = page.default.layout || FrontendLayout;
+            // Check if layout is explicitly set (including null)
+            if (!('layout' in page.default)) {
+                // Only set default layout if not explicitly defined
+                if (name.includes("Dashboard")) {
+                    page.default.layout = DashboardLayout;
+                } else {
+                    page.default.layout = FrontendLayout;
+                }
             }
         }
 

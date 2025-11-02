@@ -5,6 +5,9 @@
         </header>
 
         <main class="main-content">
+            <div class="container mx-auto px-4">
+                <FlashMessage />
+            </div>
             <slot />
         </main>
         <Footer />
@@ -14,6 +17,7 @@
 <script setup>
     import Menu from '@/Components/Frontend/Menu.vue'
     import Footer from '../Components/Frontend/footer.vue';
+    import FlashMessage from '@/Components/FlashMessage.vue';
 </script>
 
 <style scoped>

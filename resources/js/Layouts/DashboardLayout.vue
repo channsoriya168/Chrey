@@ -3,6 +3,7 @@
         <DashboardMenu v-model="drawer" :rail="rail" />
         <main class="bg-muted/20 min-h-screen" :class="{ 'ml-64': drawer && !rail, 'ml-16': rail, 'ml-0': !drawer }">
             <div class="container mx-auto px-6 py-6">
+                <FlashMessage />
                 <Card class="p-4 shadow-none border-0">
                     <DashboardAppBar @toggle-drawer="toggleDrawer" />
                     <slot />
@@ -17,6 +18,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import DashboardMenu from '@/Components/Dashboard/Menu.vue';
 import DashboardAppBar from '@/Components/Dashboard/AppBar.vue';
 import Card from '@/components/ui/Card.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 const windowWidth = ref(window.innerWidth);
 const mobile = computed(() => windowWidth.value < 768);

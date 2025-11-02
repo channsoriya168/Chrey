@@ -38,18 +38,11 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        // assign default role if roles are available
-        if (method_exists($user, 'assignRole')) {
-            try {
-                $user->assignRole('user');
-            } catch (\Exception $e) {
-                // ignore if role doesn't exist yet
-            }
-        }
-
+        // Log the user in
         Auth::login($user);
 
-        return redirect()->route('home');
+        return redirect()->route('home')
+            ->with('success', 'គណនីបានបង្កើតដោយជោគជ័យ! សូមស្វាគមន៍។');
     }
 
     // Handle login
@@ -62,16 +55,24 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            dd(User::with('roles')->find(auth()->id()));
+
+            // Get user name
+            $userName = auth()->user()->name;
+
             if (auth()->user()->hasRole('admin')) {
-                return redirect()->route('dashboard.index');
+                return redirect()->route('dashboard.index')
+                    ->with('success', "សូមស្វាគមន៍មកវិញ, {$userName}!");
             }
-            return redirect()->route('home');
+
+            return redirect()->route('home')
+                ->with('success', "សូមស្វាគមន៍មកវិញ, {$userName}!");
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return back()
+            ->withErrors([
+                'email' => 'អ៊ីម៉ែល ឬលេខសម្ងាត់មិនត្រឹមត្រូវ។',
+            ])
+            ->with('error', 'អ៊ីម៉ែល ឬលេខសម្ងាត់មិនត្រឹមត្រូវ។ សូមពិនិត្យម្តងទៀត។');
     }
 
     // Logout
@@ -82,6 +83,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home');
+        return redirect()->route('home')
+            ->with('success', 'អ្នកបានចាកចេញដោយជោគជ័យ។ សូមជួបគ្នាម្តងទៀត!');
     }
 }

@@ -51,14 +51,14 @@
                         </div>
                         <div v-else>
                             <button @click="LoginView"
-                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
+                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium mr-4"
                                 :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }">
-                                Login
+                                ចូលគណនី
                             </button>
                             <button @click="RegisterView"
-                                class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
-                                :class="{ 'bg-indigo-700': $page.url === '/register' }">
-                                Register
+                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
+                                :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/register' }">
+                                បង្កើតគណនី
                             </button>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                                 Login
                             </button>
                             <button @click="RegisterView"
-                                class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
+                                class="w-full text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors font-medium"
                                 :class="{ 'bg-indigo-700': $page.url === '/register' }">
                                 Register
                             </button>
@@ -146,8 +146,6 @@
         { name: 'ទំនាក់ទំនង', path: '/contact' },
     ]);
 
-
-    const currentLanguage = ref('en');
     const showMobileMenu = ref(false);
     const showLanguageMenu = ref(false);
     const showUserMenu = ref(false);
@@ -191,8 +189,6 @@
     const LoginView = () => {
         router.visit('/login', {
             method: 'get',
-            preserveState: true,
-            preserveScroll: true,
         });
         closeMobileMenu();
     };
@@ -200,8 +196,6 @@
     const RegisterView = () => {
         router.visit('/register', {
             method: 'get',
-            preserveState: true,
-            preserveScroll: true,
         });
         closeMobileMenu();
     };
