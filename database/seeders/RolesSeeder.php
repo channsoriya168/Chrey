@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RolesSeeder extends Seeder
 {
@@ -12,8 +13,33 @@ class RolesSeeder extends Seeder
      */
     public function run(): void
     {
-        // create roles (idempotent)
-        Role::firstOrCreate(['name' => 'admin']);
-        Role::firstOrCreate(['name' => 'user']);
+        // Reset cached roles and permissions
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        // Create roles (idempotent)
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $userRole = Role::firstOrCreate(['name' => 'user']);
+        $moderatorRole = Role::firstOrCreate(['name' => 'moderator']);
+
+        // Assign all permissions to admin
+        $adminRole->syncPermissions(Permission::all());
+
+        // Assign specific permissions to moderator
+        $moderatorRole->syncPermissions([
+            'access dashboard',
+            'view categories',
+            'create categories',
+            'edit categories',
+            'view products',
+            'create products',
+            'edit products',
+            'view users',
+        ]);
+
+        // Assign basic permissions to user
+        $userRole->syncPermissions([
+            'view categories',
+            'view products',
+        ]);
     }
 }

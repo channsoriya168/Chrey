@@ -17,27 +17,15 @@ class UserSeeder extends Seeder
 
         // Create or fetch an admin user
         $admin = User::firstOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => 'soriya@gmail.com'],
             [
-                'name' => 'Admin User',
-                'password' => bcrypt('12345678'),
+                'name' => 'soriya',
+                'password' => '12345678', // Will be auto-hashed by User model
             ]
         );
         // Assign admin role if not already assigned
         if (!$admin->hasRole('admin')) {
             $admin->assignRole('admin');
-        }
-
-        // Create or fetch a normal user
-        $normal = User::firstOrCreate(
-            ['email' => 'user@gmail.com'],
-            [
-                'name' => 'Regular User',
-                'password' => bcrypt('12345678'),
-            ]
-        );
-        if (!$normal->hasRole('user')) {
-            $normal->assignRole('user');
         }
     }
 }

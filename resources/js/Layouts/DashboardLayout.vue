@@ -1,13 +1,15 @@
 <template>
-    <div class="min-h-screen bg-background">
+    <div class="min-h-screen bg-gray-50">
         <DashboardMenu v-model="drawer" :rail="rail" />
-        <main class="bg-muted/20 min-h-screen" :class="{ 'ml-64': drawer && !rail, 'ml-16': rail, 'ml-0': !drawer }">
-            <div class="container mx-auto px-6 py-6">
+        <DashboardAppBar
+            @toggle-drawer="toggleDrawer"
+            :drawer="drawer"
+            :rail="rail"
+        />
+        <main class="bg-gray-50 min-h-screen transition-all duration-300 pt-[57px]" :class="{ 'ml-64': drawer && !rail, 'ml-16': rail, 'ml-0': !drawer }">
+            <div class="px-6 py-6">
                 <FlashMessage />
-                <Card class="p-4 shadow-none border-0">
-                    <DashboardAppBar @toggle-drawer="toggleDrawer" />
-                    <slot />
-                </Card>
+                <slot />
             </div>
         </main>
     </div>
@@ -17,7 +19,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import DashboardMenu from '@/Components/Dashboard/Menu.vue';
 import DashboardAppBar from '@/Components/Dashboard/AppBar.vue';
-import Card from '@/components/ui/Card.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 
 const windowWidth = ref(window.innerWidth);

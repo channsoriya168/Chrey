@@ -27,10 +27,10 @@
                         v-slot="{ errors: formErrors }">
                         <div class="space-y-4">
                             <!-- Email Field -->
-                            <vee-field name="email" v-slot="{ field, errors }">
+                            <vee-field name="email" v-model="form.email" v-slot="{ field, errors }">
                                 <div>
                                     <Label for="email">អ៊ីម៉ែល</Label>
-                                    <Input v-bind="field" v-model="form.email" id="email" type="email"
+                                    <Input v-bind="field" id="email" type="email"
                                         placeholder="name@example.com" :class="{ 'border-red-500': errors.length }"
                                         class="mt-1" />
                                     <p v-if="errors.length" class="mt-1 text-sm text-red-500">
@@ -40,10 +40,10 @@
                             </vee-field>
 
                             <!-- Password Field -->
-                            <vee-field name="password" v-slot="{ field, errors }">
+                            <vee-field name="password" v-model="form.password" v-slot="{ field, errors }">
                                 <div>
                                     <Label for="password">លេខសម្ងាត់</Label>
-                                    <Input v-bind="field" v-model="form.password" id="password" type="password"
+                                    <Input v-bind="field" id="password" type="password"
                                         placeholder="••••••••" :class="{ 'border-red-500': errors.length }"
                                         class="mt-1" />
                                     <p v-if="errors.length" class="mt-1 text-sm text-red-500">

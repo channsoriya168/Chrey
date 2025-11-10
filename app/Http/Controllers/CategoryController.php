@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return inertia('Dashboard/Category/Index', [
+        return inertia('Dashboard/Categories/Index', [
             'categories' => $categories
         ]);
     }
@@ -24,7 +24,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return inertia('Dashboard/Category/Create');
+        return inertia('Dashboard/Categories/Create');
     }
 
     /**
