@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,9 +12,19 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $query = Category::query();
+
+        // Search functionality
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Pagination
+        $perPage = $request->get('per_page', 10);
+        $categories = $query->latest()->paginate($perPage);
+
         return inertia('Dashboard/Categories/Index', [
             'categories' => $categories
         ]);
@@ -39,6 +50,7 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->name = $request->name;
+        $category->slug = Str::slug($request->name);
 
         if ($request->hasFile('image_url')) {
             $category->image_url = $request->file('image_url')->store('categories', 'public');
@@ -50,21 +62,11 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        return inertia('Dashboard/Category/Show', [
-            'category' => $category
-        ]);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Category $category)
     {
-        return inertia('Dashboard/Category/Edit', [
+        return inertia('Dashboard/Categories/Edit', [
             'category' => $category
         ]);
     }

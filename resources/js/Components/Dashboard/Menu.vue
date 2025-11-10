@@ -33,6 +33,16 @@
                     <LayoutDashboard class="w-5 h-5" />
                     <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ផ្ទាំងគ្រប់គ្រង</span>
                 </button>
+                <!-- categories -->
+                <button @click="navigateCallback('dashboard.categories.index')" :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200', {
+                    'bg-gray-900 text-white': isActive('categories'),
+                    'text-gray-700 hover:bg-gray-100': !isActive('categories'),
+                    'justify-center px-0': rail && !mobile
+                })">
+                    <Tags class="w-5 h-5" />
+                    <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ប្រភេទ</span>
+                </button>
+                <!-- products -->
 
                 <button @click="navigateCallback('dashboard.products.index')" :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200', {
                     'bg-gray-900 text-white': isActive('products'),
@@ -43,14 +53,7 @@
                     <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ផលិតផល</span>
                 </button>
 
-                <button @click="navigateCallback('dashboard.categories.index')" :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200', {
-                    'bg-gray-900 text-white': isActive('categories'),
-                    'text-gray-700 hover:bg-gray-100': !isActive('categories'),
-                    'justify-center px-0': rail && !mobile
-                })">
-                    <Tags class="w-5 h-5" />
-                    <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ប្រភេទ</span>
-                </button>
+
 
                 <button @click="navigateCallback('dashboard.users.index')" :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200', {
                     'bg-gray-900 text-white': isActive('users'),
@@ -74,18 +77,16 @@
 
         <!-- Bottom Actions -->
         <div class="border-t border-gray-200 p-2 space-y-0.5">
-            <button @click="navigateToFrontend"
-                    :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 text-gray-700 hover:bg-gray-100', {
-                        'justify-center px-0': rail && !mobile
-                    })">
+            <button @click="navigateToFrontend" :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 text-gray-700 hover:bg-gray-100', {
+                'justify-center px-0': rail && !mobile
+            })">
                 <Home class="w-5 h-5" />
                 <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ទៅទំព័រមុខ</span>
             </button>
 
-            <button @click="handleLogout"
-                    :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 text-gray-700 hover:bg-gray-100', {
-                        'justify-center px-0': rail && !mobile
-                    })">
+            <button @click="handleLogout" :class="cn('w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 text-gray-700 hover:bg-gray-100', {
+                'justify-center px-0': rail && !mobile
+            })">
                 <LogOut class="w-5 h-5" />
                 <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ចាកចេញ</span>
             </button>
