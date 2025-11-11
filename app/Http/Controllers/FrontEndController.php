@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
-class DashboardController extends Controller
+class FrontEndController
 {
     public function index()
     {
-        return inertia('Dashboard/Index');
+        return Inertia::render('Frontend/Index');
     }
 }

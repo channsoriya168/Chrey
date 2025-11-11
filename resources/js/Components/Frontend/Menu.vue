@@ -51,12 +51,12 @@
                         </div>
                         <div v-else>
                             <button @click="LoginView"
-                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium mr-4"
+                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 hover:border-indigo-300 transition-colors font-medium mr-4"
                                 :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/login' }">
                                 ចូលគណនី
                             </button>
                             <button @click="RegisterView"
-                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-md border border-gray-300 hover:border-indigo-300 transition-colors font-medium"
+                                class="text-gray-700 hover:text-indigo-600 px-4 py-2 hover:border-indigo-300 transition-colors font-medium"
                                 :class="{ 'text-indigo-600 border-indigo-300 bg-indigo-50': $page.url === '/register' }">
                                 បង្កើតគណនី
                             </button>

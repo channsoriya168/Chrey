@@ -2,14 +2,14 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\FrontEndController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
 
-Route::get('/', function () {
-    return Inertia::render('Frontend/Index');
-})->name('home');
+
+Route::get('/', [FrontEndController::class, 'index'])->name('home');
 Route::get('about', function () {
     return Inertia::render('Frontend/About');
 })->name('about');
@@ -17,9 +17,6 @@ Route::get('about', function () {
 Route::get('contact', function () {
     return Inertia::render('Frontend/Contact');
 })->name('contact');
-
-Route::get('categories', [DataController::class, 'categories'])
-    ->name('categories');
 
 Route::get('register', [AuthController::class, 'register'])
     ->name('register');

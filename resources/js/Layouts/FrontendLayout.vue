@@ -27,13 +27,6 @@
         flex-direction: column;
     }
 
-    .main-content {
-        flex: 1;
-        padding: 2rem;
-        padding-top: 64px;
-        /* Adjust if your app bar is a different height */
-    }
-
     .footer {
         background-color: #f8f9fa;
         padding: 1rem;
