@@ -1,7 +1,7 @@
 <template>
-  <thead :class="cn('[&_tr]:border-b', $attrs.class)" v-bind="$attrs">
-    <slot />
-  </thead>
+    <thead :class="cn('[&_tr]:border-b', $attrs.class)" v-bind="$attrs">
+        <slot />
+    </thead>
 </template>
 
 <script setup>

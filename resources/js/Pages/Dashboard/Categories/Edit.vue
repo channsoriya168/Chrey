@@ -1,32 +1,21 @@
 <template>
-    <div class="container mx-auto py-6 max-w-2xl">
+    <div class="container mx-auto max-w-2xl py-6">
         <!-- Breadcrumb -->
         <div class="mb-6">
-            <div class="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                <Button
-                    variant="link"
-                    size="sm"
-                    class="h-auto p-0"
-                    @click="router.visit('/dashboard/categories')"
-                >
+            <div class="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
+                <Button variant="link" size="sm" class="h-auto p-0" @click="router.visit('/dashboard/categories')">
                     Categories
                 </Button>
                 <span>/</span>
                 <span class="text-foreground">Edit</span>
             </div>
             <div class="flex items-center gap-2">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    @click="router.visit('/dashboard/categories')"
-                >
+                <Button variant="ghost" size="sm" @click="router.visit('/dashboard/categories')">
                     <ArrowLeft class="h-4 w-4" />
                 </Button>
                 <div>
                     <h1 class="text-2xl font-semibold">Edit Category</h1>
-                    <p class="text-sm text-muted-foreground">
-                        Update the category information below
-                    </p>
+                    <p class="text-muted-foreground text-sm">Update the category information below</p>
                 </div>
             </div>
         </div>
@@ -50,7 +39,7 @@
                     />
 
                     <!-- Form Actions -->
-                    <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
+                    <div class="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
                         <Button
                             type="button"
                             variant="outline"
@@ -60,11 +49,7 @@
                         >
                             Cancel
                         </Button>
-                        <Button
-                            type="submit"
-                            :disabled="isSubmitting"
-                            class="w-full sm:w-auto"
-                        >
+                        <Button type="submit" :disabled="isSubmitting" class="w-full sm:w-auto">
                             <span v-if="isSubmitting">Updating...</span>
                             <span v-else>Update Category</span>
                         </Button>
@@ -97,10 +82,7 @@ const props = defineProps({
 
 // Validation schema
 const validationSchema = yup.object({
-    name: yup
-        .string()
-        .required('Name is required')
-        .max(255, 'Name must be at most 255 characters'),
+    name: yup.string().required('Name is required').max(255, 'Name must be at most 255 characters'),
     image_url: yup
         .mixed()
         .nullable()
@@ -131,11 +113,7 @@ const nameModel = computed({
 })
 
 // Image preview
-const imagePreview = ref(
-    props.category.image_url
-        ? `/storage/${props.category.image_url}`
-        : null
-)
+const imagePreview = ref(props.category.image_url ? `/storage/${props.category.image_url}` : null)
 
 // Handle image change
 const handleImageChange = (file) => {

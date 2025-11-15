@@ -12,16 +12,15 @@ use Inertia\Inertia;
 Route::prefix('dashboard')->name('dashboard.')->middleware(['auth', 'permission:access dashboard'])->group(function () {
     // Dashboard home
     Route::get('/', [DashboardController::class, 'index'])->name('index');
+    // Category Management
+    Route::resource('categories', CategoryController::class);
+
+    // Product Management
+    Route::resource('products', ProductController::class);
 
     // User Management (only for users with appropriate permissions)
     Route::resource('users', UserManagementController::class);
 
     // Role Management (only for users with appropriate permissions)
     Route::resource('roles', RoleManagementController::class);
-
-    // Category Management
-    Route::resource('categories', CategoryController::class);
-
-    // Product Management
-    Route::resource('products', ProductController::class);
 });

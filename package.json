@@ -4,23 +4,28 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "format": "prettier --write \"resources/**/*.{js,vue,ts,tsx,jsx}\"",
+        "format:check": "prettier --check \"resources/**/*.{js,vue,ts,tsx,jsx}\""
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.1.11",
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
+        "prettier": "^3.6.2",
+        "prettier-plugin-tailwindcss": "^0.7.1",
         "tailwindcss": "^4.1.11",
         "vite": "^6.2.4"
     },
     "dependencies": {
         "@inertiajs/vue3": "^2.0.17",
         "@vitejs/plugin-vue": "^6.0.0",
-        "@vueuse/core": "^13.8.0",
+        "@vueuse/core": "^13.9.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "lucide-vue-next": "^0.542.0",
+        "reka-ui": "^2.6.0",
         "shadcn-vue": "^2.2.0",
         "tailwind-merge": "^3.3.1",
         "vee-validate": "^4.15.1",

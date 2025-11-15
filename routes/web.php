@@ -10,6 +10,9 @@ use Inertia\Inertia;
 
 
 Route::get('/', [FrontEndController::class, 'index'])->name('home');
+
+Route::get('product/{slug}', [FrontEndController::class, 'productDetail'])->name('product.detail');
+
 Route::get('about', function () {
     return Inertia::render('Frontend/About');
 })->name('about');

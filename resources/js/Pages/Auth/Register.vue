@@ -1,18 +1,14 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 khmer-text">
+    <div class="khmer-text flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
         <Head title="បង្កើតគណនី" />
 
-        <div class="max-w-md w-full space-y-8">
+        <div class="w-full max-w-md space-y-8">
             <!-- Header -->
             <div>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 khmer-text">
-                    បង្កើតគណនី
-                </h2>
-                <p class="mt-2 text-center text-sm text-gray-600 khmer-text">
+                <h2 class="khmer-text mt-6 text-center text-3xl font-extrabold text-gray-900">បង្កើតគណនី</h2>
+                <p class="khmer-text mt-2 text-center text-sm text-gray-600">
                     ឬ
-                    <Link href="/login" class="font-medium text-blue-600 hover:text-blue-500">
-                        ចូលគណនី
-                    </Link>
+                    <Link href="/login" class="font-medium text-blue-600 hover:text-blue-500"> ចូលគណនី </Link>
                 </p>
             </div>
 
@@ -57,7 +53,9 @@
                                 class="mt-1"
                                 autocomplete="new-password"
                             />
-                            <p v-if="item.errors.password" class="mt-1 text-sm text-red-500">{{ item.errors.password }}</p>
+                            <p v-if="item.errors.password" class="mt-1 text-sm text-red-500">
+                                {{ item.errors.password }}
+                            </p>
                         </div>
                         <div>
                             <Label for="password_confirmation">បញ្ជាក់លេខសម្ងាត់</Label>
@@ -69,7 +67,9 @@
                                 class="mt-1"
                                 autocomplete="new-password"
                             />
-                            <p v-if="item.errors.password_confirmation" class="mt-1 text-sm text-red-500">{{ item.errors.password_confirmation }}</p>
+                            <p v-if="item.errors.password_confirmation" class="mt-1 text-sm text-red-500">
+                                {{ item.errors.password_confirmation }}
+                            </p>
                         </div>
                         <Button type="submit" class="w-full bg-blue-600 hover:bg-blue-700" :disabled="item.processing">
                             {{ item.processing ? 'កំពុងបង្កើត...' : 'បង្កើតគណនី' }}
@@ -83,35 +83,35 @@
 
 <script>
 export default {
-    layout: null, // Disable layout for register page
+    layout: null // Disable layout for register page
 }
 </script>
 
 <script setup>
-    import { useForm } from '@inertiajs/vue3';
-    import { Head, Link } from '@inertiajs/vue3';
-    import Card from '@/Components/ui/Card.vue';
-    import CardContent from '@/Components/ui/CardContent.vue';
-    import Input from '@/Components/ui/Input.vue';
-    import Label from '@/Components/ui/Label.vue';
-    import Button from '@/Components/ui/Button.vue';
-    import FlashMessage from '@/Components/FlashMessage.vue';
+import { useForm } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
+import Card from '@/Components/ui/Card.vue'
+import CardContent from '@/Components/ui/CardContent.vue'
+import Input from '@/Components/ui/Input.vue'
+import Label from '@/Components/ui/Label.vue'
+import Button from '@/Components/ui/Button.vue'
+import FlashMessage from '@/Components/FlashMessage.vue'
 
-    const item = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    });
+const item = useForm({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+})
 
-    const register = () => {
-        item.post('/register', {
-            onSuccess: () => {
-                // handle success
-            },
-            onError: (errors) => {
-                // handle errors
-            }
-        });
-    };
+const register = () => {
+    item.post('/register', {
+        onSuccess: () => {
+            // handle success
+        },
+        onError: (errors) => {
+            // handle errors
+        }
+    })
+}
 </script>
