@@ -5,10 +5,6 @@
             <nav class="flex items-center space-x-2 text-sm">
                 <Link href="/" class="text-gray-500 hover:text-pink-600">Home</Link>
                 <span class="text-gray-400">/</span>
-                <Link v-if="product.category" href="#" class="text-gray-500 hover:text-pink-600">{{
-                    product.category.name
-                }}</Link>
-                <span v-if="product.category" class="text-gray-400">/</span>
                 <span class="font-medium text-gray-900">{{ product.name }}</span>
             </nav>
         </div>
@@ -115,14 +111,6 @@
                         <p class="leading-relaxed text-gray-600">
                             {{ product.description || 'No description available for this product.' }}
                         </p>
-                    </div>
-
-                    <!-- Category -->
-                    <div v-if="product.category" class="flex items-center space-x-2">
-                        <span class="text-gray-600">Category:</span>
-                        <Link href="#" class="font-medium text-pink-600 hover:text-pink-700">
-                            {{ product.category.name }}
-                        </Link>
                     </div>
 
                     <!-- Quantity Selector -->

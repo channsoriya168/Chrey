@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\RoleManagementController;
 use App\Http\Controllers\Dashboard\UserManagementController;
@@ -12,8 +11,6 @@ use Inertia\Inertia;
 Route::prefix('dashboard')->name('dashboard.')->middleware(['auth', 'permission:access dashboard'])->group(function () {
     // Dashboard home
     Route::get('/', [DashboardController::class, 'index'])->name('index');
-    // Category Management
-    Route::resource('categories', CategoryController::class);
 
     // Product Management
     Route::resource('products', ProductController::class);

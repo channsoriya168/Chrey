@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('slug')->unique()->comment('ស្លាកផលិតផល');
             $table->string('code')->unique()->comment('លេខកូដផលិតផល');
             $table->string('name')->comment('ឈ្មោះផលិតផល');
-            $table->json('image_url')->nullable()->comment('រូបភាពផលិតផល (JSON)');
-            $table->integer('quantity')->default(0)->comment('ចំនួនផលិតផល');
-            $table->decimal('price', 10, 2)->default(0.00)->comment('តម្លៃផលិតផល');
-            $table->decimal('discount_price', 10, 2)->nullable()->comment('តម្លៃបញ្ចុះតម្លៃ');
             $table->text('description')->nullable()->comment('ការពិពណ៌នាអំពីផលិតផល');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade')->comment('កាតេហរីដែលផលិតផលនេះស្ថិតនៅក្នុង');
+            $table->integer('stock')->default(0)->comment('ចំនួនផលិតផល');
+            $table->enum('size', ['តូច', 'មធ្យម', 'ធំ'])->default('មធ្យម')->comment('ទំហំផលិតផល');
+            $table->decimal('price', 10, 2)->default(0.00)->comment('តម្លៃផលិតផល');
+            $table->json('image_url')->nullable()->comment('រូបភាពផលិតផល (JSON)');
+            $table->decimal('discount_price_percent', 5, 2)->nullable()->comment('ភាគរយបញ្ចុះតម្លៃ');
+            $table->decimal('discount_price', 10, 2)->storedAs('price - (price * COALESCE(discount_price_percent, 0) / 100)')->comment('តម្លៃបញ្ចុះតម្លៃ');
             $table->timestamps();
         });
     }

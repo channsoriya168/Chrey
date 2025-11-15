@@ -133,35 +133,6 @@
             </div>
         </div>
 
-        <!-- Category Section -->
-        <div class="mx-auto max-w-7xl px-2 py-2 sm:px-2 md:py-12 lg:px-3">
-            <div class="mb-6 flex items-center justify-between md:mb-8">
-                <h2 class="text-xl font-bold text-gray-900 md:text-3xl">Shop by Category</h2>
-                <a href="#" class="text-xs font-semibold text-pink-600 hover:text-pink-700 md:text-sm">View All →</a>
-            </div>
-
-            <div class="grid grid-cols-4 gap-3 md:grid-cols-6 md:gap-6 lg:grid-cols-8">
-                <div
-                    v-for="category in categories"
-                    :key="category.id"
-                    class="group flex cursor-pointer flex-col items-center"
-                >
-                    <div
-                        class="mb-2 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-gray-100 transition-colors duration-200 group-hover:bg-pink-100 md:mb-3 md:h-20 md:w-20"
-                    >
-                        <img
-                            :src="category.image_url || 'https://api.iconify.design/mdi/package-variant.svg'"
-                            :alt="category.name"
-                            class="h-full w-full object-cover"
-                        />
-                    </div>
-                    <span class="text-center text-[10px] leading-tight font-medium text-gray-700 md:text-sm">{{
-                        category.name
-                    }}</span>
-                </div>
-            </div>
-        </div>
-
         <!-- Featured Products Section -->
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
             <div class="mb-6 flex items-center justify-between md:mb-8">
@@ -276,10 +247,6 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 
 const props = defineProps({
-    categories: {
-        type: Array,
-        default: () => []
-    },
     products: {
         type: Object,
         required: true

@@ -8,10 +8,31 @@
                 <h1 class="text-3xl font-bold text-gray-900">Products</h1>
                 <p class="mt-1 text-sm text-gray-500">Manage your product inventory</p>
             </div>
-            <Button @click="handleCreate" class="bg-gray-900 text-white hover:bg-gray-800">
+            <Button @click="isCreateDialogOpen = true" class="bg-gray-900 text-white hover:bg-gray-800">
                 <Plus class="mr-2 h-4 w-4" />
                 Add Product
             </Button>
+
+            <!-- Create Dialog -->
+            <ProductFormDialog
+                v-model="isCreateDialogOpen"
+                mode="create"
+                title="បង្កើតផលិតផល"
+                submit-text="បង្កើត"
+                processing-text="កំពុងបង្កើត..."
+                @submit="handleCreateSubmit"
+            />
+
+            <!-- Edit Dialog -->
+            <ProductFormDialog
+                v-model="isEditDialogOpen"
+                mode="edit"
+                title="កែប្រែផលិតផល"
+                submit-text="កែប្រែ"
+                processing-text="កំពុងកែប្រែ..."
+                :initial-data="currentEditItem"
+                @submit="handleEditSubmit"
+            />
         </div>
 
         <!-- Table Card -->
@@ -30,7 +51,14 @@
             </div>
 
             <!-- DataTable -->
-            <DataTable :columns="columns" :data="products" :loading="loading">
+            <DataTable
+                :columns="columns"
+                :data="products.data"
+                :loading="loading"
+                :pagination="products"
+                @page-change="handlePageChange"
+                @per-page-change="handlePerPageChange"
+            >
                 <!-- Custom Cell: Image -->
                 <template #cell-image_url="{ item }">
                     <div class="flex-shrink-0">
@@ -38,7 +66,7 @@
                             v-if="item.image_url && item.image_url.length > 0"
                             class="h-16 w-16 overflow-hidden rounded-lg border border-gray-200"
                         >
-                            <img :src="item.image_url[0]" :alt="item.name" class="h-full w-full object-cover" />
+                            <img :src="`/storage/${item.image_url[0]}`" :alt="item.name" class="h-full w-full object-cover" />
                         </div>
                         <div
                             v-else
@@ -78,18 +106,18 @@
                 </template>
 
                 <!-- Custom Cell: Stock -->
-                <template #cell-quantity="{ item }">
+                <template #cell-stock="{ item }">
                     <span
                         :class="[
                             'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                            item.quantity > 50
+                            item.stock > 50
                                 ? 'bg-green-100 text-green-800'
-                                : item.quantity > 0
+                                : item.stock > 0
                                   ? 'bg-yellow-100 text-yellow-800'
                                   : 'bg-red-100 text-red-800'
                         ]"
                     >
-                        {{ item.quantity }} units
+                        {{ item.stock }} units
                     </span>
                 </template>
 
@@ -120,7 +148,7 @@
                         </div>
                         <h3 class="mb-2 text-lg font-semibold text-gray-900">No products found</h3>
                         <p class="mb-6 text-sm text-gray-600">Get started by adding your first product</p>
-                        <Button @click="handleCreate" size="sm">
+                        <Button @click="isCreateDialogOpen = true" size="sm">
                             <Plus class="mr-2 h-4 w-4" />
                             Add First Product
                         </Button>
@@ -147,19 +175,31 @@ import { router, Head } from '@inertiajs/vue3'
 import Button from '@/Components/ui/Button.vue'
 import Input from '@/Components/ui/Input.vue'
 import DataTable from '@/Components/ui/DataTable.vue'
+import ProductFormDialog from '@/Components/Dashboard/ProductFormDialog.vue'
 import { Plus, Search, ImageIcon, Pencil, Trash2, Package } from 'lucide-vue-next'
 
 // Props from Inertia
 const props = defineProps({
     products: {
-        type: Array,
-        default: () => []
+        type: Object,
+        default: () => ({
+            data: [],
+            current_page: 1,
+            last_page: 1,
+            per_page: 10,
+            total: 0,
+            from: 0,
+            to: 0
+        })
     }
 })
 
 // State
 const loading = ref(false)
 const searchQuery = ref('')
+const isCreateDialogOpen = ref(false)
+const isEditDialogOpen = ref(false)
+const currentEditItem = ref(null)
 
 // Table columns configuration
 const columns = [
@@ -179,19 +219,41 @@ const columns = [
         cellClass: ''
     },
     {
-        key: 'quantity',
+        key: 'stock',
         label: 'Stock',
         cellClass: ''
     }
 ]
 
-// Handlers
-const handleCreate = () => {
-    router.visit('/dashboard/products/create')
+// Handle create form submission
+const handleCreateSubmit = ({ form, resetForm }) => {
+    form.post('/dashboard/products', {
+        preserveScroll: true,
+        onSuccess: () => {
+            isCreateDialogOpen.value = false
+            resetForm()
+        }
+    })
+}
+
+// Handle edit form submission
+const handleEditSubmit = ({ form, resetForm }) => {
+    form.transform((data) => ({
+        ...data,
+        _method: 'PUT'
+    })).post(`/dashboard/products/${currentEditItem.value.id}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            isEditDialogOpen.value = false
+            resetForm()
+            currentEditItem.value = null
+        }
+    })
 }
 
 const handleEdit = (item) => {
-    router.visit(`/dashboard/products/${item.id}/edit`)
+    currentEditItem.value = item
+    isEditDialogOpen.value = true
 }
 
 const handleDelete = (item) => {
@@ -204,8 +266,50 @@ const handleDelete = (item) => {
     }
 }
 
+const handlePageChange = (page) => {
+    router.get(
+        '/dashboard/products',
+        {
+            page,
+            search: searchQuery.value
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            onStart: () => (loading.value = true),
+            onFinish: () => (loading.value = false)
+        }
+    )
+}
+
+const handlePerPageChange = (perPage) => {
+    router.get(
+        '/dashboard/products',
+        {
+            per_page: perPage,
+            search: searchQuery.value
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            onStart: () => (loading.value = true),
+            onFinish: () => (loading.value = false)
+        }
+    )
+}
+
 const handleSearch = () => {
-    // Add search functionality
-    console.log('Searching for:', searchQuery.value)
+    router.get(
+        '/dashboard/products',
+        {
+            search: searchQuery.value
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            onStart: () => (loading.value = true),
+            onFinish: () => (loading.value = false)
+        }
+    )
 }
 </script>

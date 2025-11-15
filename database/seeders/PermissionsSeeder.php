@@ -33,12 +33,6 @@ class PermissionsSeeder extends Seeder
             'view permissions',
             'assign permissions',
 
-            // Category management
-            'view categories',
-            'create categories',
-            'edit categories',
-            'delete categories',
-
             // Product management
             'view products',
             'create products',
