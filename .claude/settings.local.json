@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(test:*)",
-      "WebFetch(domain:www.shadcn-vue.com)"
+      "WebFetch(domain:www.shadcn-vue.com)",
+      "Bash(npx shadcn-vue@latest add label button table pagination select textarea)",
+      "Bash(npx shadcn-vue@latest add:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

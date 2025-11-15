@@ -8,27 +8,27 @@
             <div class="space-y-4 py-4">
                 <!-- Name Field -->
                 <div class="space-y-2">
-                    <label :for="`${mode}-name`" class="text-sm font-medium">ឈ្មោះផលិតផល *</label>
+                    <Label :for="`${mode}-name`">ឈ្មោះផលិតផល *</Label>
                     <Input v-model="localForm.name" :id="`${mode}-name`" placeholder="ឈ្មោះផលិតផល" />
                     <p v-if="localForm.errors.name" class="text-xs text-red-500">{{ localForm.errors.name }}</p>
                 </div>
 
                 <!-- Code Field -->
                 <div class="space-y-2">
-                    <label :for="`${mode}-code`" class="text-sm font-medium">លេខកូដផលិតផល *</label>
+                    <Label :for="`${mode}-code`">លេខកូដផលិតផល *</Label>
                     <Input v-model="localForm.code" :id="`${mode}-code`" placeholder="លេខកូដផលិតផល" />
                     <p v-if="localForm.errors.code" class="text-xs text-red-500">{{ localForm.errors.code }}</p>
                 </div>
 
                 <!-- Description Field -->
                 <div class="space-y-2">
-                    <label :for="`${mode}-description`" class="text-sm font-medium">ការពិពណ៌នា</label>
-                    <textarea
+                    <Label :for="`${mode}-description`">ការពិពណ៌នា</Label>
+                    <Textarea
                         v-model="localForm.description"
                         :id="`${mode}-description`"
                         placeholder="ការពិពណ៌នាអំពីផលិតផល"
-                        class="flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    ></textarea>
+                        class="min-h-[80px]"
+                    />
                     <p v-if="localForm.errors.description" class="text-xs text-red-500">
                         {{ localForm.errors.description }}
                     </p>
@@ -37,7 +37,7 @@
                 <!-- Price and Discount -->
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
-                        <label :for="`${mode}-price`" class="text-sm font-medium">តម្លៃ *</label>
+                        <Label :for="`${mode}-price`">តម្លៃ *</Label>
                         <Input
                             v-model="localForm.price"
                             :id="`${mode}-price`"
@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="space-y-2">
-                        <label :for="`${mode}-discount`" class="text-sm font-medium">បញ្ចុះតម្លៃ (%)</label>
+                        <Label :for="`${mode}-discount`">បញ្ចុះតម្លៃ (%)</Label>
                         <Input
                             v-model="localForm.discount_price_percent"
                             :id="`${mode}-discount`"
@@ -69,7 +69,7 @@
                 <!-- Stock and Size -->
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
-                        <label :for="`${mode}-stock`" class="text-sm font-medium">ចំនួនស្តុក *</label>
+                        <Label :for="`${mode}-stock`">ចំនួនស្តុក *</Label>
                         <Input
                             v-model="localForm.stock"
                             :id="`${mode}-stock`"
@@ -81,16 +81,17 @@
                     </div>
 
                     <div class="space-y-2">
-                        <label :for="`${mode}-size`" class="text-sm font-medium">ទំហំ *</label>
-                        <select
-                            v-model="localForm.size"
-                            :id="`${mode}-size`"
-                            class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
-                        >
-                            <option value="តូច">តូច</option>
-                            <option value="មធ្យម">មធ្យម</option>
-                            <option value="ធំ">ធំ</option>
-                        </select>
+                        <Label :for="`${mode}-size`">ទំហំ *</Label>
+                        <Select v-model="localForm.size">
+                            <SelectTrigger :id="`${mode}-size`">
+                                <SelectValue placeholder="Select size" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="តូច">តូច</SelectItem>
+                                <SelectItem value="មធ្យម">មធ្យម</SelectItem>
+                                <SelectItem value="ធំ">ធំ</SelectItem>
+                            </SelectContent>
+                        </Select>
                         <p v-if="localForm.errors.size" class="text-xs text-red-500">{{ localForm.errors.size }}</p>
                     </div>
                 </div>
@@ -98,7 +99,7 @@
                 <!-- Images Field -->
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <label class="text-sm font-medium text-gray-700">រូបភាពផលិតផល</label>
+                        <Label class="text-gray-700">រូបភាពផលិតផល</Label>
                         <span v-if="imagePreviews.length > 0" class="text-xs text-gray-500">
                             {{ imagePreviews.length }} {{ imagePreviews.length > 1 ? 'images' : 'image' }}
                         </span>
@@ -236,8 +237,11 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from '@/components/ui/alert-dialog'
-import Button from '@/Components/ui/Button.vue'
-import Input from '@/Components/ui/Input.vue'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
 
 const props = defineProps({
     modelValue: {

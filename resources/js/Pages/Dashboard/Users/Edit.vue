@@ -124,8 +124,8 @@
 <script setup>
 import { Link, useForm, Head } from '@inertiajs/vue3'
 import DashboardLayout from '@/Layouts/DashboardLayout.vue'
-import Input from '@/Components/ui/Input.vue'
-import Label from '@/Components/ui/Label.vue'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Save, X } from 'lucide-vue-next'
 
 const props = defineProps({

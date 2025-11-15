@@ -81,12 +81,7 @@
 </template>
 
 <script setup>
-import Table from './Table.vue'
-import TableHeader from './TableHeader.vue'
-import TableBody from './TableBody.vue'
-import TableRow from './TableRow.vue'
-import TableHead from './TableHead.vue'
-import TableCell from './TableCell.vue'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import Pagination from './Pagination.vue'
 
 const props = defineProps({

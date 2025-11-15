@@ -164,7 +164,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { router, Head } from '@inertiajs/vue3'
-import Button from '@/Components/ui/Button.vue'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import DataTable from '@/Components/ui/DataTable.vue'
 import ProductFormDialog from '@/Components/Dashboard/ProductFormDialog.vue'

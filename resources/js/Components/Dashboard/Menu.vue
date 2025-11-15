@@ -145,7 +145,7 @@
 import { router, usePage } from '@inertiajs/vue3'
 import { computed, toRefs, onMounted, onUnmounted, ref } from 'vue'
 import { cn } from '@/lib/utils'
-import Avatar from '@/components/ui/Avatar.vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { GraduationCap, LayoutDashboard, Package, Users, Shield, Home, LogOut } from 'lucide-vue-next'
 
 const props = defineProps({

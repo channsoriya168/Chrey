@@ -125,8 +125,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { usePage } from '@inertiajs/vue3'
-import Alert from '@/Components/ui/Alert.vue'
-import AlertDescription from '@/Components/ui/AlertDescription.vue'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 const props = defineProps({
     autoDismiss: {

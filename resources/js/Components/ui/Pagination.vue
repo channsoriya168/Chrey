@@ -7,15 +7,16 @@
         <div class="flex items-center space-x-6 lg:space-x-8">
             <div class="flex items-center space-x-2">
                 <p class="text-sm font-medium">Rows per page</p>
-                <select
-                    :value="perPage"
-                    @change="$emit('update:perPage', parseInt($event.target.value))"
-                    class="border-input focus:ring-ring h-8 w-[70px] rounded-md border bg-transparent px-2 py-1 text-sm focus:ring-2 focus:ring-offset-2 focus:outline-none"
-                >
-                    <option v-for="size in pageSizes" :key="size" :value="size">
-                        {{ size }}
-                    </option>
-                </select>
+                <Select v-model="selectedPerPage">
+                    <SelectTrigger class="h-8 w-[70px]">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem v-for="size in pageSizes" :key="size" :value="String(size)">
+                            {{ size }}
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
 
             <div class="flex w-[100px] items-center justify-center text-sm font-medium">
@@ -25,7 +26,8 @@
             <div class="flex items-center space-x-2">
                 <Button
                     variant="outline"
-                    size="sm"
+                    size="icon"
+                    class="h-8 w-8"
                     :disabled="currentPage === 1"
                     @click="$emit('update:currentPage', 1)"
                 >
@@ -34,7 +36,8 @@
 
                 <Button
                     variant="outline"
-                    size="sm"
+                    size="icon"
+                    class="h-8 w-8"
                     :disabled="currentPage === 1"
                     @click="$emit('update:currentPage', currentPage - 1)"
                 >
@@ -43,7 +46,8 @@
 
                 <Button
                     variant="outline"
-                    size="sm"
+                    size="icon"
+                    class="h-8 w-8"
                     :disabled="currentPage === lastPage"
                     @click="$emit('update:currentPage', currentPage + 1)"
                 >
@@ -52,7 +56,8 @@
 
                 <Button
                     variant="outline"
-                    size="sm"
+                    size="icon"
+                    class="h-8 w-8"
                     :disabled="currentPage === lastPage"
                     @click="$emit('update:currentPage', lastPage)"
                 >
@@ -64,8 +69,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import Button from './Button.vue'
+import { computed, watch } from 'vue'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -91,7 +97,12 @@ const props = defineProps({
     }
 })
 
-defineEmits(['update:currentPage', 'update:perPage'])
+const emit = defineEmits(['update:currentPage', 'update:perPage'])
+
+const selectedPerPage = computed({
+    get: () => String(props.perPage),
+    set: (value) => emit('update:perPage', parseInt(value))
+})
 
 const from = computed(() => {
     return (props.currentPage - 1) * props.perPage + 1
