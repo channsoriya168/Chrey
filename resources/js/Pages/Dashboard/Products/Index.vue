@@ -41,7 +41,7 @@
             <div class="border-b border-gray-200 p-4">
                 <div class="relative">
                     <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-                    <input v-model="searchQuery" placeholder="Search products..." class="w-full pr-10 pl-10 sm:w-96" />
+                    <Input v-model="searchQuery" placeholder="Search products..." class="w-full pr-10 pl-10 sm:w-96" />
                     <div v-if="loading" class="absolute top-1/2 right-3 -translate-y-1/2">
                         <div class="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900"></div>
                     </div>
@@ -165,7 +165,7 @@
 import { ref, watch } from 'vue'
 import { router, Head } from '@inertiajs/vue3'
 import Button from '@/Components/ui/Button.vue'
-import Input from '@/Components/ui/Input.vue'
+import { Input } from '@/components/ui/input'
 import DataTable from '@/Components/ui/DataTable.vue'
 import ProductFormDialog from '@/Components/Dashboard/ProductFormDialog.vue'
 import { Plus, Search, ImageIcon, Pencil, Trash2, Package } from 'lucide-vue-next'

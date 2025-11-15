@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "WebFetch(domain:www.shadcn-vue.com)"
     ],
     "deny": [],
     "ask": []
