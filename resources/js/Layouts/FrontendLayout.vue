@@ -1,8 +1,6 @@
 <template>
     <div class="frontend-layout">
-        <header>
-            <Menu />
-        </header>
+        <Menu />
 
         <main class="main-content">
             <div class="container mx-auto px-4">

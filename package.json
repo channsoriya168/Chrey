@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^2.0.17",
+        "@smartweb/vue-flash-message": "^0.6.10",
         "@vitejs/plugin-vue": "^6.0.0",
         "@vueuse/core": "^13.9.0",
         "class-variance-authority": "^0.7.1",
