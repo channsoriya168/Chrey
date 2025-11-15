@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 
 class ProductController extends Controller
@@ -17,21 +19,29 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::query();
-
-        // Search functionality
-        if ($request->has('search') && $request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('code', 'like', '%' . $request->search . '%')
-                  ->orWhere('description', 'like', '%' . $request->search . '%');
-        }
-
-        // Pagination
         $perPage = $request->get('per_page', 10);
-        $products = $query->latest()->paginate($perPage);
 
         return inertia('Dashboard/Products/Index', [
-            'products' => $products
+            // Lazy evaluation - only loaded when requested
+            'products' => fn () => QueryBuilder::for(Product::class)
+                ->allowedFilters([
+                    AllowedFilter::callback('search', function ($query, $value) {
+                        $query->where(function ($q) use ($value) {
+                            $q->where('name', 'like', "%{$value}%")
+                              ->orWhere('code', 'like', "%{$value}%")
+                              ->orWhere('description', 'like', "%{$value}%");
+                        });
+                    }),
+                ])
+                ->latest()
+                ->paginate($perPage)
+                ->withQueryString(),
+
+            // Filters are always included
+            'filters' => [
+                'search' => $request->input('filter.search', ''),
+                'per_page' => $perPage,
+            ],
         ]);
     }
 
@@ -93,6 +103,7 @@ class ProductController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * 
      */
     public function edit(Product $product)
     {

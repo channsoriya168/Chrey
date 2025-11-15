@@ -41,12 +41,10 @@
             <div class="border-b border-gray-200 p-4">
                 <div class="relative">
                     <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-                    <Input
-                        v-model="searchQuery"
-                        placeholder="Search products..."
-                        class="w-full pl-10 sm:w-96"
-                        @input="handleSearch"
-                    />
+                    <input v-model="searchQuery" placeholder="Search products..." class="w-full pr-10 pl-10 sm:w-96" />
+                    <div v-if="loading" class="absolute top-1/2 right-3 -translate-y-1/2">
+                        <div class="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900"></div>
+                    </div>
                 </div>
             </div>
 
@@ -66,7 +64,11 @@
                             v-if="item.image_url && item.image_url.length > 0"
                             class="h-16 w-16 overflow-hidden rounded-lg border border-gray-200"
                         >
-                            <img :src="`/storage/${item.image_url[0]}`" :alt="item.name" class="h-full w-full object-cover" />
+                            <img
+                                :src="`/storage/${item.image_url[0]}`"
+                                :alt="item.name"
+                                class="h-full w-full object-cover"
+                            />
                         </div>
                         <div
                             v-else
@@ -156,27 +158,18 @@
                 </template>
             </DataTable>
         </div>
-
-        <!-- Loading Overlay -->
-        <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-            <div class="rounded-xl bg-white p-6 shadow-xl">
-                <div class="flex items-center gap-3">
-                    <div class="h-6 w-6 animate-spin rounded-full border-b-2 border-gray-900"></div>
-                    <span class="font-medium text-gray-700">Loading...</span>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { router, Head } from '@inertiajs/vue3'
 import Button from '@/Components/ui/Button.vue'
 import Input from '@/Components/ui/Input.vue'
 import DataTable from '@/Components/ui/DataTable.vue'
 import ProductFormDialog from '@/Components/Dashboard/ProductFormDialog.vue'
 import { Plus, Search, ImageIcon, Pencil, Trash2, Package } from 'lucide-vue-next'
+import { useDebounceFn } from '@vueuse/core'
 
 // Props from Inertia
 const props = defineProps({
@@ -191,12 +184,19 @@ const props = defineProps({
             from: 0,
             to: 0
         })
+    },
+    filters: {
+        type: Object,
+        default: () => ({
+            search: '',
+            per_page: 10
+        })
     }
 })
 
 // State
 const loading = ref(false)
-const searchQuery = ref('')
+const searchQuery = ref(props.filters.search || '')
 const isCreateDialogOpen = ref(false)
 const isEditDialogOpen = ref(false)
 const currentEditItem = ref(null)
@@ -266,50 +266,52 @@ const handleDelete = (item) => {
     }
 }
 
-const handlePageChange = (page) => {
-    router.get(
-        '/dashboard/products',
-        {
-            page,
-            search: searchQuery.value
+// Debounced search function
+const debouncedSearch = useDebounceFn((value) => {
+    router.reload({
+        data: {
+            'filter[search]': value || undefined,
+            per_page: props.filters.per_page
         },
-        {
-            preserveState: true,
-            preserveScroll: true,
-            onStart: () => (loading.value = true),
-            onFinish: () => (loading.value = false)
-        }
-    )
+        only: ['products'],
+        preserveState: true,
+        preserveScroll: true,
+        onStart: () => (loading.value = true),
+        onFinish: () => (loading.value = false)
+    })
+}, 300)
+
+// Watch search query for auto-search with debounce
+watch(searchQuery, (value) => {
+    debouncedSearch(value)
+})
+
+const handlePageChange = (page) => {
+    router.reload({
+        data: {
+            page,
+            'filter[search]': searchQuery.value || undefined,
+            per_page: props.filters.per_page
+        },
+        only: ['products'],
+        preserveState: true,
+        preserveScroll: true,
+        onStart: () => (loading.value = true),
+        onFinish: () => (loading.value = false)
+    })
 }
 
 const handlePerPageChange = (perPage) => {
-    router.get(
-        '/dashboard/products',
-        {
+    router.reload({
+        data: {
             per_page: perPage,
-            search: searchQuery.value
+            'filter[search]': searchQuery.value || undefined
         },
-        {
-            preserveState: true,
-            preserveScroll: true,
-            onStart: () => (loading.value = true),
-            onFinish: () => (loading.value = false)
-        }
-    )
-}
-
-const handleSearch = () => {
-    router.get(
-        '/dashboard/products',
-        {
-            search: searchQuery.value
-        },
-        {
-            preserveState: true,
-            preserveScroll: true,
-            onStart: () => (loading.value = true),
-            onFinish: () => (loading.value = false)
-        }
-    )
+        only: ['products'],
+        preserveState: true,
+        preserveScroll: true,
+        onStart: () => (loading.value = true),
+        onFinish: () => (loading.value = false)
+    })
 }
 </script>

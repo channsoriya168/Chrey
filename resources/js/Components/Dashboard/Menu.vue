@@ -51,23 +51,6 @@
                     <LayoutDashboard class="h-5 w-5" />
                     <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ផ្ទាំងគ្រប់គ្រង</span>
                 </button>
-                <!-- categories -->
-                <button
-                    @click="navigateCallback('dashboard.categories.index')"
-                    :class="
-                        cn(
-                            'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
-                            {
-                                'bg-gray-900 text-white': isActive('categories'),
-                                'text-gray-700 hover:bg-gray-100': !isActive('categories'),
-                                'justify-center px-0': rail && !mobile
-                            }
-                        )
-                    "
-                >
-                    <Tags class="h-5 w-5" />
-                    <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ប្រភេទ</span>
-                </button>
                 <!-- products -->
 
                 <button
@@ -163,7 +146,7 @@ import { router, usePage } from '@inertiajs/vue3'
 import { computed, toRefs, onMounted, onUnmounted, ref } from 'vue'
 import { cn } from '@/lib/utils'
 import Avatar from '@/components/ui/Avatar.vue'
-import { GraduationCap, LayoutDashboard, Package, Tags, Users, Shield, Home, LogOut } from 'lucide-vue-next'
+import { GraduationCap, LayoutDashboard, Package, Users, Shield, Home, LogOut } from 'lucide-vue-next'
 
 const props = defineProps({
     modelValue: {
@@ -211,10 +194,6 @@ const isActive = (section) => {
         return url === '/dashboard' || url === '/dashboard/'
     } else if (section === 'products') {
         return url.includes('/products')
-    } else if (section === 'products') {
-        return url.includes('/products')
-    } else if (section === 'categories') {
-        return url.includes('/categories')
     } else if (section === 'users') {
         return url.includes('/users')
     } else if (section === 'roles') {

@@ -27,9 +27,6 @@ class RolesSeeder extends Seeder
         // Assign specific permissions to moderator
         $moderatorRole->syncPermissions([
             'access dashboard',
-            'view categories',
-            'create categories',
-            'edit categories',
             'view products',
             'create products',
             'edit products',
@@ -38,7 +35,6 @@ class RolesSeeder extends Seeder
 
         // Assign basic permissions to user
         $userRole->syncPermissions([
-            'view categories',
             'view products',
         ]);
     }
