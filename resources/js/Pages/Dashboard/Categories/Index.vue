@@ -17,7 +17,6 @@
                     </AlertDialogHeader>
                     <div class="space-y-4 py-4">
                         <!-- Name Field -->
-                        {{ item }}
                         <div class="space-y-2">
                             <label for="name" class="text-sm font-medium">ឈ្មោះ *</label>
                             <vee-field name="name" v-model="form.name" v-slot="{ field }">

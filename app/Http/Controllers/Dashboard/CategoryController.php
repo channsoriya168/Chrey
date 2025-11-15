@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -84,8 +85,8 @@ class CategoryController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($category->image_url && \Storage::disk('public')->exists($category->image_url)) {
-                \Storage::disk('public')->delete($category->image_url);
+            if ($category->image_url && Storage::disk('public')->exists($category->image_url)) {
+                Storage::disk('public')->delete($category->image_url);
             }
             $category->image_url = $request->file('image')->store('categories', 'public');
         }
@@ -101,8 +102,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         // Delete associated image if exists
-        if ($category->image_url && \Storage::disk('public')->exists($category->image_url)) {
-            \Storage::disk('public')->delete($category->image_url);
+        if ($category->image_url && Storage::disk('public')->exists($category->image_url)) {
+            Storage::disk('public')->delete($category->image_url);
         }
 
         $category->delete();

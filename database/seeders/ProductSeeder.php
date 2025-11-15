@@ -15,10 +15,10 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get category IDs
-        $electronicsId = Category::where('slug', 'electronics')->first()->id;
-        $fashionId = Category::where('slug', 'fashion')->first()->id;
-        $homeLivingId = Category::where('slug', 'home-living')->first()->id;
+        // Get category IDs by name instead of slug since slugs are now UUIDs
+        $electronicsId = Category::where('name', 'Electronics')->first()->id;
+        $fashionId = Category::where('name', 'Fashion')->first()->id;
+        $homeLivingId = Category::where('name', 'Home & Living')->first()->id;
 
         $products = [
             // Electronics Products
