@@ -17,17 +17,17 @@ class CategorySeeder extends Seeder
         $categories = [
             [
                 'name' => 'Electronics',
-                'slug' => 'electronics',
+                'slug' => Str::uuid(),
                 'image_url' => 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=200&h=200&fit=crop',
             ],
             [
                 'name' => 'Fashion',
-                'slug' => 'fashion',
+                'slug' => Str::uuid(),
                 'image_url' => 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=200&h=200&fit=crop',
             ],
             [
                 'name' => 'Home & Living',
-                'slug' => 'home-living',
+                'slug' => Str::uuid(),
                 'image_url' => 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=200&h=200&fit=crop',
             ],
         ];

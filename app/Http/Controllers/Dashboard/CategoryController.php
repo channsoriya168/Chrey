@@ -35,7 +35,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return inertia('Dashboard/Categories/Create');
+        
     }
 
     /**
@@ -45,15 +45,15 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $category = new Category();
         $category->name = $request->name;
-        $category->slug = Str::slug($request->name);
+        $category->slug = Str::uuid();
 
-        if ($request->hasFile('image_url')) {
-            $category->image_url = $request->file('image_url')->store('categories', 'public');
+        if ($request->hasFile('image')) {
+            $category->image_url = $request->file('image')->store('categories', 'public');
         }
 
         $category->save();
@@ -66,9 +66,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return inertia('Dashboard/Categories/Edit', [
-            'category' => $category
-        ]);
+        
     }
 
     /**
@@ -78,18 +76,18 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $category->name = $request->name;
         $category->slug = Str::slug($request->name);
 
-        if ($request->hasFile('image_url')) {
+        if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($category->image_url && \Storage::disk('public')->exists($category->image_url)) {
                 \Storage::disk('public')->delete($category->image_url);
             }
-            $category->image_url = $request->file('image_url')->store('categories', 'public');
+            $category->image_url = $request->file('image')->store('categories', 'public');
         }
 
         $category->save();

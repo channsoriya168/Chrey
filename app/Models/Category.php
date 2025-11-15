@@ -16,4 +16,14 @@ class Category extends Model
         'slug',
         'image_url',
     ];
+
+    /**
+     * Get the full URL for the image.
+     */
+    protected function imageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn ($value) => $value ? asset('storage/' . $value) : null,
+        );
+    }
 }
