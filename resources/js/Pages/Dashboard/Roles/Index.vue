@@ -1,5 +1,4 @@
 <template>
-    <DashboardLayout>
         <div class="p-6">
             <div class="mb-6 flex items-center justify-between">
                 <h1 class="text-2xl font-bold">Role Management</h1>
@@ -61,7 +60,6 @@
                 </div>
             </div>
         </div>
-    </DashboardLayout>
 </template>
 
 <script setup>

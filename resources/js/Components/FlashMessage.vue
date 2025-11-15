@@ -1,131 +1,238 @@
 <template>
-    <transition
-        enter-active-class="transition ease-out duration-300"
-        enter-from-class="opacity-0 transform translate-y-2"
-        enter-to-class="opacity-100 transform translate-y-0"
-        leave-active-class="transition ease-in duration-200"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-    >
-        <div v-if="show" class="mb-4">
+    <!-- Fixed position container for toast notifications -->
+    <Teleport to="body">
+        <div
+            class="fixed top-4 right-4 z-50 flex flex-col gap-3 w-full max-w-md pointer-events-none"
+            aria-live="polite"
+            aria-atomic="true"
+        >
             <!-- Success Message -->
-            <Alert v-if="flash.success" variant="success" class="relative">
-                <div class="flex items-start">
-                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <div class="flex-1">
-                        <AlertDescription>{{ flash.success }}</AlertDescription>
-                    </div>
-                    <button @click="clearMessage('success')" class="ml-4 flex-shrink-0">
-                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </Alert>
-
-            <!-- Error Message -->
-            <Alert
-                v-if="flash.error || (errors && Object.keys(errors).length > 0)"
-                variant="destructive"
-                class="relative"
+            <TransitionGroup
+                enter-active-class="transform transition duration-300 ease-out"
+                enter-from-class="translate-x-full opacity-0"
+                enter-to-class="translate-x-0 opacity-100"
+                leave-active-class="transform transition duration-200 ease-in"
+                leave-from-class="translate-x-0 opacity-100"
+                leave-to-class="translate-x-full opacity-0"
             >
-                <div class="flex items-start">
-                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <div class="flex-1">
-                        <AlertDescription v-if="flash.error">{{ flash.error }}</AlertDescription>
-                        <AlertDescription v-else-if="errors && Object.keys(errors).length > 0">
-                            <ul class="list-inside list-disc space-y-1">
-                                <li v-for="(error, key) in errors" :key="key">
-                                    {{ Array.isArray(error) ? error[0] : error }}
-                                </li>
-                            </ul>
-                        </AlertDescription>
+                <Alert
+                    v-if="show && flash.success"
+                    key="success"
+                    variant="success"
+                    class="pointer-events-auto shadow-lg border-l-4 border-l-green-700"
+                >
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-5 h-5 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        </div>
+                        <div class="flex-1 pt-1">
+                            <h4 class="font-semibold text-sm text-white mb-1">
+                                Success!
+                            </h4>
+                            <AlertDescription class="text-sm text-white/90">
+                                {{ flash.success }}
+                            </AlertDescription>
+                        </div>
+                        <button
+                            @click="clearMessage('success')"
+                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-white/20 dark:hover:bg-white/10 transition-colors"
+                            aria-label="Dismiss"
+                        >
+                            <svg class="w-4 h-4 text-green" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </button>
                     </div>
-                    <button @click="clearMessage('error')" class="ml-4 flex-shrink-0">
-                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </Alert>
+                    <div v-if="props.autoDismiss && !flash.error" class="absolute bottom-0 left-0 h-1 bg-green-700 rounded-b" :style="{ width: progressWidth + '%' }"></div>
+                </Alert>
 
-            <!-- Warning Message -->
-            <Alert v-if="flash.warning" variant="warning" class="relative">
-                <div class="flex items-start">
-                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            fill-rule="evenodd"
-                            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <div class="flex-1">
-                        <AlertDescription>{{ flash.warning }}</AlertDescription>
+                <!-- Error Message -->
+                <Alert
+                    v-if="show && (flash.error || (errors && Object.keys(errors).length > 0))"
+                    key="error"
+                    variant="destructive"
+                    class="pointer-events-auto shadow-lg border-l-4 border-l-red-700"
+                >
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-5 h-5 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        </div>
+                        <div class="flex-1 pt-1">
+                            <h4 class="font-semibold text-sm text-white mb-1">
+                                Error!
+                            </h4>
+                            <AlertDescription v-if="flash.error" class="text-sm text-white/90">
+                                {{ flash.error }}
+                            </AlertDescription>
+                            <AlertDescription v-else-if="errors && Object.keys(errors).length > 0" class="text-sm text-white/90">
+                                <ul class="space-y-1 mt-1">
+                                    <li
+                                        v-for="(error, key) in errors"
+                                        :key="key"
+                                        class="flex items-start gap-2"
+                                    >
+                                        <span class="text-white mt-0.5">•</span>
+                                        <span>{{ Array.isArray(error) ? error[0] : error }}</span>
+                                    </li>
+                                </ul>
+                            </AlertDescription>
+                        </div>
+                        <button
+                            @click="clearMessage('error')"
+                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-white/20 dark:hover:bg-white/10 transition-colors"
+                            aria-label="Dismiss"
+                        >
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </button>
                     </div>
-                    <button @click="clearMessage('warning')" class="ml-4 flex-shrink-0">
-                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </Alert>
+                </Alert>
 
-            <!-- Info Message -->
-            <Alert v-if="flash.info" variant="default" class="relative">
-                <div class="flex items-start">
-                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <div class="flex-1">
-                        <AlertDescription>{{ flash.info }}</AlertDescription>
+                <!-- Warning Message -->
+                <Alert
+                    v-if="show && flash.warning"
+                    key="warning"
+                    variant="warning"
+                    class="pointer-events-auto shadow-lg border-l-4 border-l-amber-500"
+                >
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-5 h-5 text-amber-600 dark:text-amber-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                />
+                            </svg>
+                        </div>
+                        <div class="flex-1 pt-1">
+                            <h4 class="font-semibold text-sm text-amber-900 dark:text-amber-100 mb-1">
+                                Warning!
+                            </h4>
+                            <AlertDescription class="text-sm text-amber-800 dark:text-amber-200">
+                                {{ flash.warning }}
+                            </AlertDescription>
+                        </div>
+                        <button
+                            @click="clearMessage('warning')"
+                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
+                            aria-label="Dismiss"
+                        >
+                            <svg class="w-4 h-4 text-amber-600 dark:text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </button>
                     </div>
-                    <button @click="clearMessage('info')" class="ml-4 flex-shrink-0">
-                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </Alert>
+                    <div v-if="props.autoDismiss" class="absolute bottom-0 left-0 h-1 bg-amber-500 rounded-b" :style="{ width: progressWidth + '%' }"></div>
+                </Alert>
+
+                <!-- Info Message -->
+                <Alert
+                    v-if="show && flash.info"
+                    key="info"
+                    variant="default"
+                    class="pointer-events-auto shadow-lg border-l-4 border-l-blue-500"
+                >
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-5 h-5 text-blue-600 dark:text-blue-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        </div>
+                        <div class="flex-1 pt-1">
+                            <h4 class="font-semibold text-sm text-blue-900 dark:text-blue-100 mb-1">
+                                Info
+                            </h4>
+                            <AlertDescription class="text-sm text-blue-800 dark:text-blue-200">
+                                {{ flash.info }}
+                            </AlertDescription>
+                        </div>
+                        <button
+                            @click="clearMessage('info')"
+                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                            aria-label="Dismiss"
+                        >
+                            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                    <div v-if="props.autoDismiss" class="absolute bottom-0 left-0 h-1 bg-blue-500 rounded-b" :style="{ width: progressWidth + '%' }"></div>
+                </Alert>
+            </TransitionGroup>
         </div>
-    </transition>
+    </Teleport>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { usePage } from '@inertiajs/vue3'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { usePage, router } from '@inertiajs/vue3'
+import { Alert, AlertDescription } from '@/Components/ui/alert'
 
 const props = defineProps({
     autoDismiss: {
@@ -142,8 +249,11 @@ const page = usePage()
 const show = ref(false)
 const flash = computed(() => page.props.flash || {})
 const errors = computed(() => page.props.errors || {})
+const progressWidth = ref(100)
+const messageKey = ref(0)
 
 let timeoutId = null
+let progressInterval = null
 
 const hasMessages = computed(() => {
     return (
@@ -155,26 +265,59 @@ const hasMessages = computed(() => {
     )
 })
 
+const startProgressBar = () => {
+    progressWidth.value = 100
+    const step = 100 / (props.dismissTimeout / 50)
+    
+    progressInterval = setInterval(() => {
+        progressWidth.value -= step
+        if (progressWidth.value <= 0) {
+            clearInterval(progressInterval)
+        }
+    }, 50)
+}
+
+const stopProgressBar = () => {
+    if (progressInterval) {
+        clearInterval(progressInterval)
+        progressInterval = null
+    }
+}
+
+// Watch for flash message changes (including on navigation)
 watch(
-    hasMessages,
-    (newVal) => {
-        if (newVal) {
+    () => [flash.value.success, flash.value.error, flash.value.warning, flash.value.info],
+    () => {
+        if (hasMessages.value) {
+            // Force re-render by updating key
+            messageKey.value++
             show.value = true
 
-            if (props.autoDismiss && !flash.value.error && !errors.value) {
-                clearTimeout(timeoutId)
+            // Clear existing timers
+            stopProgressBar()
+            clearTimeout(timeoutId)
+
+            // Only auto-dismiss success, warning, and info messages
+            if (props.autoDismiss && !flash.value.error && !(errors.value && Object.keys(errors.value).length > 0)) {
+                startProgressBar()
+                
                 timeoutId = setTimeout(() => {
                     show.value = false
+                    stopProgressBar()
                 }, props.dismissTimeout)
             }
         } else {
             show.value = false
+            stopProgressBar()
         }
     },
-    { immediate: true }
+    { immediate: true, deep: true }
 )
 
 const clearMessage = (type) => {
+    stopProgressBar()
+    clearTimeout(timeoutId)
+    
     if (type === 'error') {
         // Clear both flash error and validation errors
         page.props.flash.error = null
@@ -189,9 +332,23 @@ const clearMessage = (type) => {
     }
 }
 
+// Listen to Inertia navigation events to reset messages
+router.on('success', () => {
+    // Reset the message key to trigger re-render
+    messageKey.value++
+})
+
 onMounted(() => {
     if (hasMessages.value) {
         show.value = true
+        messageKey.value++
+    }
+})
+
+onUnmounted(() => {
+    stopProgressBar()
+    if (timeoutId) {
+        clearTimeout(timeoutId)
     }
 })
 </script>

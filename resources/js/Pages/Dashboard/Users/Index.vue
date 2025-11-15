@@ -1,8 +1,22 @@
 <template>
-    <DashboardLayout>
         <Head title="គ្រប់គ្រងអ្នកប្រើប្រាស់" />
 
         <div class="space-y-6">
+            <!-- Breadcrumb -->
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink :href="route('dashboard.index')">
+                            <span class="khmer-text">ទំព័រដើម</span>
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage class="khmer-text">អ្នកប្រើប្រាស់</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
@@ -139,13 +153,20 @@
                 />
             </div>
         </div>
-    </DashboardLayout>
 </template>
 
 <script setup>
 import { Link, router, Head } from '@inertiajs/vue3'
 import DashboardLayout from '@/Layouts/DashboardLayout.vue'
 import { UserPlus, Users, Edit, Trash2 } from 'lucide-vue-next'
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
 
 defineProps({
     users: Object

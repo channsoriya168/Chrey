@@ -1,8 +1,28 @@
 <template>
-    <DashboardLayout>
         <Head title="កែសម្រួលអ្នកប្រើប្រាស់" />
 
         <div class="max-w-3xl space-y-6">
+            <!-- Breadcrumb -->
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink :href="route('dashboard.index')">
+                            <span class="khmer-text">ទំព័រដើម</span>
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink :href="route('dashboard.users.index')">
+                            <span class="khmer-text">អ្នកប្រើប្រាស់</span>
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage class="khmer-text">កែសម្រួល</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+
             <!-- Header -->
             <div>
                 <h1 class="khmer-text text-2xl font-bold text-gray-900">កែសម្រួលអ្នកប្រើប្រាស់</h1>
@@ -118,7 +138,6 @@
                 </form>
             </div>
         </div>
-    </DashboardLayout>
 </template>
 
 <script setup>
@@ -127,6 +146,14 @@ import DashboardLayout from '@/Layouts/DashboardLayout.vue'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Save, X } from 'lucide-vue-next'
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
 
 const props = defineProps({
     user: Object,
