@@ -1,14 +1,13 @@
 <template>
-    <div class="space-y-1.5 group">
+    <div class="space-y-2 group">
         <!-- Label -->
         <Label 
             v-if="label" 
             :for="id" 
-            class="text-xs font-bold text-gray-800 tracking-wide flex items-center gap-1.5"
+            class="khmer-text text-sm font-bold text-gray-700 flex items-center gap-2"
         >
-            <div class="w-1 h-3 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></div>
             {{ label }}
-            <span v-if="required" class="text-red-500">*</span>
+            <span v-if="required" class="text-red-500 text-base">*</span>
         </Label>
 
         <!-- Input Field -->

@@ -50,7 +50,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return inertia('Dashboard/Product/Create');
+        return inertia('Dashboard/Products/Create');
     }
 
     /**
@@ -107,7 +107,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return inertia('Dashboard/Products/Edit', [
+            'product' => $product
+        ]);
     }
 
     /**
