@@ -8,5 +8,8 @@
   "bracketSpacing": true,
   "arrowParens": "always",
   "endOfLine": "lf",
-  "vueIndentScriptAndStyle": false
+  "vueIndentScriptAndStyle": false,
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindConfig": "./tailwind.config.js",
+  "tailwindFunctions": ["clsx", "cn", "cva"]
 }

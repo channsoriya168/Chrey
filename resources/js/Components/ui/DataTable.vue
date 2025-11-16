@@ -1,25 +1,30 @@
 <template>
-    <div class="space-y-4">
-        <!-- Search and Filters Slot -->
-        <div v-if="$slots.filters" class="flex items-center gap-4">
-            <slot name="filters" />
-        </div>
-
+    <div class="overflow-hidden bg-white shadow-sm">
         <!-- Table Container -->
-        <div class="overflow-hidden rounded-lg border border-gray-200">
+        <div class="min-h-[200px] overflow-x-auto pb-2">
             <Table>
                 <TableHeader>
-                    <TableRow class="bg-gray-50 border-b border-gray-200">
-                        <TableHead v-for="column in columns" :key="column.key" :class="column.headerClass">
+                    <TableRow class="bg-amber-800">
+                        <TableHead
+                            v-for="(column, colIndex) in columns"
+                            :key="column.key"
+                            :class="[
+                                column.headerClass,
+                                colIndex === 0 ? 'rounded-l-lg' : '',
+                                colIndex === columns.length - 1 && !($slots.actions || hasActionButtons)
+                                    ? 'rounded-tr-lg'
+                                    : ''
+                            ]"
+                        >
                             <slot :name="`header-${column.key}`" :column="column">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-gray-600">
+                                <span class="text-xs font-semibold uppercase tracking-wide text-white">
                                     {{ column.label }}
                                 </span>
                             </slot>
                         </TableHead>
-                        <TableHead v-if="$slots.actions || hasActionButtons" class="text-right">
+                        <TableHead v-if="$slots.actions || hasActionButtons" :class="['text-center', 'rounded-r-lg']">
                             <slot name="header-actions">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-gray-600">Actions</span>
+                                <span class="text-xs font-semibold uppercase tracking-wide text-white">Actions</span>
                             </slot>
                         </TableHead>
                     </TableRow>
@@ -28,19 +33,25 @@
                 <TableBody>
                     <!-- Loading State -->
                     <TableRow v-if="loading">
-                        <TableCell :colspan="columns.length + ($slots.actions || hasActionButtons ? 1 : 0)" class="h-24 text-center">
+                        <TableCell
+                            :colspan="columns.length + ($slots.actions || hasActionButtons ? 1 : 0)"
+                            class="h-24 text-center"
+                        >
                             <div class="flex items-center justify-center">
                                 <div
-                                    class="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"
+                                    class="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"
                                 ></div>
-                                <span class="text-muted-foreground ml-2">Loading...</span>
+                                <span class="ml-2 text-muted-foreground">Loading...</span>
                             </div>
                         </TableCell>
                     </TableRow>
 
                     <!-- Empty State -->
                     <TableRow v-else-if="!data || data.length === 0">
-                        <TableCell :colspan="columns.length + ($slots.actions || hasActionButtons ? 1 : 0)" class="h-24 text-center">
+                        <TableCell
+                            :colspan="columns.length + ($slots.actions || hasActionButtons ? 1 : 0)"
+                            class="h-24 text-center"
+                        >
                             <slot name="empty">
                                 <div class="text-muted-foreground">No results found.</div>
                             </slot>
@@ -52,16 +63,31 @@
                         v-else
                         v-for="(item, index) in data"
                         :key="getRowKey(item, index)"
-                        class="border-b border-gray-100 transition-all duration-200 hover:bg-gray-50/60"
+                        class="group transition-all duration-200 hover:bg-amber-50"
                     >
-                        <TableCell v-for="column in columns" :key="column.key" :class="['py-4', column.cellClass]">
+                        <TableCell
+                            v-for="(column, colIndex) in columns"
+                            :key="column.key"
+                            :class="[
+                                'relative py-4 transition-colors duration-200',
+                                column.cellClass,
+                                'group-hover:bg-gray-200 group-hover:text-white',
+                                colIndex === 0 ? 'group-hover:rounded-l-lg' : '',
+                                colIndex === columns.length - 1 && !($slots.actions || hasActionButtons)
+                                    ? 'group-hover:rounded-r-lg'
+                                    : ''
+                            ]"
+                        >
                             <slot :name="`cell-${column.key}`" :item="item" :value="item[column.key]" :index="index">
-                                <span class="text-sm text-gray-700">{{ item[column.key] }}</span>
+                                <span class="text-sm text-gray-700 group-hover:text-white">{{ item[column.key] }}</span>
                             </slot>
                         </TableCell>
 
                         <!-- Actions Column -->
-                        <TableCell v-if="$slots.actions || hasActionButtons" class="py-4 text-right">
+                        <TableCell
+                            v-if="$slots.actions || hasActionButtons"
+                            class="relative py-4 text-center transition-colors duration-200 group-hover:rounded-r-lg group-hover:bg-gray-200 group-hover:text-white"
+                        >
                             <slot name="actions" :item="item" :index="index">
                                 <!-- Default Action Buttons -->
                                 <div v-if="hasActionButtons" class="inline-flex items-center justify-end gap-1.5">
@@ -111,11 +137,9 @@
             <template #info>
                 <slot name="pagination-info" :pagination="pagination">
                     <span v-if="pagination.total > 0">
-                        បង្ហាញពី {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} results
+                        Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} results
                     </span>
-                    <span v-else>
-                        បង្ហាញពី 0 results
-                    </span>
+                    <span v-else> Showing 0 results </span>
                 </slot>
             </template>
         </Pagination>
@@ -138,7 +162,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table'
 import Pagination from './Pagination.vue'
 import DeleteDialog from './DeleteDialog.vue'
 import { Eye, Pencil, Trash2 } from 'lucide-vue-next'

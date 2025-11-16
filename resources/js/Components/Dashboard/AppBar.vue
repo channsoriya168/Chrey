@@ -8,7 +8,7 @@
                 <Menu class="h-5 w-5" />
             </button>
             <div class="hidden md:block">
-                <h1 class="khmer-text text-lg font-semibold text-gray-900">ប្រព័ន្ធគ្រប់គ្រង</h1>
+                <h1 class="khmer-text text-lg font-semibold text-amber-800">ប្រព័ន្ធគ្រប់គ្រង</h1>
             </div>
         </div>
 

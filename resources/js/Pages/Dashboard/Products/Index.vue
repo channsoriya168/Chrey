@@ -3,43 +3,36 @@
 
     <div class="space-y-6">
         <!-- Breadcrumb -->
-        <Breadcrumb>
-            <BreadcrumbList>
-                <BreadcrumbItem>
-                    <BreadcrumbLink :href="route('dashboard.index')">
-                        <span class="khmer-text">ទំព័រដើម</span>
-                    </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                    <BreadcrumbPage class="khmer-text">ផលិតផល</BreadcrumbPage>
-                </BreadcrumbItem>
-            </BreadcrumbList>
-        </Breadcrumb>
-        
+        <DashboardBreadcrumb :items="[{ label: 'ទំព័រដើម', href: route('dashboard.index') }, { label: 'ផលិតផល' }]" />
 
-        <!-- Header Section -->
-        <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <div class="flex items-center justify-between bg-blue-200 p-3 rounded-lg">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Products</h1>
-                <p class="mt-1 text-sm text-gray-500">Manage your product inventory</p>
+                <h1 class="khmer-text text-2xl font-bold text-gray-900">គ្រប់គ្រងផលិតផល</h1>
             </div>
-            <Button @click="isCreateDialogOpen=true" class="bg-gray-900 text-white hover:bg-gray-800">
-                <Plus class="mr-2 h-6 w-7" />
-                 បង្កើត
-            </Button>
+            <Link
+                @click="createCallback"
+                class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-white transition-colors hover:bg-gray-800"
+            >
+                <Plus class="h-4 w-4" />
+                <span class="khmer-text">បង្កើត</span>
+            </Link>
         </div>
 
         <!-- Table Card -->
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div class="overflow-hidden">
             <!-- Search Section -->
-            <div class="border-b border-gray-200 p-4">
-                <div class="relative">
-                    <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-                    <Input v-model="filter.search" placeholder="Search products..." class="w-full pr-10 pl-10 sm:w-96" />
-                    <div v-if="loading" class="absolute top-1/2 right-3 -translate-y-1/2">
-                        <div class="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900"></div>
-                    </div>
+            <div class="border-b border-gray-200 py-4 flex items-center justify-end">
+                <div class="relative w-full sm:w-96">
+                    <Search
+                        class="pointer-events-none absolute left-3 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-gray-400"
+                    />
+                    <input
+                        type="text"
+                        id="search"
+                        v-model="filter.search"
+                        placeholder="ស្វែងរកផលិតផល"
+                        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                    />
                 </div>
             </div>
 
@@ -62,7 +55,7 @@
                     <div class="flex-shrink-0">
                         <div
                             v-if="item.image_url && item.image_url.length > 0"
-                            class="h-12 w-12 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm"
+                            class="h-20 w-20 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm"
                         >
                             <img
                                 :src="`/storage/${item.image_url[0]}`"
@@ -72,7 +65,7 @@
                         </div>
                         <div
                             v-else
-                            class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-200 bg-gray-50"
+                            class="flex h-20 w-20 items-center justify-center rounded-lg border border-gray-200 bg-gray-50"
                         >
                             <ImageIcon class="h-5 w-5 text-gray-400" />
                         </div>
@@ -140,17 +133,11 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { router, Head } from '@inertiajs/vue3'
+import FormField from '@/Components/ui/FormField.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import DataTable from '@/Components/ui/DataTable.vue'
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator
-} from '@/components/ui/breadcrumb'
+import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
 import { Plus, Search, ImageIcon, Package } from 'lucide-vue-next'
 
 // Props from Inertia
@@ -175,8 +162,6 @@ const props = defineProps({
     }
 })
 
-
-const isCreateDialogOpen = ref(false);
 // State
 const loading = ref(false)
 
@@ -189,28 +174,32 @@ const columns = [
     {
         key: 'image_url',
         label: 'Image',
-        cellClass: 'w-16'
+        // cellClass: 'w-16'
     },
     {
         key: 'name',
         label: 'Product',
-        cellClass: 'min-w-[200px]'
+        // cellClass: 'min-w-[200px]'
     },
     {
         key: 'price',
         label: 'Price',
-        cellClass: 'w-32'
+        // cellClass: 'w-32'
     },
     {
         key: 'stock',
         label: 'Stock',
-        cellClass: 'w-28'
+        // cellClass: 'w-28'
     }
 ]
 
-watch(filter, () => {
-    filterCallback()
-}, { deep: true })
+watch(
+    filter,
+    () => {
+        filterCallback()
+    },
+    { deep: true }
+)
 
 /**
  * Filter callback.
@@ -228,7 +217,7 @@ const filterCallback = () => {
 }
 
 // Navigate to create page
-const handleCreate = () => {
+const createCallback = () => {
     router.visit('/dashboard/products/create')
 }
 
@@ -277,5 +266,4 @@ const handlePerPageChange = (perPage) => {
         }
     })
 }
-
 </script>

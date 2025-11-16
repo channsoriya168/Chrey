@@ -21,7 +21,7 @@
         <div :class="cn('flex items-center border-b border-gray-200 p-4', { 'justify-center': rail && !mobile })">
             <div
                 :class="
-                    cn('flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900', {
+                    cn('flex h-10 w-10 items-center justify-center rounded-lg bg-amber-800', {
                         'mr-0': rail && !mobile,
                         'mr-3': !rail || mobile
                     })
@@ -29,7 +29,7 @@
             >
                 <GraduationCap class="h-5 w-5 text-white" />
             </div>
-            <div v-if="!rail || mobile" class="khmer-text text-lg font-bold text-gray-900">ជ្រៃ</div>
+            <div v-if="!rail || mobile" class="khmer-text text-lg font-bold text-amber-800">ជ្រៃ</div>
         </div>
 
         <!-- Main Navigation -->
@@ -41,7 +41,7 @@
                         cn(
                             'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                             {
-                                'bg-gray-900 text-white': isActive('dashboard'),
+                                'bg-amber-800 text-white': isActive('dashboard'),
                                 'text-gray-700 hover:bg-gray-100': !isActive('dashboard'),
                                 'justify-center px-0': rail && !mobile
                             }
@@ -59,7 +59,7 @@
                         cn(
                             'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                             {
-                                'bg-gray-900 text-white': isActive('products'),
+                                'bg-amber-800 text-white': isActive('products'),
                                 'text-gray-700 hover:bg-gray-100': !isActive('products'),
                                 'justify-center px-0': rail && !mobile
                             }
@@ -76,7 +76,7 @@
                         cn(
                             'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                             {
-                                'bg-gray-900 text-white': isActive('users'),
+                                'bg-amber-800 text-white': isActive('users'),
                                 'text-gray-700 hover:bg-gray-100': !isActive('users'),
                                 'justify-center px-0': rail && !mobile
                             }
@@ -93,7 +93,7 @@
                         cn(
                             'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                             {
-                                'bg-gray-900 text-white': isActive('roles'),
+                                'bg-amber-800 text-white': isActive('roles'),
                                 'text-gray-700 hover:bg-gray-100': !isActive('roles'),
                                 'justify-center px-0': rail && !mobile
                             }
