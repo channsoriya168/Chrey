@@ -3,12 +3,10 @@
 
     <div class="space-y-6">
         <!-- Breadcrumb -->
-        <DashboardBreadcrumb :items="[{ label: 'ទំព័រដើម', href: route('dashboard.index') }, { label: 'ផលិតផល' }]" />
+        
 
-        <div class="flex items-center justify-between bg-blue-200 p-3 rounded-lg">
-            <div>
-                <h1 class="khmer-text text-2xl font-bold text-gray-900">គ្រប់គ្រងផលិតផល</h1>
-            </div>
+        <div class="flex items-center justify-between">
+            <DashboardBreadcrumb :items="[{ label: 'ផ្ទាំងគ្រប់គ្រង', href: route('dashboard.index') }, { label: 'ផលិតផល' }]" />
             <Link
                 @click="createCallback"
                 class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-white transition-colors hover:bg-gray-800"
@@ -16,6 +14,7 @@
                 <Plus class="h-4 w-4" />
                 <span class="khmer-text">បង្កើត</span>
             </Link>
+           
         </div>
 
         <!-- Table Card -->

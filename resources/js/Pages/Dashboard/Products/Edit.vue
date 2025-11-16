@@ -17,23 +17,24 @@
             </Button>
         </div>
 
-        <!-- Header Card -->
-        <div class="rounded-xl border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 shadow-sm">
-            <h1 class="khmer-text text-3xl font-bold text-gray-900">កែប្រែផលិតផល</h1>
-            <p class="khmer-text mt-2 text-sm text-gray-600">កែប្រែព័ត៌មានផលិតផល</p>
-        </div>
-
         <!-- Form Card -->
         <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-            <ProductForm
-                v-model:form="form"
-                v-model:image-previews="imagePreviews"
-                v-model:existing-image-urls="existingImageUrls"
-                submit-text="រក្សាទុក"
-                processing-text="កំពុងរក្សាទុក..."
+            <vee-form
+                :validation-schema="validationSchema"
+                :initial-values="form"
                 @submit="handleSubmit"
-                @cancel="handleCancel"
-            />
+                v-slot="{ errors: veeErrors }"
+            >
+                <ProductForm
+                   :form="form"
+                    :image-previews="imagePreviews"
+                    :existing-image-urls="existingImageUrls"
+                    :vee-errors="veeErrors"
+                    submit-text="រក្សាទុក"
+                    processing-text="កំពុងរក្សាទុក..."
+                    @cancel="handleCancel"
+                />
+            </vee-form>
         </div>
     </div>
 </template>
@@ -41,6 +42,7 @@
 <script setup>
 import { ref } from 'vue'
 import { router, Head, useForm } from '@inertiajs/vue3'
+import * as yup from 'yup'
 import ProductForm from '@/Components/Dashboard/ProductForm.vue'
 import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
 import { Button } from '@/Components/ui/button'
@@ -72,7 +74,48 @@ const imagePreviews = ref(
 )
 const existingImageUrls = ref(Array.isArray(props.product?.image_url) ? [...props.product.image_url] : [])
 
-const handleSubmit = () => {
+// Validation Schema
+const validationSchema = yup.object({
+    code: yup
+        .string()
+        .required('សូមបញ្ចូលលេខកូដផលិតផល')
+        .min(2, 'លេខកូដត្រូវតែមានយ៉ាងហោចណាស់ 2 តួអក្សរ'),
+    name: yup
+        .string()
+        .required('សូមបញ្ចូលឈ្មោះផលិតផល')
+        .min(3, 'ឈ្មោះត្រូវតែមានយ៉ាងហោចណាស់ 3 តួអក្សរ'),
+    description: yup
+        .string()
+        .nullable(),
+    price: yup
+        .number()
+        .required('សូមបញ្ចូលតម្លៃ')
+        .positive('តម្លៃត្រូវតែជាលេខវិជ្ជមាន')
+        .typeError('សូមបញ្ចូលលេខត្រឹមត្រូវ'),
+    discount_price_percent: yup
+        .number()
+        .nullable()
+        .transform((value, originalValue) => (originalValue === '' ? null : value))
+        .min(0, 'បញ្ចុះតម្លៃត្រូវតែធំជាង ឬស្មើ 0')
+        .max(100, 'បញ្ចុះតម្លៃត្រូវតែតូចជាង ឬស្មើ 100'),
+    stock: yup
+        .number()
+        .required('សូមបញ្ចូលចំនួនស្តុក')
+        .integer('ចំនួនស្តុកត្រូវតែជាលេខគត់')
+        .min(0, 'ចំនួនស្តុកត្រូវតែធំជាង ឬស្មើ 0')
+        .typeError('សូមបញ្ចូលលេខត្រឹមត្រូវ'),
+    size: yup
+        .string()
+        .required('សូមជ្រើសរើសទំហំ')
+        .oneOf(['តូច', 'មធ្យម', 'ធំ'], 'សូមជ្រើសរើសទំហំត្រឹមត្រូវ')
+})
+
+const handleSubmit = (values) => {
+    // Update form with validated values (but keep images from form object)
+    // Object.keys(values).forEach((key) => {
+    //     form[key] = values[key]
+    // })
+
     form.transform((data) => {
         const formData = new FormData()
 

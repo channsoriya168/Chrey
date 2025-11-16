@@ -5,7 +5,6 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="khmer-text text-3xl font-bold text-gray-800">ស្វាគមន៍មកកាន់ផ្ទាំងគ្រប់គ្រង</h1>
-                <p class="khmer-text mt-1 text-gray-500">ទិដ្ឋភាពទូទៅនៃប្រព័ន្ធរបស់អ្នក</p>
             </div>
             <div class="text-sm text-gray-500">
                 {{ currentDate }}
@@ -16,9 +15,9 @@
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <!-- Users Card -->
             <div
-                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-800 to-amber-900 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
             >
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                <div class="absolute right-0 top-0 -mr-4 -mt-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
                         <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
@@ -31,11 +30,10 @@
                                 />
                             </svg>
                         </div>
-                        <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-medium">+12%</span>
                     </div>
                     <div class="space-y-1">
                         <h3 class="khmer-text text-sm font-medium opacity-90">អ្នកប្រើប្រាស់</h3>
-                        <p class="text-4xl font-bold">0</p>
+                        <p class="text-4xl font-bold">{{ users }}</p>
                     </div>
                 </div>
             </div>
@@ -44,7 +42,7 @@
             <div
                 class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
             >
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                <div class="absolute right-0 top-0 -mr-4 -mt-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
                         <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
@@ -61,33 +59,7 @@
                     </div>
                     <div class="space-y-1">
                         <h3 class="khmer-text text-sm font-medium opacity-90">ផលិតផលសរុប</h3>
-                        <p class="text-4xl font-bold">85</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Orders Card -->
-            <div
-                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-            >
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
-                <div class="relative">
-                    <div class="mb-4 flex items-start justify-between">
-                        <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
-                            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
-                            </svg>
-                        </div>
-                        <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-medium">+18%</span>
-                    </div>
-                    <div class="space-y-1">
-                        <h3 class="khmer-text text-sm font-medium opacity-90">ការបញ្ជាទិញ</h3>
-                        <p class="text-4xl font-bold">45</p>
+                        <p class="text-4xl font-bold">{{ products }}</p>
                     </div>
                 </div>
             </div>
@@ -100,7 +72,7 @@
                 <div class="mb-6 flex items-center justify-between">
                     <h3 class="khmer-text text-lg font-semibold text-gray-800">ចំណូលប្រចាំខែ</h3>
                     <select
-                        class="rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        class="rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option>ខែនេះ</option>
                         <option>ខែមុន</option>
@@ -186,32 +158,23 @@
                 </div>
             </div>
         </div>
-
-        <!-- Quick Actions -->
-        <div class="rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-8 text-white shadow-xl">
-            <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
-                <div>
-                    <h3 class="khmer-text mb-2 text-2xl font-bold">ត្រៀមរួចជាស្រេច?</h3>
-                    <p class="khmer-text text-white/90">ចាប់ផ្តើមគ្រប់គ្រងផលិតផល និងការបញ្ជាទិញរបស់អ្នក</p>
-                </div>
-                <div class="flex gap-3">
-                    <button
-                        class="khmer-text rounded-xl bg-white px-6 py-3 font-semibold text-purple-600 shadow-lg transition-colors hover:bg-gray-50"
-                    >
-                        បន្ថែមផលិតផល
-                    </button>
-                    <button
-                        class="khmer-text rounded-xl bg-white/20 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/30"
-                    >
-                        មើលរបាយការណ៍
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 <script setup>
 import { computed } from 'vue'
+
+const props = defineProps({
+    users: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    products: {
+        type: Number,
+        required: true,
+        default: 0
+    }
+})
 
 // Get current date in a nice format
 const currentDate = computed(() => {

@@ -1,126 +1,142 @@
 <template>
-    <form @submit.prevent="handleSubmit" class="space-y-8">
+    <div class="space-y-8">
         <!-- Basic Information Section -->
         <div class="space-y-6">
             <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-white">
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                         />
                     </svg>
                 </div>
                 <div>
-                    <h3 class="khmer-text text-lg font-semibold text-gray-900">ពត៌មានផលិតផល</h3>
-                    <p class="khmer-text text-sm text-gray-500">បញ្ចូលពត៌មានមូលដ្ឋាន</p>
+                    <h3 class="khmer-text text-lg font-semibold text-gray-900">បង្កើត​/ផលិតផលថ្មី</h3>
+                    <p class="khmer-text text-sm text-gray-500">បំពេញព័ត៌មានផលិតផល</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <!-- Code Field -->
-                <FormField
-                    id="code"
-                    v-model="form.code"
-                    label="លេខកូដផលិតផល"
-                    placeholder="បញ្ចូលលេខកូដផលិតផល"
-                    :error="form.errors.code"
-                    required
-                />
+                <vee-field name="code" v-slot="{ field, errorMessage }">
+                    <FormField
+                        id="code"
+                        v-model="form.code"
+                        label="លេខកូដផលិតផល"
+                        placeholder="បញ្ចូលលេខកូដផលិតផល"
+                        :error="errorMessage || form.errors.code"
+                        required
+                        v-bind="field"
+                    />
+                </vee-field>
 
                 <!-- Name Field -->
-                <FormField
-                    id="name"
-                    v-model="form.name"
-                    label="ឈ្មោះផលិតផល"
-                    placeholder="បញ្ចូលឈ្មោះផលិតផល"
-                    :error="form.errors.name"
-                    required
-                />
+                <vee-field name="name" v-slot="{ field, errorMessage }">
+                    <FormField
+                        id="name"
+                        v-model="form.name"
+                        label="ឈ្មោះផលិតផល"
+                        placeholder="បញ្ចូលឈ្មោះផលិតផល"
+                        :error="errorMessage || form.errors.name"
+                        required
+                        v-bind="field"
+                    />
+                </vee-field>
 
                 <!-- Description Field - Full Width -->
                 <div class="md:col-span-2">
+                    <vee-field name="description" v-slot="{ field, errorMessage }">
+                        <FormField
+                            id="description"
+                            v-model="form.description"
+                            type="textarea"
+                            label="ការពិពណ៌នា"
+                            placeholder="សរសេរការពិពណ៌នាលម្អិតអំពីផលិតផល..."
+                            :error="errorMessage || form.errors.description"
+                            v-bind="field"
+                        />
+                    </vee-field>
+                </div>
+            </div>
+            <!-- Pricing & Inventory Section -->
+            <div class="space-y-6">
+                <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-600 text-white">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="khmer-text text-lg font-semibold text-gray-900">តម្លៃ និងស្តុក</h3>
+                        <p class="khmer-text text-sm text-gray-500">កំណត់តម្លៃ និងចំនួនស្តុក</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <FormField
-                        id="description"
-                        v-model="form.description"
-                        type="textarea"
-                        label="ការពិពណ៌នា"
-                        placeholder="សរសេរការពិពណ៌នាលម្អិតអំពីផលិតផល..."
-                        :error="form.errors.description"
+                        id="price"
+                        v-model="form.price"
+                        type="number"
+                        label="តម្លៃ ($)"
+                        placeholder="0.00"
+                        :error="form.errors.price"
+                        step="0.01"
+                        min="0"
+                        required
+                    />
+
+                    <div>
+                        <FormField
+                            id="discount"
+                            v-model="form.discount_price_percent"
+                            type="number"
+                            label="បញ្ចុះតម្លៃ (%)"
+                            placeholder="0"
+                            :error="form.errors.discount_price_percent"
+                            step="0.01"
+                            min="0"
+                            max="100"
+                        />
+                        <!-- Calculated Discount Price -->
+                        <div v-if="calculatedDiscountPrice" class="mt-2 flex items-center gap-2 text-sm">
+                            <span class="khmer-text text-gray-600">តម្លៃបន្ទាប់ពីបញ្ចុះ:</span>
+                            <span class="font-semibold text-green-600">${{ calculatedDiscountPrice }}</span>
+                            <span class="khmer-text text-gray-500">(សន្សំ ${{ discountAmount }})</span>
+                        </div>
+                    </div>
+
+                    <FormField
+                        id="stock"
+                        v-model="form.stock"
+                        type="number"
+                        label="ចំនួនស្តុក"
+                        placeholder="0"
+                        :error="form.errors.stock"
+                        min="0"
+                        required
+                    />
+
+                    <FormField
+                        id="size"
+                        v-model="form.size"
+                        type="select"
+                        label="ទំហំ"
+                        placeholder="ជ្រើសរើសទំហំ"
+                        :error="form.errors.size"
+                        :options="[
+                            { value: 'តូច', label: 'តូច' },
+                            { value: 'មធ្យម', label: 'មធ្យម' },
+                            { value: 'ធំ', label: 'ធំ' }
+                        ]"
+                        required
                     />
                 </div>
-            </div>
-        </div>
-
-        <!-- Pricing & Inventory Section -->
-        <div class="space-y-6">
-            <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-600 text-white">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="khmer-text text-lg font-semibold text-gray-900">តម្លៃ និងស្តុក</h3>
-                    <p class="khmer-text text-sm text-gray-500">កំណត់តម្លៃ និងចំនួនស្តុក</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <FormField
-                    id="price"
-                    v-model="form.price"
-                    type="number"
-                    label="តម្លៃ ($)"
-                    placeholder="0.00"
-                    :error="form.errors.price"
-                    step="0.01"
-                    min="0"
-                    required
-                />
-
-                <FormField
-                    id="discount"
-                    v-model="form.discount_price_percent"
-                    type="number"
-                    label="បញ្ចុះតម្លៃ (%)"
-                    placeholder="0"
-                    :error="form.errors.discount_price_percent"
-                    step="0.01"
-                    min="0"
-                    max="100"
-                />
-
-                <FormField
-                    id="stock"
-                    v-model="form.stock"
-                    type="number"
-                    label="ចំនួនស្តុក"
-                    placeholder="0"
-                    :error="form.errors.stock"
-                    min="0"
-                    required
-                />
-
-                <FormField
-                    id="size"
-                    v-model="form.size"
-                    type="select"
-                    label="ទំហំ"
-                    placeholder="ជ្រើសរើសទំហំ"
-                    :error="form.errors.size"
-                    :options="[
-                        { value: 'តូច', label: 'តូច' },
-                        { value: 'មធ្យម', label: 'មធ្យម' },
-                        { value: 'ធំ', label: 'ធំ' }
-                    ]"
-                    required
-                />
             </div>
         </div>
 
@@ -146,7 +162,20 @@
             <div v-if="imagePreviews.length === 0" class="grid grid-cols-4 gap-3 md:grid-cols-5 lg:grid-cols-6">
                 <div
                     @click="openImageDialog"
-                    class="group flex aspect-square cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-200 hover:border-gray-400 hover:bg-gray-100"
+                    @dragover.prevent="handleDragOver"
+                    @dragleave.prevent="handleDragLeave"
+                    @drop.prevent="handleDrop"
+                    :class="[
+                        'group flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed transition-all duration-200',
+                        isDragging
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+                    ]"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Upload images"
+                    @keydown.enter="openImageDialog"
+                    @keydown.space.prevent="openImageDialog"
                 >
                     <svg
                         class="h-6 w-6 text-gray-400 transition-colors group-hover:text-gray-600"
@@ -157,6 +186,7 @@
                     >
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
+                    <span class="khmer-text text-xs text-gray-500">ឬអូសទម្លាក់</span>
                 </div>
             </div>
 
@@ -165,7 +195,20 @@
                 <!-- Add More Button -->
                 <div
                     @click="openImageDialog"
-                    class="group flex aspect-square cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-200 hover:border-gray-400 hover:bg-gray-100"
+                    @dragover.prevent="handleDragOver"
+                    @dragleave.prevent="handleDragLeave"
+                    @drop.prevent="handleDrop"
+                    :class="[
+                        'group flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed transition-all duration-200',
+                        isDragging
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+                    ]"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Add more images"
+                    @keydown.enter="openImageDialog"
+                    @keydown.space.prevent="openImageDialog"
                 >
                     <svg
                         class="h-6 w-6 text-gray-400 transition-colors group-hover:text-gray-600"
@@ -176,6 +219,7 @@
                     >
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
+                    <span class="khmer-text text-xs text-gray-500">បន្ថែម</span>
                 </div>
 
                 <!-- Existing Images -->
@@ -183,9 +227,23 @@
                     v-for="(image, index) in imagePreviews"
                     :key="index"
                     class="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md"
+                    :class="{ 'ring-2 ring-blue-500': index === 0 }"
                 >
                     <!-- Image -->
-                    <img :src="image" alt="Product image" class="h-full w-full object-cover" />
+                    <img
+                        :src="image"
+                        :alt="`Product image ${index + 1}`"
+                        class="h-full w-full object-cover"
+                        loading="lazy"
+                    />
+
+                    <!-- Primary Badge -->
+                    <div
+                        v-if="index === 0"
+                        class="absolute left-2 top-2 rounded-md bg-blue-600 px-2 py-0.5 text-xs font-medium text-white shadow-sm"
+                    >
+                        ដំបូង
+                    </div>
 
                     <!-- Overlay on Hover -->
                     <div
@@ -226,10 +284,39 @@
 
                     <!-- Badge Number -->
                     <div
+                        v-if="index !== 0"
                         class="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-md bg-gray-900 text-xs font-medium text-white shadow-sm"
                     >
                         {{ index + 1 }}
                     </div>
+
+                    <!-- Image Size Info -->
+                    <div
+                        v-if="imageSizes[index]"
+                        class="absolute bottom-2 left-2 rounded-md bg-black/70 px-2 py-0.5 text-xs text-white"
+                    >
+                        {{ imageSizes[index] }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Upload Info -->
+            <div class="flex items-start gap-2 rounded-lg bg-blue-50 p-3 text-sm">
+                <svg class="h-5 w-5 flex-shrink-0 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                <div class="khmer-text text-blue-900">
+                    <p class="font-medium">ព័ត៌មានអំពីរូបភាព:</p>
+                    <ul class="mt-1 list-inside list-disc space-y-0.5 text-blue-800">
+                        <li>ទំហំអតិបរមា: 2MB ក្នុងមួយរូប</li>
+                        <li>ប្រភេទ: JPG, PNG, GIF, WebP</li>
+                        <li>អាចអូសទម្លាក់ឬចុចដើម្បីជ្រើសរើស</li>
+                        <li>រូបភាពដំបូងនឹងត្រូវបង្ហាញជាមេ</li>
+                    </ul>
                 </div>
             </div>
 
@@ -308,11 +395,12 @@
                 </Button>
             </div>
         </div>
-    </form>
+    </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { ErrorMessage } from 'vee-validate'
 import FormField from '@/Components/ui/FormField.vue'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -327,26 +415,107 @@ const props = defineProps({
     processingText: {
         type: String,
         default: 'កំពុងដំណើរការ...'
+    },
+    veeErrors: {
+        type: Object,
+        default: () => ({})
     }
 })
 
-const emit = defineEmits(['submit', 'cancel'])
+const emit = defineEmits(['cancel'])
 
 const imagePreviews = defineModel('imagePreviews', { default: () => [] })
 const imageInput = ref(null)
 const replaceImageInput = ref(null)
 const replaceImageIndex = ref(null)
 const existingImageUrls = defineModel('existingImageUrls', { default: () => [] })
+const isDragging = ref(false)
+const imageSizes = ref([])
+
+// Computed properties for price calculations
+const calculatedDiscountPrice = computed(() => {
+    const price = parseFloat(form.value.price)
+    const discount = parseFloat(form.value.discount_price_percent)
+
+    if (isNaN(price) || isNaN(discount) || discount <= 0) {
+        return null
+    }
+
+    const discountedPrice = price - (price * discount) / 100
+    return discountedPrice.toFixed(2)
+})
+
+const discountAmount = computed(() => {
+    const price = parseFloat(form.value.price)
+    const discount = parseFloat(form.value.discount_price_percent)
+
+    if (isNaN(price) || isNaN(discount) || discount <= 0) {
+        return '0.00'
+    }
+
+    const amount = (price * discount) / 100
+    return amount.toFixed(2)
+})
 
 const openImageDialog = () => {
     imageInput.value?.click()
 }
 
-const handleImageChange = (event) => {
-    const files = Array.from(event.target.files)
+// Drag and drop handlers
+const handleDragOver = (event) => {
+    isDragging.value = true
+}
+
+const handleDragLeave = (event) => {
+    isDragging.value = false
+}
+
+const handleDrop = (event) => {
+    isDragging.value = false
+    const files = Array.from(event.dataTransfer.files).filter((file) => file.type.startsWith('image/'))
+
+    if (files.length > 0) {
+        processImageFiles(files)
+    }
+}
+
+// Validate and format file size
+const formatFileSize = (bytes) => {
+    if (bytes < 1024) return bytes + ' B'
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
+}
+
+const validateImageSize = (file) => {
+    const maxSize = 2 * 1024 * 1024 // 2MB
+    return file.size <= maxSize
+}
+
+// Process image files with validation
+const processImageFiles = (files) => {
+    const validFiles = []
+    const invalidFiles = []
 
     files.forEach((file) => {
+        if (validateImageSize(file)) {
+            validFiles.push(file)
+        } else {
+            invalidFiles.push(file.name)
+        }
+    })
+
+    // Show error for invalid files
+    if (invalidFiles.length > 0) {
+        form.value.errors.images = `រូបភាពខាងក្រោមមានទំហំលើសពី 2MB: ${invalidFiles.join(', ')}`
+        setTimeout(() => {
+            form.value.errors.images = null
+        }, 5000)
+    }
+
+    // Process valid files
+    validFiles.forEach((file) => {
         form.value.images.push(file)
+        imageSizes.value.push(formatFileSize(file.size))
 
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -354,6 +523,11 @@ const handleImageChange = (event) => {
         }
         reader.readAsDataURL(file)
     })
+}
+
+const handleImageChange = (event) => {
+    const files = Array.from(event.target.files)
+    processImageFiles(files)
 
     if (imageInput.value) {
         imageInput.value.value = ''
@@ -368,6 +542,19 @@ const replaceImage = (index) => {
 const handleReplaceImageChange = (event) => {
     const file = event.target.files[0]
     if (file && replaceImageIndex.value !== null) {
+        // Validate file size
+        if (!validateImageSize(file)) {
+            form.value.errors.images = `រូបភាព ${file.name} មានទំហំលើសពី 2MB`
+            setTimeout(() => {
+                form.value.errors.images = null
+            }, 5000)
+            replaceImageIndex.value = null
+            if (replaceImageInput.value) {
+                replaceImageInput.value.value = ''
+            }
+            return
+        }
+
         const index = replaceImageIndex.value
         const existingImageCount = existingImageUrls.value.length
 
@@ -378,10 +565,12 @@ const handleReplaceImageChange = (event) => {
             const newImageIndex = index - existingImageCount
             if (newImageIndex < form.value.images.length) {
                 form.value.images.splice(newImageIndex, 1)
+                imageSizes.value.splice(newImageIndex, 1)
             }
         }
 
         form.value.images.push(file)
+        imageSizes.value[index] = formatFileSize(file.size)
 
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -406,6 +595,7 @@ const removeImage = (index) => {
         const newImageIndex = index - existingImageCount
         if (newImageIndex >= 0 && newImageIndex < form.value.images.length) {
             form.value.images.splice(newImageIndex, 1)
+            imageSizes.value.splice(newImageIndex, 1)
         }
     }
 
@@ -421,9 +611,6 @@ const getImageType = (imageUrl) => {
     return extension ? extension.toUpperCase() : 'Image'
 }
 
-const handleSubmit = () => {
-    emit('submit')
-}
 
 const handleCancel = () => {
     emit('cancel')
