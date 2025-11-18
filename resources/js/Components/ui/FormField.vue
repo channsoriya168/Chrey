@@ -1,13 +1,9 @@
 <template>
-    <div class="space-y-2 group">
+    <div class="group space-y-2">
         <!-- Label -->
-        <Label 
-            v-if="label" 
-            :for="id" 
-            class="khmer-text text-sm font-bold text-gray-700 flex items-center gap-2"
-        >
+        <Label v-if="label" :for="id" class="khmer-text flex items-center gap-2 text-sm font-bold text-gray-700">
             {{ label }}
-            <span v-if="required" class="text-red-500 text-base">*</span>
+            <span v-if="required" class="text-base text-red-500">*</span>
         </Label>
 
         <!-- Input Field -->
@@ -39,17 +35,15 @@
             :modelValue="modelValue"
             @update:modelValue="$emit('update:modelValue', $event)"
         >
-            <SelectTrigger 
-                :id="id"
-                :class="selectClasses"
-            >
+            <SelectTrigger :id="id" :class="selectClasses">
                 <SelectValue :placeholder="placeholder" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem 
-                    v-for="option in options" 
-                    :key="option.value" 
+                <SelectItem
+                    v-for="option in options"
+                    :key="option.value"
                     :value="option.value"
+                    :class="option.className || ''"
                 >
                     {{ option.label }}
                 </SelectItem>
@@ -57,15 +51,19 @@
         </Select>
 
         <!-- Error Message -->
-        <p v-if="error" class="text-xs text-red-600 flex items-center gap-1.5 ml-1 animate-shake">
+        <p v-if="error" class="animate-shake ml-1 flex items-center gap-1.5 text-xs text-red-600">
             <svg class="h-3.5 w-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd"
+                />
             </svg>
             <span class="font-medium">{{ error }}</span>
         </p>
 
         <!-- Help Text -->
-        <p v-if="helpText && !error" class="text-xs text-gray-500 ml-1">
+        <p v-if="helpText && !error" class="ml-1 text-xs text-gray-500">
             {{ helpText }}
         </p>
     </div>
@@ -119,7 +117,8 @@ const props = defineProps({
 
 defineEmits(['update:modelValue'])
 
-const baseInputClasses = 'h-11 text-sm rounded-lg border-2 transition-all duration-300 font-medium placeholder:text-gray-400 placeholder:font-normal'
+const baseInputClasses =
+    'h-11 text-sm rounded-lg border-2 transition-all duration-300 font-medium placeholder:text-gray-400 placeholder:font-normal'
 
 const inputClasses = computed(() => {
     return [

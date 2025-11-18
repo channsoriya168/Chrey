@@ -2,21 +2,6 @@
     <div class="space-y-8">
         <!-- Basic Information Section -->
         <div class="space-y-6">
-            <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="khmer-text text-lg font-semibold text-gray-900">បង្កើត​/ផលិតផលថ្មី</h3>
-                    <p class="khmer-text text-sm text-gray-500">បំពេញព័ត៌មានផលិតផល</p>
-                </div>
-            </div>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <!-- Code Field -->
@@ -44,22 +29,9 @@
                         v-bind="field"
                     />
                 </vee-field>
-
-                <!-- Description Field - Full Width -->
-                <div class="md:col-span-2">
-                    <vee-field name="description" v-slot="{ field, errorMessage }">
-                        <FormField
-                            id="description"
-                            v-model="form.description"
-                            type="textarea"
-                            label="ការពិពណ៌នា"
-                            placeholder="សរសេរការពិពណ៌នាលម្អិតអំពីផលិតផល..."
-                            :error="errorMessage || form.errors.description"
-                            v-bind="field"
-                        />
-                    </vee-field>
-                </div>
             </div>
+
+            
             <!-- Pricing & Inventory Section -->
             <div class="space-y-6">
                 <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
@@ -79,30 +51,36 @@
                 </div>
 
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <FormField
-                        id="price"
-                        v-model="form.price"
-                        type="number"
-                        label="តម្លៃ ($)"
-                        placeholder="0.00"
-                        :error="form.errors.price"
-                        step="0.01"
-                        min="0"
-                        required
-                    />
-
-                    <div>
+                    <vee-field name="price" v-slot="{ field, errorMessage }">
                         <FormField
-                            id="discount"
-                            v-model="form.discount_price_percent"
+                            id="price"
+                            v-model="form.price"
                             type="number"
-                            label="បញ្ចុះតម្លៃ (%)"
-                            placeholder="0"
-                            :error="form.errors.discount_price_percent"
+                            label="តម្លៃ ($)"
+                            placeholder="0.00"
+                            :error="errorMessage || form.errors.price"
                             step="0.01"
                             min="0"
-                            max="100"
+                            required
+                            v-bind="field"
                         />
+                    </vee-field>
+
+                    <div>
+                        <vee-field name="discount_price_percent" v-slot="{ field, errorMessage }">
+                            <FormField
+                                id="discount"
+                                v-model="form.discount_price_percent"
+                                type="number"
+                                label="បញ្ចុះតម្លៃ (%)"
+                                placeholder="0"
+                                :error="errorMessage || form.errors.discount_price_percent"
+                                step="0.01"
+                                min="0"
+                                max="100"
+                                v-bind="field"
+                            />
+                        </vee-field>
                         <!-- Calculated Discount Price -->
                         <div v-if="calculatedDiscountPrice" class="mt-2 flex items-center gap-2 text-sm">
                             <span class="khmer-text text-gray-600">តម្លៃបន្ទាប់ពីបញ្ចុះ:</span>
@@ -111,31 +89,64 @@
                         </div>
                     </div>
 
-                    <FormField
-                        id="stock"
-                        v-model="form.stock"
-                        type="number"
-                        label="ចំនួនស្តុក"
-                        placeholder="0"
-                        :error="form.errors.stock"
-                        min="0"
-                        required
-                    />
+                    <vee-field name="stock" v-slot="{ field, errorMessage }">
+                        <FormField
+                            id="stock"
+                            v-model="form.stock"
+                            type="number"
+                            label="ចំនួនស្តុក"
+                            placeholder="0"
+                            :error="errorMessage || form.errors.stock"
+                            min="0"
+                            required
+                            v-bind="field"
+                        />
+                    </vee-field>
 
-                    <FormField
-                        id="size"
-                        v-model="form.size"
-                        type="select"
-                        label="ទំហំ"
-                        placeholder="ជ្រើសរើសទំហំ"
-                        :error="form.errors.size"
-                        :options="[
-                            { value: 'តូច', label: 'តូច' },
-                            { value: 'មធ្យម', label: 'មធ្យម' },
-                            { value: 'ធំ', label: 'ធំ' }
-                        ]"
-                        required
-                    />
+                    <vee-field name="size" v-slot="{ field, errorMessage }">
+                        <FormField
+                            id="size"
+                            v-model="form.size"
+                            type="select"
+                            label="ទំហំ"
+                            placeholder="ជ្រើសរើសទំហំ"
+                            :error="errorMessage || form.errors.size"
+                            :options="[
+                                {
+                                    value: 'តូច',
+                                    label: 'តូច',
+                                    className: 'bg-blue-50 hover:!bg-blue-100 focus:!bg-blue-100'
+                                },
+                                {
+                                    value: 'មធ្យម',
+                                    label: 'មធ្យម',
+                                    className: 'bg-green-50 hover:!bg-green-100 focus:!bg-green-100'
+                                },
+                                {
+                                    value: 'ធំ',
+                                    label: 'ធំ',
+                                    className: 'bg-amber-50 hover:!bg-amber-100 focus:!bg-amber-100'
+                                }
+                            ]"
+                            required
+                            v-bind="field"
+                        />
+                    </vee-field>
+
+                    <!-- Description Field - Full Width -->
+                    <div class="md:col-span-2">
+                        <vee-field name="description" v-slot="{ field, errorMessage }">
+                            <FormField
+                                id="description"
+                                v-model="form.description"
+                                type="textarea"
+                                label="ការពិពណ៌នា"
+                                placeholder="សរសេរការពិពណ៌នាលម្អិតអំពីផលិតផល..."
+                                :error="errorMessage || form.errors.description"
+                                v-bind="field"
+                            />
+                        </vee-field>
+                    </div>
                 </div>
             </div>
         </div>
@@ -610,7 +621,6 @@ const getImageType = (imageUrl) => {
     const extension = imageUrl.split('.').pop().split('?')[0]
     return extension ? extension.toUpperCase() : 'Image'
 }
-
 
 const handleCancel = () => {
     emit('cancel')

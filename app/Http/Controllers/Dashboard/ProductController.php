@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -26,11 +28,7 @@ class ProductController extends Controller
             'products' => fn () => QueryBuilder::for(Product::class)
                 ->allowedFilters([
                     AllowedFilter::callback('search', function ($query, $value) {
-                        $query->where(function ($q) use ($value) {
-                            $q->where('name', 'like', "%{$value}%")
-                              ->orWhere('code', 'like', "%{$value}%")
-                              ->orWhere('description', 'like', "%{$value}%");
-                        });
+                        $query->where('name', 'like', "%{$value}%");
                     }),
                 ])
                 ->latest()
@@ -56,28 +54,19 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:255|unique:products,code',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'discount_price_percent' => 'nullable|numeric|min:0|max:100',
-            'stock' => 'required|integer|min:0',
-            'size' => 'required|in:តូច,មធ្យម,ធំ',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $product = new Product();
-        $product->name = $request->name;
+        $product->name = $validated['name']; 
         $product->slug = Str::uuid();
-        $product->code = $request->code;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->discount_price_percent = $request->discount_price_percent;
-        $product->stock = $request->stock;
-        $product->size = $request->size;
+        $product->code = $validated['code'];
+        $product->description = $validated['description'] ?? null;
+        $product->price = $validated['price'];
+        $product->discount_price_percent = $validated['discount_price_percent'] ?? null;
+        $product->stock = $validated['stock'];
+        $product->size = $validated['size'];
 
         // Handle multiple images
         if ($request->hasFile('images')) {
@@ -117,31 +106,20 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:255|unique:products,code,' . $product->id,
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'discount_price_percent' => 'nullable|numeric|min:0|max:100',
-            'stock' => 'required|integer|min:0',
-            'size' => 'required|in:តូច,មធ្យម,ធំ',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'existing_images' => 'nullable|array',
-        ]);
+        $validated = $request->validated();
 
-        $product->name = $request->name;
-        $product->slug = Str::slug($request->name);
-        $product->code = $request->code;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->discount_price_percent = $request->discount_price_percent;
-        $product->stock = $request->stock;
-        $product->size = $request->size;
+        $product->name = $validated['name'];
+        $product->code = $validated['code'];
+        $product->description = $validated['description'] ?? null;
+        $product->price = $validated['price'];
+        $product->discount_price_percent = $validated['discount_price_percent'] ?? null;
+        $product->stock = $validated['stock'];
+        $product->size = $validated['size'];
 
         // Handle images - merge existing and new images
-        $existingImages = $request->input('existing_images', []);
+        $existingImages = $validated['existing_images'] ?? [];
         $imagePaths = $existingImages; // Start with existing images that weren't deleted
 
         // Delete images that were removed (old images not in existing_images)

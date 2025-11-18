@@ -19,6 +19,10 @@
 
         <!-- Form Card -->
         <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+            <div class="border-b border-gray-200 pb-4 mb-6">
+                <h2 class="khmer-text mb-1 text-2xl font-bold text-gray-900">កែប្រែផលិតផល</h2>
+                <p class="text-gray-600">កែប្រែព័ត៍មានខាងក្រោមដើម្បីធ្វើបច្ចុប្បន្នភាពផលិតផល</p>
+            </div>
             <vee-form
                 :validation-schema="validationSchema"
                 :initial-values="form"
@@ -26,9 +30,9 @@
                 v-slot="{ errors: veeErrors }"
             >
                 <ProductForm
-                   :form="form"
-                    :image-previews="imagePreviews"
-                    :existing-image-urls="existingImageUrls"
+                    v-model:form="form"
+                    v-model:image-previews="imagePreviews"
+                    v-model:existing-image-urls="existingImageUrls"
                     :vee-errors="veeErrors"
                     submit-text="រក្សាទុក"
                     processing-text="កំពុងរក្សាទុក..."
@@ -111,10 +115,6 @@ const validationSchema = yup.object({
 })
 
 const handleSubmit = (values) => {
-    // Update form with validated values (but keep images from form object)
-    // Object.keys(values).forEach((key) => {
-    //     form[key] = values[key]
-    // })
 
     form.transform((data) => {
         const formData = new FormData()

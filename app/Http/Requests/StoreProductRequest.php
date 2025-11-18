@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,21 +32,35 @@ class ProductRequest extends FormRequest
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ];
     }
-    public function messages()
+
+    /**
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
     {
         return [
             'name.required' => 'ឈ្មោះផលិតផលត្រូវបានទាមទារ។',
+            'name.max' => 'ឈ្មោះផលិតផលមិនអាចលើសពី 255 តួអក្សរ។',
             'code.required' => 'លេខកូដផលិតផលត្រូវបានទាមទារ។',
             'code.unique' => 'លេខកូដផលិតផលត្រូវតែមានតែមួយគត់។',
+            'code.max' => 'លេខកូដផលិតផលមិនអាចលើសពី 255 តួអក្សរ។',
+            'description.string' => 'ការពិពណ៌នាត្រូវតែជាអក្សរ។',
             'price.required' => 'តម្លៃត្រូវបានទាមទារ។',
             'price.numeric' => 'តម្លៃត្រូវតែជាលេខ។',
+            'price.min' => 'តម្លៃត្រូវតែធំជាងឬស្មើ 0។',
+            'discount_price_percent.numeric' => 'ភាគរយបញ្ចុះតម្លៃត្រូវតែជាលេខ។',
+            'discount_price_percent.min' => 'ភាគរយបញ្ចុះតម្លៃត្រូវតែធំជាងឬស្មើ 0។',
+            'discount_price_percent.max' => 'ភាគរយបញ្ចុះតម្លៃត្រូវតែតូចជាងឬស្មើ 100។',
             'stock.required' => 'ចំនួនស្តុកត្រូវបានទាមទារ។',
             'stock.integer' => 'ចំនួនស្តុកត្រូវតែជាចំនួនគត់។',
+            'stock.min' => 'ចំនួនស្តុកត្រូវតែធំជាងឬស្មើ 0។',
             'size.required' => 'ទំហំត្រូវបានទាមទារ។',
-            'size.in' => 'ទំហំត្រូវតែមានតែមួយក្នុងចំណោម: តូច, មធ្យម, ធំ។',
-            'images.*.image' => 'Each file must be an image.',
-            'images.*.mimes' => 'Each image must be a file of type: jpeg, png, jpg, gif, svg, webp.',
-            'images.*.max' => 'Each image must not exceed 2048 kilobytes.',
+            'size.in' => 'ទំហំត្រូវតែជា: តូច, មធ្យម, ឬធំ។',
+            'images.*.image' => 'ឯកសារត្រូវតែជារូបភាព។',
+            'images.*.mimes' => 'រូបភាពត្រូវតែមានប្រភេទ: jpeg, png, jpg, gif, svg, webp។',
+            'images.*.max' => 'រូបភាពមិនអាចលើសពី 2MB។',
         ];
     }
 }

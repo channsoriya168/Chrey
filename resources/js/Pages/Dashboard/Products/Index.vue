@@ -3,24 +3,24 @@
 
     <div class="space-y-6">
         <!-- Breadcrumb -->
-        
 
         <div class="flex items-center justify-between">
-            <DashboardBreadcrumb :items="[{ label: 'ផ្ទាំងគ្រប់គ្រង', href: route('dashboard.index') }, { label: 'ផលិតផល' }]" />
-            <Link
+            <DashboardBreadcrumb
+                :items="[{ label: 'ផ្ទាំងគ្រប់គ្រង', href: route('dashboard.index') }, { label: 'ផលិតផល' }]"
+            />
+            <Button
                 @click="createCallback"
                 class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-white transition-colors hover:bg-gray-800"
             >
                 <Plus class="h-4 w-4" />
                 <span class="khmer-text">បង្កើត</span>
-            </Link>
-           
+            </Button>
         </div>
 
         <!-- Table Card -->
         <div class="overflow-hidden">
             <!-- Search Section -->
-            <div class="border-b border-gray-200 py-4 flex items-center justify-end">
+            <div class="flex items-center justify-end border-b border-gray-200 py-4">
                 <div class="relative w-full sm:w-96">
                     <Search
                         class="pointer-events-none absolute left-3 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-gray-400"
@@ -77,27 +77,31 @@
                 <template #cell-name="{ item }">
                     <div class="flex flex-col gap-0.5">
                         <span class="text-sm font-medium text-gray-900">{{ item.name }}</span>
-                        <span class="text-xs text-gray-500">{{ item.code }}</span>
-                        <p v-if="item.description" class="line-clamp-1 text-xs text-gray-400">
-                            {{ item.description }}
-                        </p>
                     </div>
                 </template>
 
                 <!-- Custom Cell: Price -->
                 <template #cell-price="{ item }">
                     <div class="flex flex-col gap-1">
-                        <div v-if="item.discount_price" class="flex items-center gap-1.5">
+                        <div
+                            v-if="item.discount_price_percent && item.discount_price_percent > 0"
+                            class="flex items-center gap-1.5"
+                        >
                             <span class="text-sm font-semibold text-green-600">${{ item.discount_price }}</span>
                             <span class="text-xs text-gray-400 line-through">${{ item.price }}</span>
                         </div>
                         <span v-else class="text-sm font-semibold text-gray-900">${{ item.price }}</span>
+                    </div>
+                </template>
+                <!-- Custom Cell: Discount Percentage -->
+                <template #cell-discount_percentage="{ item }">
+                    <div class="flex flex-col gap-1">
                         <span
-                            v-if="item.discount_price"
-                            class="inline-flex w-fit items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
+                            v-if="item.discount_price_percent && item.discount_price_percent > 0"
+                            class="text-sm font-semibold text-red-600 pa-5"
+                            >{{ parseFloat(item.discount_price_percent) }}%</span
                         >
-                            Save ${{ (item.price - item.discount_price).toFixed(2) }}
-                        </span>
+                        <span v-else class="text-sm font-semibold text-red-600">0%</span>
                     </div>
                 </template>
 
@@ -174,22 +178,27 @@ const filter = ref({
 const columns = [
     {
         key: 'image_url',
-        label: 'Image',
+        label: 'រូបភាព'
         // cellClass: 'w-16'
     },
     {
         key: 'name',
-        label: 'Product',
+        label: 'ផលិតផល'
         // cellClass: 'min-w-[200px]'
     },
     {
         key: 'price',
-        label: 'Price',
+        label: 'តម្លៃ'
+        // cellClass: 'w-32'
+    },
+    {
+        key: 'discount_percentage',
+        label: 'បញ្ចុះតម្លៃ'
         // cellClass: 'w-32'
     },
     {
         key: 'stock',
-        label: 'Stock',
+        label: 'ស្តុក'
         // cellClass: 'w-28'
     }
 ]

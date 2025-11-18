@@ -24,7 +24,7 @@
                         </TableHead>
                         <TableHead v-if="$slots.actions || hasActionButtons" :class="['text-center', 'rounded-r-lg']">
                             <slot name="header-actions">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-white">Actions</span>
+                                <span class="text-xs font-semibold uppercase tracking-wide text-white">សកម្មភាព</span>
                             </slot>
                         </TableHead>
                     </TableRow>
