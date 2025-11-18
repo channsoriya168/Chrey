@@ -304,16 +304,16 @@ const selectedImage = ref(productImages.value[0])
 function getProductImages() {
     if (props.product.image_url) {
         if (Array.isArray(props.product.image_url) && props.product.image_url.length > 0) {
-            return props.product.image_url
+            return props.product.image_url.map(path => `/storage/${path}`)
         }
         if (typeof props.product.image_url === 'string') {
             try {
                 const parsed = JSON.parse(props.product.image_url)
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed
+                    return parsed.map(path => `/storage/${path}`)
                 }
             } catch (e) {
-                return [props.product.image_url]
+                return [`/storage/${props.product.image_url}`]
             }
         }
     }
@@ -348,16 +348,16 @@ const getDisplayPrice = (product) => {
 const getImageUrl = (product) => {
     if (product.image_url) {
         if (Array.isArray(product.image_url) && product.image_url.length > 0) {
-            return product.image_url[0]
+            return `/storage/${product.image_url[0]}`
         }
         if (typeof product.image_url === 'string') {
             try {
                 const parsed = JSON.parse(product.image_url)
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed[0]
+                    return `/storage/${parsed[0]}`
                 }
             } catch (e) {
-                return product.image_url
+                return `/storage/${product.image_url}`
             }
         }
     }

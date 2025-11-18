@@ -41,11 +41,13 @@
                 :data="products.data"
                 :loading="loading"
                 :pagination="products"
+                :can-view="true"
                 :can-edit="true"
                 :can-delete="true"
                 delete-item-name-key="name"
                 @page-change="handlePageChange"
                 @per-page-change="handlePerPageChange"
+                @view="viewCallback"
                 @edit="editCallback"
                 @delete="deleteCallback"
             >
@@ -218,6 +220,11 @@ const filterCallback = () => {
 // Navigate to create page
 const createCallback = () => {
     router.visit('/dashboard/products/create')
+}
+
+// Navigate to view page
+const viewCallback = (item) => {
+    router.visit(`/dashboard/products/${item.id}`)
 }
 
 // Navigate to edit page

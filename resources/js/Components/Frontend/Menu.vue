@@ -206,11 +206,6 @@ function toggleMobileMenu() {
     showLanguageMenu.value = false
 }
 
-function toggleLanguageMenu() {
-    showLanguageMenu.value = !showLanguageMenu.value
-    showUserMenu.value = false
-}
-
 function toggleUserMenu() {
     showUserMenu.value = !showUserMenu.value
     showLanguageMenu.value = false
