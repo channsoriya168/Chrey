@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FrontEndController;
 use Illuminate\Support\Facades\Route;
@@ -13,14 +14,6 @@ Route::get('/', [FrontEndController::class, 'index'])->name('home');
 
 Route::get('product/{slug}', [FrontEndController::class, 'productDetail'])->name('product.detail');
 
-Route::get('about', function () {
-    return Inertia::render('Frontend/About');
-})->name('about');
-
-Route::get('contact', function () {
-    return Inertia::render('Frontend/Contact');
-})->name('contact');
-
 Route::get('register', [AuthController::class, 'register'])
     ->name('register');
 Route::post('register', [AuthController::class, 'storeRegister'])
@@ -31,9 +24,11 @@ Route::get('login', [AuthController::class, 'login'])
 Route::post('login', [AuthController::class, 'storeLogin'])
     ->name('login.store');
 
-Route::post('logout', [AuthController::class, 'logout'])
-    ->name('logout')
-    ->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::resource('cart',CartController::class)->only(['index','store','update','destroy']);
+    Route::post('logout', [AuthController::class, 'logout'])
+    ->name('logout');
+});
 
 // Include dashboard routes
 require __DIR__ . '/dashboard.php';

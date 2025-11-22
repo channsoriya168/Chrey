@@ -3,9 +3,9 @@
         <!-- Breadcrumb -->
         <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <nav class="flex items-center space-x-2 text-sm">
-                <Link href="/" class="text-gray-500 hover:text-pink-600">Home</Link>
+                <Link href="/" class="text-gray-500 hover:text-pink-600">ទំព័រដើម</Link>
                 <span class="text-gray-400">/</span>
-                <span class="font-medium text-gray-900">{{ product.name }}</span>
+                <span class="font-medium text-gray-900">{{ product.data.name }}</span>
             </nav>
         </div>
 
@@ -18,14 +18,14 @@
                     <div class="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-white">
                         <img
                             :src="selectedImage"
-                            :alt="product.name"
+                            :alt="product.data.name"
                             class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                         />
                         <div
-                            v-if="calculateDiscount(product.price, product.discount_price)"
+                            v-if="product.data.discount_price_percent>0"
                             class="absolute top-4 left-4 rounded-lg bg-red-500 px-3 py-1 text-sm font-bold text-white"
                         >
-                            -{{ calculateDiscount(product.price, product.discount_price) }}% OFF
+                            {{ product.data.discount_price_percent }}% OFF
                         </div>
                     </div>
 
@@ -42,7 +42,7 @@
                         >
                             <img
                                 :src="image"
-                                :alt="`${product.name} - Image ${index + 1}`"
+                                :alt="`${product.data.name} - Image ${index + 1}`"
                                 class="h-full w-full object-cover"
                             />
                         </button>
@@ -50,10 +50,14 @@
                 </div>
 
                 <!-- Product Information -->
-                <div class="space-y-6">
+                <div class="space-y-6">          
                     <!-- Product Title & Rating -->
                     <div>
-                        <h1 class="mb-3 text-3xl font-bold text-gray-900 md:text-4xl">{{ product.name }}</h1>
+                        <h1 class="mb-3 text-3xl font-bold text-gray-900 md:text-4xl">{{ product.data.name }}</h1>
+                         <!-- Description -->
+                            <p class="leading-relaxed text-gray-600">
+                                    {{ product.data.description}}
+                                </p>
                         <div class="flex items-center space-x-4">
                             <div class="flex items-center">
                                 <div class="flex text-lg text-yellow-400">
@@ -61,29 +65,23 @@
                                 </div>
                                 <span class="ml-2 text-sm text-gray-600">(0 reviews)</span>
                             </div>
-                            <span v-if="product.code" class="text-sm text-gray-500">SKU: {{ product.code }}</span>
+
                         </div>
                     </div>
-
+                    
                     <!-- Price -->
                     <div class="flex items-baseline space-x-3">
-                        <span class="text-4xl font-bold text-pink-600">${{ getDisplayPrice(product) }}</span>
+                        <span class="text-4xl font-bold text-pink-600">${{ product.data.discount_price || product.data.price }}</span>
                         <span
-                            v-if="product.discount_price && product.discount_price < product.price"
+                            v-if="product.data.discount_price && product.data.discount_price < product.data.price"
                             class="text-2xl text-gray-400 line-through"
-                            >${{ product.price }}</span
+                            >${{ product.data.price }}</span
                         >
-                        <span
-                            v-if="calculateDiscount(product.price, product.discount_price)"
-                            class="text-lg font-semibold text-green-600"
-                        >
-                            Save ${{ (product.price - product.discount_price).toFixed(2) }}
-                        </span>
                     </div>
 
                     <!-- Stock Status -->
                     <div class="flex items-center space-x-2">
-                        <span v-if="product.quantity > 0" class="flex items-center font-medium text-green-600">
+                        <span v-if="product.data.stock > 0" class="flex items-center font-medium text-green-600">
                             <svg class="mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path
                                     fill-rule="evenodd"
@@ -91,26 +89,8 @@
                                     clip-rule="evenodd"
                                 />
                             </svg>
-                            In Stock ({{ product.quantity }} available)
+                          In Stock  {{product.data.stock}}
                         </span>
-                        <span v-else class="flex items-center font-medium text-red-600">
-                            <svg class="mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                            Out of Stock
-                        </span>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="border-t border-gray-200 pt-6">
-                        <h2 class="mb-3 text-xl font-semibold text-gray-900">Product Description</h2>
-                        <p class="leading-relaxed text-gray-600">
-                            {{ product.description || 'No description available for this product.' }}
-                        </p>
                     </div>
 
                     <!-- Quantity Selector -->
@@ -119,7 +99,6 @@
                         <div class="flex items-center rounded-lg border border-gray-300">
                             <button
                                 @click="decrementQuantity"
-                                :disabled="quantity <= 1"
                                 class="px-4 py-2 text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 −
@@ -128,12 +107,12 @@
                                 v-model.number="quantity"
                                 type="number"
                                 min="1"
-                                :max="product.quantity"
+                                :max="product.data.stock"
                                 class="w-16 border-x border-gray-300 py-2 text-center focus:outline-none"
                             />
                             <button
                                 @click="incrementQuantity"
-                                :disabled="quantity >= product.quantity"
+                                :disa
                                 class="px-4 py-2 text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 +
@@ -144,10 +123,11 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-col gap-4 pt-4 sm:flex-row">
                         <button
-                            :disabled="product.quantity === 0"
+                            @click="addToCart"
+                            :disabled="product.data.stock === 0 || isAddingToCart"
                             class="flex flex-1 items-center justify-center space-x-2 rounded-lg bg-pink-600 px-8 py-4 font-semibold text-white transition-colors duration-200 hover:bg-pink-700 disabled:cursor-not-allowed disabled:bg-gray-400"
                         >
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg v-if="!isAddingToCart" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -155,7 +135,11 @@
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                                 />
                             </svg>
-                            <span>Add to Cart</span>
+                            <svg v-else class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>{{ isAddingToCart ? 'Adding...' : 'Add to Cart' }}</span>
                         </button>
                         <button
                             class="flex items-center justify-center space-x-2 rounded-lg border-2 border-pink-600 px-8 py-4 font-semibold text-pink-600 transition-colors duration-200 hover:bg-pink-50"
@@ -170,58 +154,6 @@
                             </svg>
                             <span class="hidden sm:inline">Wishlist</span>
                         </button>
-                    </div>
-
-                    <!-- Additional Info -->
-                    <div class="space-y-3 border-t border-gray-200 pt-6">
-                        <div class="flex items-center text-gray-600">
-                            <svg
-                                class="mr-3 h-5 w-5 text-pink-600"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                                />
-                            </svg>
-                            Free shipping on orders over $50
-                        </div>
-                        <div class="flex items-center text-gray-600">
-                            <svg
-                                class="mr-3 h-5 w-5 text-pink-600"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                            30-day return policy
-                        </div>
-                        <div class="flex items-center text-gray-600">
-                            <svg
-                                class="mr-3 h-5 w-5 text-pink-600"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                                />
-                            </svg>
-                            Secure checkout
-                        </div>
                     </div>
                 </div>
             </div>
@@ -242,12 +174,6 @@
                                 :alt="relatedProduct.name"
                                 class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
                             />
-                            <div
-                                v-if="calculateDiscount(relatedProduct.price, relatedProduct.discount_price)"
-                                class="absolute top-2 left-2 rounded bg-red-500 px-2 py-1 text-xs font-bold text-white"
-                            >
-                                -{{ calculateDiscount(relatedProduct.price, relatedProduct.discount_price) }}%
-                            </div>
                         </div>
                         <div class="p-4">
                             <h3 class="mb-2 truncate text-sm font-semibold text-gray-800">{{ relatedProduct.name }}</h3>
@@ -259,9 +185,6 @@
                             </div>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <span class="text-lg font-bold text-gray-900"
-                                        >${{ getDisplayPrice(relatedProduct) }}</span
-                                    >
                                     <span
                                         v-if="
                                             relatedProduct.discount_price &&
@@ -282,7 +205,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3'
+
 
 const props = defineProps({
     product: {
@@ -299,16 +223,44 @@ const props = defineProps({
 const quantity = ref(1)
 const productImages = ref(getProductImages())
 const selectedImage = ref(productImages.value[0])
+const isAddingToCart = ref(false)
+
+// Add to cart function
+const addToCart = () => {
+    if (props.product.data.stock < 1 || isAddingToCart.value) {
+        return
+    }
+
+    isAddingToCart.value = true
+
+    router.post(
+        '/cart',
+        {
+            product_id: props.product.data.id,
+            quantity: quantity.value
+        },
+        {
+            onSuccess: () => {
+                isAddingToCart.value = false
+                // Reset quantity after successful add
+                quantity.value = 1
+            },
+            onError: () => {
+                isAddingToCart.value = false
+            }
+        }
+    )
+}
 
 // Get all product images
 function getProductImages() {
-    if (props.product.image_url) {
-        if (Array.isArray(props.product.image_url) && props.product.image_url.length > 0) {
-            return props.product.image_url.map(path => `/storage/${path}`)
+    if (props.product.data.image_url) {
+        if (Array.isArray(props.product.data.image_url) && props.product.data.image_url.length > 0) {
+            return props.product.data.image_url.map(path => `/storage/${path}`)
         }
-        if (typeof props.product.image_url === 'string') {
+        if (typeof props.product.data.image_url === 'string') {
             try {
-                const parsed = JSON.parse(props.product.image_url)
+                const parsed = JSON.parse(props.product.data.image_url)
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     return parsed.map(path => `/storage/${path}`)
                 }
@@ -317,12 +269,12 @@ function getProductImages() {
             }
         }
     }
-    return ['https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=600&fit=crop']
+    return ['']
 }
 
 // Quantity controls
 const incrementQuantity = () => {
-    if (quantity.value < props.product.quantity) {
+    if (quantity.value < props.product.data.stock) {
         quantity.value++
     }
 }
@@ -331,17 +283,6 @@ const decrementQuantity = () => {
     if (quantity.value > 1) {
         quantity.value--
     }
-}
-
-// Calculate discount percentage
-const calculateDiscount = (price, discountPrice) => {
-    if (!discountPrice || discountPrice >= price) return null
-    return Math.round(((price - discountPrice) / price) * 100)
-}
-
-// Get display price (discount price if available, otherwise regular price)
-const getDisplayPrice = (product) => {
-    return product.discount_price || product.price
 }
 
 // Get image URL for related products
@@ -361,7 +302,7 @@ const getImageUrl = (product) => {
             }
         }
     }
-    return 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop'
+    return null
 }
 </script>
 

@@ -12,29 +12,17 @@
                                 class="grid h-full grid-cols-2 items-center gap-3 px-4 py-2 sm:gap-4 sm:px-6 sm:py-8 md:gap-8 md:px-16 md:py-0"
                             >
                                 <div class="space-y-2 sm:space-y-3 md:space-y-6">
-                                    <div
-                                        class="inline-block rounded-full bg-pink-100 px-2.5 py-1 text-[11px] font-semibold text-pink-600 sm:px-3 sm:py-1.5 sm:text-xs md:px-4 md:py-2 md:text-sm"
-                                    >
-                                        #Big Fashion Sale
-                                    </div>
                                     <h1
-                                        class="text-base leading-tight font-bold text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
+                                        class="text-base font-bold leading-tight text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
                                     >
-                                        Limited Time Offer!<br />
-                                        Up to <span class="text-pink-600">50% OFF!</span>
+                                        ធ្វើដោយដៃ<br />
+                                        គុណភាព ទំនុកចិត្ត <span class="text-pink-600">100%</span>
                                     </h1>
-                                    <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg">
-                                        Redefine Your Everyday Style
-                                    </p>
-                                    <button
-                                        class="rounded-lg bg-pink-600 px-4 py-2 text-xs font-semibold text-white transition-colors duration-200 hover:bg-pink-700 sm:px-6 sm:py-2.5 sm:text-sm md:px-8 md:py-3 md:text-base"
-                                    >
-                                        Shop Now
-                                    </button>
+                                    <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg"></p>
                                 </div>
                                 <div class="flex items-center justify-center">
                                     <img
-                                        src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop"
+                                        :src="firstImage"
                                         alt="Fashion products"
                                         class="h-auto max-h-[180px] w-full rounded-lg object-cover sm:max-h-[240px] md:max-h-96"
                                     />
@@ -48,68 +36,22 @@
                                 class="grid h-full grid-cols-2 items-center gap-3 px-4 py-2 sm:gap-4 sm:px-6 sm:py-8 md:gap-8 md:px-16 md:py-0"
                             >
                                 <div class="space-y-2 sm:space-y-3 md:space-y-6">
-                                    <div
-                                        class="inline-block rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold text-blue-600 sm:px-3 sm:py-1.5 sm:text-xs md:px-4 md:py-2 md:text-sm"
-                                    >
-                                        #Summer Collection
-                                    </div>
                                     <h1
-                                        class="text-base leading-tight font-bold text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
+                                        class="text-base font-bold leading-tight text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
                                     >
-                                        New Season<br />
-                                        <span class="text-blue-600">New Styles</span>
+                                        ផលិតដោយ<br />
+                                        <span class="text-purple-600">ប្រជាជនខេត្ត តាកែវ</span>
                                     </h1>
                                     <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg">
-                                        Discover the latest trends
+                                        គាំទ្រផលិតផលខ្មែរដូរជួយអោយប្រជាជនខ្មែរមានជីវភាពប្រសើរជាងមុខ
                                     </p>
-                                    <button
-                                        class="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition-colors duration-200 hover:bg-blue-700 sm:px-6 sm:py-2.5 sm:text-sm md:px-8 md:py-3 md:text-base"
-                                    >
-                                        Explore Now
-                                    </button>
                                 </div>
                                 <div class="flex items-center justify-center">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&h=400&fit=crop"
-                                        alt="New collection"
-                                        class="h-auto max-h-[180px] w-full rounded-lg object-cover sm:max-h-[240px] md:max-h-96"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 3 -->
-                        <div v-show="currentSlide === 2" class="absolute inset-0 transition-opacity duration-500">
-                            <div
-                                class="grid h-full grid-cols-2 items-center gap-3 px-4 py-2 sm:gap-4 sm:px-6 sm:py-8 md:gap-8 md:px-16 md:py-0"
-                            >
-                                <div class="space-y-2 sm:space-y-3 md:space-y-6">
-                                    <div
-                                        class="inline-block rounded-full bg-purple-100 px-2.5 py-1 text-[11px] font-semibold text-purple-600 sm:px-3 sm:py-1.5 sm:text-xs md:px-4 md:py-2 md:text-sm"
-                                    >
-                                        #Best Sellers
-                                    </div>
-                                    <h1
-                                        class="text-base leading-tight font-bold text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
-                                    >
-                                        Top Rated<br />
-                                        <span class="text-purple-600">Products</span>
-                                    </h1>
-                                    <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg">
-                                        Customer favorites just for you
-                                    </p>
-                                    <button
-                                        class="rounded-lg bg-purple-600 px-4 py-2 text-xs font-semibold text-white transition-colors duration-200 hover:bg-purple-700 sm:px-6 sm:py-2.5 sm:text-sm md:px-8 md:py-3 md:text-base"
-                                    >
-                                        View Collection
-                                    </button>
-                                </div>
-                                <div class="flex items-center justify-center">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=400&fit=crop"
+                                     <img
+                                        :src="secondImage"
                                         alt="Best sellers"
                                         class="h-auto max-h-[180px] w-full rounded-lg object-cover sm:max-h-[240px] md:max-h-96"
-                                    />
+                                    /> 
                                 </div>
                             </div>
                         </div>
@@ -120,7 +62,7 @@
                         class="absolute bottom-1 left-1/2 z-10 flex -translate-x-1/2 transform space-x-1.5 sm:bottom-3 md:bottom-6 md:space-x-2"
                     >
                         <button
-                            v-for="index in 3"
+                            v-for="index in 2"
                             :key="index"
                             @click="currentSlide = index - 1"
                             :class="[
@@ -155,7 +97,7 @@
                         />
                         <div
                             v-if="calculateDiscount(product.price, product.discount_price)"
-                            class="absolute top-1.5 left-1.5 rounded bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white md:top-2 md:left-2 md:px-2 md:py-1 md:text-xs"
+                            class="absolute left-1.5 top-1.5 rounded bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white md:left-2 md:top-2 md:px-2 md:py-1 md:text-xs"
                         >
                             -{{ calculateDiscount(product.price, product.discount_price) }}%
                         </div>
@@ -245,6 +187,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import firstImage from '@/../images/01.png'
+import secondImage from '@/../images/02.png'
 
 const props = defineProps({
     products: {
@@ -259,7 +203,7 @@ let slideInterval = null
 // Auto-rotate carousel
 onMounted(() => {
     slideInterval = setInterval(() => {
-        currentSlide.value = (currentSlide.value + 1) % 3
+        currentSlide.value = (currentSlide.value + 1) % 2
     }, 5000)
 })
 

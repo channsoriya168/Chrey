@@ -9,21 +9,11 @@
                     </Link>
                 </div>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden items-center space-x-8 md:flex">
-                    <Link
-                        v-for="pageItem in pages"
-                        :key="pageItem.path"
-                        :href="pageItem.path"
-                        class="nav-link"
-                        :class="{ active: $page.url === pageItem.path }"
-                    >
-                        {{ pageItem.name }}
-                    </Link>
-                </div>
-
                 <!-- Right Side Actions -->
                 <div class="hidden items-center space-x-4 md:flex">
+                    <!-- Cart Button -->
+                    <CartDrawer :items="cartItems" />
+
                     <!-- Auth Buttons -->
                     <div class="flex items-center space-x-3">
                         <div v-if="authUser">
@@ -65,6 +55,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div v-else>
                             <button
                                 @click="LoginView"
@@ -85,7 +76,10 @@
                 </div>
 
                 <!-- Mobile menu button -->
-                <div class="flex items-center md:hidden">
+                <div class="flex items-center space-x-2 md:hidden">
+                    <!-- Cart Button Mobile -->
+                    <CartDrawer :items="cartItems" />
+
                     <button
                         @click="toggleMobileMenu"
                         class="rounded-md p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
@@ -181,6 +175,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { usePage, router, Link } from '@inertiajs/vue3'
+import CartDrawer from './CartDrawer.vue'
 
 const page = usePage()
 
@@ -194,6 +189,9 @@ const pages = ref([
     { name: 'អំពី', path: '/about' },
     { name: 'ទំនាក់ទំនង', path: '/contact' }
 ])
+
+// Cart items from shared Inertia props
+const cartItems = computed(() => page.props.cartItems || [])
 
 const showMobileMenu = ref(false)
 const showLanguageMenu = ref(false)

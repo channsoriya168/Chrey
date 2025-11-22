@@ -15,6 +15,8 @@ class Product extends Model
         'discount_price_percent' => 'decimal:2',
     ];
 
+    
+
     public function ratings()
     {
         return $this->hasMany(Rating::class);
