@@ -71,6 +71,23 @@
                 </button>
 
                 <button
+                    @click="navigateCallback('dashboard.carts.index')"
+                    :class="
+                        cn(
+                            'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
+                            {
+                                'bg-amber-800 text-white': isActive('carts'),
+                                'text-gray-700 hover:bg-gray-100': !isActive('carts'),
+                                'justify-center px-0': rail && !mobile
+                            }
+                        )
+                    "
+                >
+                    <ShoppingCart class="h-5 w-5" />
+                    <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">កន្ត្រកទំនិញ</span>
+                </button>
+
+                <button
                     @click="navigateCallback('dashboard.users.index')"
                     :class="
                         cn(
@@ -109,21 +126,6 @@
         <!-- Bottom Actions -->
         <div class="space-y-0.5 border-t border-gray-200 p-2">
             <button
-                @click="navigateToFrontend"
-                :class="
-                    cn(
-                        'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-gray-100',
-                        {
-                            'justify-center px-0': rail && !mobile
-                        }
-                    )
-                "
-            >
-                <Home class="h-5 w-5" />
-                <span v-if="!rail || mobile" class="khmer-text flex-1 text-left">ទៅទំព័រមុខ</span>
-            </button>
-
-            <button
                 @click="handleLogout"
                 :class="
                     cn(
@@ -146,7 +148,7 @@ import { router, usePage } from '@inertiajs/vue3'
 import { computed, toRefs, onMounted, onUnmounted, ref } from 'vue'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { GraduationCap, LayoutDashboard, Package, Users, Shield, Home, LogOut } from 'lucide-vue-next'
+import { GraduationCap, LayoutDashboard, Package, Users, Shield, Home, LogOut, ShoppingCart } from 'lucide-vue-next'
 
 const props = defineProps({
     modelValue: {
@@ -194,6 +196,8 @@ const isActive = (section) => {
         return url === '/dashboard' || url === '/dashboard/'
     } else if (section === 'products') {
         return url.includes('/products')
+    } else if (section === 'carts') {
+        return url.includes('/carts')
     } else if (section === 'users') {
         return url.includes('/users')
     } else if (section === 'roles') {

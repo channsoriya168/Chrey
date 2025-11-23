@@ -132,8 +132,8 @@
 </template>
 
 <script setup>
-import { ref, computed, TransitionGroup } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { ref, computed, onMounted, TransitionGroup } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
 import {
     Sheet,
     SheetContent,
@@ -148,15 +148,15 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ShoppingCart, Trash2, Minus, Plus, CreditCard } from 'lucide-vue-next'
 
-const props = defineProps({
-    items: {
-        type: Array,
-        default: () => []
-    }
-})
-
+const page = usePage()
 const isOpen = ref(false)
-const cartItems = computed(() => props.items || [])
+const cartItems = ref([])
+const isLoading = ref(false)
+
+// Check if user is authenticated
+const isAuthenticated = computed(() => {
+    return page.props.auth && page.props.auth.user
+})
 
 const cartItemCount = computed(() => {
     return cartItems.value.reduce((total, item) => total + item.quantity, 0)
@@ -165,6 +165,33 @@ const cartItemCount = computed(() => {
 const subtotal = computed(() => {
     return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
 })
+
+// Fetch cart items from API
+const fetchCartItems = async () => {
+    if (!isAuthenticated.value) {
+        cartItems.value = []
+        return
+    }
+
+    isLoading.value = true
+    try {
+        const response = await fetch('/api/cart/items', {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+
+        if (response.ok) {
+            const data = await response.json()
+            cartItems.value = data.cartItems || []
+        }
+    } catch (error) {
+        console.error('Failed to fetch cart items:', error)
+    } finally {
+        isLoading.value = false
+    }
+}
 
 const getProductImage = (product) => {
     if (product.image_url) {
@@ -194,7 +221,7 @@ const updateQuantity = (itemId, newQuantity) => {
         {
             preserveScroll: true,
             onSuccess: () => {
-                // Update will be reflected via page reload
+                fetchCartItems()
             }
         }
     )
@@ -203,7 +230,10 @@ const updateQuantity = (itemId, newQuantity) => {
 const removeItem = (itemId) => {
     if (confirm('Remove this item from cart?')) {
         router.delete(`/cart/${itemId}`, {
-            preserveScroll: true
+            preserveScroll: true,
+            onSuccess: () => {
+                fetchCartItems()
+            }
         })
     }
 }
@@ -217,6 +247,16 @@ const checkout = () => {
     isOpen.value = false
     router.visit('/checkout')
 }
+
+// Fetch cart items on component mount
+onMounted(() => {
+    fetchCartItems()
+})
+
+// Expose the refresh function so parent components can trigger it
+defineExpose({
+    fetchCartItems
+})
 </script>
 
 <style>

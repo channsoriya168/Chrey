@@ -20,8 +20,8 @@
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="khmer-text text-2xl font-bold text-gray-900">គ្រប់គ្រងអ្នកប្រើប្រាស់</h1>
-                    <p class="khmer-text mt-1 text-sm text-gray-600">គ្រប់គ្រង និងកែប្រែអ្នកប្រើប្រាស់ក្នុងប្រព័ន្ធ</p>
+                    <!-- <h1 class="khmer-text text-2xl font-bold text-gray-900">គ្រប់គ្រងអ្នកប្រើប្រាស់</h1>
+                    <p class="khmer-text mt-1 text-sm text-gray-600">គ្រប់គ្រង និងកែប្រែអ្នកប្រើប្រាស់ក្នុងប្រព័ន្ធ</p> -->
                 </div>
                 <Link
                     v-if="$page.props.auth.user.permissions.includes('create users')"
@@ -33,131 +33,101 @@
                 </Link>
             </div>
 
-            <!-- Table Card -->
-            <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    class="khmer-text px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-                                >
-                                    ឈ្មោះ
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="khmer-text px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-                                >
-                                    អ៊ីម៉ែល
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="khmer-text px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-                                >
-                                    តួនាទី
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="khmer-text px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase"
-                                >
-                                    សកម្មភាព
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white">
-                            <tr v-if="users.data.length === 0">
-                                <td colspan="4" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center justify-center text-gray-500">
-                                        <Users class="mb-2 h-12 w-12" />
-                                        <p class="khmer-text">គ្មានអ្នកប្រើប្រាស់</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr v-for="user in users.data" :key="user.id" class="transition-colors hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-900"
-                                        >
-                                            <span class="text-sm font-semibold text-white">{{
-                                                user.name.charAt(0).toUpperCase()
-                                            }}</span>
-                                        </div>
-                                        <div class="ml-3">
-                                            <div class="text-sm font-medium text-gray-900">{{ user.name }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-700">{{ user.email }}</div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex flex-wrap gap-1">
-                                        <span
-                                            v-for="role in user.roles"
-                                            :key="role.id"
-                                            class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
-                                        >
-                                            {{ role.name }}
-                                        </span>
-                                        <span v-if="user.roles.length === 0" class="khmer-text text-xs text-gray-400"
-                                            >គ្មានតួនាទី</span
-                                        >
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
-                                    <div class="flex justify-end gap-2">
-                                        <Link
-                                            v-if="$page.props.auth.user.permissions.includes('edit users')"
-                                            :href="route('dashboard.users.edit', user.id)"
-                                            class="inline-flex items-center gap-1 rounded px-3 py-1.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
-                                        >
-                                            <Edit class="h-4 w-4" />
-                                            <span class="khmer-text">កែសម្រួល</span>
-                                        </Link>
-                                        <button
-                                            v-if="
-                                                $page.props.auth.user.permissions.includes('delete users') &&
-                                                user.id !== $page.props.auth.user.id
-                                            "
-                                            @click="deleteUser(user.id)"
-                                            class="inline-flex items-center gap-1 rounded px-3 py-1.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
-                                        >
-                                            <Trash2 class="h-4 w-4" />
-                                            <span class="khmer-text">លុប</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <!-- DataTable -->
+            <div class="overflow-hidden">
+                <DataTable
+                    :columns="columns"
+                    :data="users.data"
+                    :loading="loading"
+                    :pagination="users"
+                    :can-edit="$page.props.auth.user.permissions.includes('edit users')"
+                    :can-delete="$page.props.auth.user.permissions.includes('delete users')"
+                    delete-item-name-key="name"
+                    edit-label="កែសម្រួល"
+                    delete-label="លុប"
+                    @page-change="handlePageChange"
+                    @per-page-change="handlePerPageChange"
+                    @edit="editUser"
+                    @delete="deleteUser"
+                >
+                    <!-- Custom Cell: Name with Avatar -->
+                    <template #cell-name="{ item }">
+                        <div class="flex items-center">
+                            <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-900">
+                                <span class="text-sm font-semibold text-white">
+                                    {{ item.name.charAt(0).toUpperCase() }}
+                                </span>
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">{{ item.name }}</div>
+                            </div>
+                        </div>
+                    </template>
 
-            <!-- Pagination -->
-            <div v-if="users.links.length > 3" class="flex justify-center gap-1">
-                <Link
-                    v-for="(link, index) in users.links"
-                    :key="index"
-                    :href="link.url"
-                    :class="[
-                        'rounded-lg border px-4 py-2 text-sm font-medium transition-colors',
-                        link.active
-                            ? 'border-gray-900 bg-gray-900 text-white'
-                            : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
-                        !link.url ? 'cursor-not-allowed opacity-50' : ''
-                    ]"
-                    :disabled="!link.url"
-                    v-html="link.label"
-                />
+                    <!-- Custom Cell: Email -->
+                    <template #cell-email="{ item }">
+                        <div class="text-sm text-gray-700">{{ item.email }}</div>
+                    </template>
+
+                    <!-- Custom Cell: Roles -->
+                    <template #cell-roles="{ item }">
+                        <div class="flex flex-wrap gap-1">
+                            <span
+                                v-for="role in item.roles"
+                                :key="role.id"
+                                class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
+                            >
+                                {{ role.name }}
+                            </span>
+                            <span v-if="item.roles.length === 0" class="khmer-text text-xs text-gray-400">
+                                គ្មានតួនាទី
+                            </span>
+                        </div>
+                    </template>
+
+                    <!-- Empty State -->
+                    <template #empty>
+                        <div class="flex flex-col items-center justify-center py-12">
+                            <div class="mb-4 rounded-full bg-gray-100 p-6">
+                                <Users class="h-12 w-12 text-gray-400" />
+                            </div>
+                            <h3 class="khmer-text mb-2 text-lg font-semibold text-gray-900">គ្មានអ្នកប្រើប្រាស់</h3>
+                        </div>
+                    </template>
+
+                    <!-- Custom Actions Column -->
+                    <template #actions="{ item }">
+                        <div class="inline-flex items-center justify-end gap-1.5">
+                            <button
+                                v-if="$page.props.auth.user.permissions.includes('edit users')"
+                                @click="editUser(item)"
+                                class="inline-flex h-8 w-8 items-center justify-center rounded-md text-amber-500 transition-all duration-200 hover:bg-amber-50 hover:text-amber-600"
+                                title="កែសម្រួល"
+                            >
+                                <Edit class="h-4 w-4" />
+                            </button>
+                            <button
+                                v-if="
+                                    $page.props.auth.user.permissions.includes('delete users') &&
+                                    item.id !== $page.props.auth.user.id
+                                "
+                                @click="deleteUser(item)"
+                                class="inline-flex h-8 w-8 items-center justify-center rounded-md text-red-500 transition-all duration-200 hover:bg-red-50 hover:text-red-600"
+                                title="លុប"
+                            >
+                                <Trash2 class="h-4 w-4" />
+                            </button>
+                        </div>
+                    </template>
+                </DataTable>
             </div>
         </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { Link, router, Head } from '@inertiajs/vue3'
-import DashboardLayout from '@/Layouts/DashboardLayout.vue'
+import DataTable from '@/Components/ui/DataTable.vue'
 import { UserPlus, Users, Edit, Trash2 } from 'lucide-vue-next'
 import {
     Breadcrumb,
@@ -168,13 +138,79 @@ import {
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 
-defineProps({
-    users: Object
+const props = defineProps({
+    users: {
+        type: Object,
+        default: () => ({
+            data: [],
+            current_page: 1,
+            last_page: 1,
+            per_page: 10,
+            total: 0,
+            from: 0,
+            to: 0
+        })
+    },
+    filters: {
+        type: Object,
+        default: () => ({
+            per_page: 10
+        })
+    }
 })
 
-const deleteUser = (id) => {
-    if (confirm('តើអ្នកប្រាកដថាចង់លុបអ្នកប្រើប្រាស់នេះ?')) {
-        router.delete(route('dashboard.users.destroy', id))
+// State
+const loading = ref(false)
+
+// Table columns configuration
+const columns = [
+    {
+        key: 'name',
+        label: 'ឈ្មោះ'
+    },
+    {
+        key: 'email',
+        label: 'អ៊ីម៉ែល'
+    },
+    {
+        key: 'roles',
+        label: 'តួនាទី'
     }
+]
+
+// Navigate to edit page
+const editUser = (item) => {
+    router.visit(route('dashboard.users.edit', item.id))
+}
+
+// Delete user
+const deleteUser = (item) => {
+    if (confirm('តើអ្នកប្រាកដថាចង់លុបអ្នកប្រើប្រាស់នេះ?')) {
+        router.delete(route('dashboard.users.destroy', item.id), {
+            preserveScroll: true
+        })
+    }
+}
+
+// Handle page change
+const handlePageChange = (page) => {
+    router.reload({
+        only: ['users'],
+        data: {
+            page: page,
+            per_page: props.filters.per_page
+        }
+    })
+}
+
+// Handle per page change
+const handlePerPageChange = (perPage) => {
+    router.reload({
+        only: ['users'],
+        data: {
+            page: 1,
+            per_page: perPage
+        }
+    })
 }
 </script>

@@ -4,6 +4,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\RoleManagementController;
 use App\Http\Controllers\Dashboard\UserManagementController;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\CartManagementController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,6 +15,9 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth', 'permission:
 
     // Product Management
     Route::resource('products', ProductController::class);
+
+    // Cart Management
+    Route::resource('carts', CartManagementController::class)->only(['index', 'show', 'destroy']);
 
     // User Management (only for users with appropriate permissions)
     Route::resource('users', UserManagementController::class);

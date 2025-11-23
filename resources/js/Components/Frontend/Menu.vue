@@ -12,7 +12,7 @@
                 <!-- Right Side Actions -->
                 <div class="hidden items-center space-x-4 md:flex">
                     <!-- Cart Button -->
-                    <CartDrawer :items="cartItems" />
+                    <CartDrawer />
 
                     <!-- Auth Buttons -->
                     <div class="flex items-center space-x-3">

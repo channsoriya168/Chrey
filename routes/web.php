@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FrontEndController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::post('login', [AuthController::class, 'storeLogin'])
 
 Route::middleware('auth')->group(function () {
     Route::resource('cart',CartController::class)->only(['index','store','update','destroy']);
+    Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
     Route::post('logout', [AuthController::class, 'logout'])
     ->name('logout');
 });

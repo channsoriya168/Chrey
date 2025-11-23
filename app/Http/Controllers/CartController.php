@@ -19,16 +19,33 @@ class CartController extends Controller
             ->where('status', 'pending')
             ->first();
 
-        $cartItems = $cart ? $cart->cartItems : collect();
+        return inertia('Cart/Index', [
+            'cart' => $cart,
+            'cartItems' => $cart ? $cart->cartItems : []
+        ]);
+    }
+
+    /**
+     * Get cart items for API
+     */
+    public function getCartItems()
+    {
+        $cart = Cart::with(['cartItems.product'])
+            ->where('user_id', auth()->id())
+            ->where('status', 'pending')
+            ->first();
+
+        $cartItems = $cart ? $cart->cartItems : [];
 
         $subtotal = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
         });
 
-        return inertia('Frontend/Cart', [
-            'cart' => $cart,
+        return response()->json([
             'cartItems' => $cartItems,
             'subtotal' => $subtotal,
+            'total' => $subtotal,
+            'count' => $cartItems->count()
         ]);
     }
 

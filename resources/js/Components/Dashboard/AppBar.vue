@@ -59,36 +59,6 @@
                             <p class="khmer-text text-sm font-semibold text-gray-900">{{ userName }}</p>
                             <p class="mt-0.5 text-xs text-gray-500">{{ userEmail }}</p>
                         </div>
-                        <div class="py-1">
-                            <button
-                                @click="handleGoToFrontend"
-                                class="flex w-full items-center gap-3 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
-                            >
-                                <Globe class="h-4 w-4" />
-                                <span class="khmer-text">ទៅទំព័រមុខ</span>
-                            </button>
-                            <button
-                                class="flex w-full items-center gap-3 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
-                            >
-                                <UserCircle class="h-4 w-4" />
-                                <span class="khmer-text">ប្រវត្តិរូប</span>
-                            </button>
-                            <button
-                                class="flex w-full items-center gap-3 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
-                            >
-                                <Settings class="h-4 w-4" />
-                                <span class="khmer-text">ការកំណត់</span>
-                            </button>
-                        </div>
-                        <div class="border-t border-gray-200 py-1">
-                            <button
-                                @click="handleLogout"
-                                class="flex w-full items-center gap-3 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
-                            >
-                                <LogOut class="h-4 w-4" />
-                                <span class="khmer-text">ចាកចេញ</span>
-                            </button>
-                        </div>
                     </div>
                 </Transition>
             </div>
