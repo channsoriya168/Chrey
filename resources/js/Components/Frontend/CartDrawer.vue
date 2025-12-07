@@ -20,9 +20,9 @@
                 </SheetDescription>
             </SheetHeader>
 
-            <div class="mt-8 flex flex-col h-full animate-in fade-in-0 duration-700 delay-200">
+            <div class="mt-8 flex h-[calc(100vh-200px)] flex-col animate-in fade-in-0 duration-700 delay-200">
                 <!-- Cart Items List -->
-                <div v-if="cartItems.length > 0" class="flex-1 overflow-y-auto pr-2">
+                <div v-if="cartItems.length > 0" class="flex-1 overflow-y-auto pr-2 mb-4">
                     <TransitionGroup name="cart-item" tag="div" class="space-y-4">
                         <div
                             v-for="item in cartItems"
@@ -116,10 +116,10 @@
 
                     <!-- Action Buttons -->
                     <SheetFooter class="mt-6 flex-col gap-3">
-                        <Button class="w-full" variant="outline" size="lg" @click="viewCart">
+                        <!-- <Button class="w-full" variant="outline" size="lg" @click="viewCart">
                             <ShoppingCart class="mr-2 h-4 w-4" />
                             View Full Cart
-                        </Button>
+                        </Button> -->
                         <Button class="w-full bg-pink-600 hover:bg-pink-700" size="lg" @click="checkout">
                             <CreditCard class="mr-2 h-4 w-4" />
                             Proceed to Checkout
@@ -132,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, TransitionGroup } from 'vue'
+import { ref, computed, onMounted, onUnmounted, TransitionGroup } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import {
     Sheet,
@@ -244,13 +244,27 @@ const viewCart = () => {
 }
 
 const checkout = () => {
-    isOpen.value = false
-    router.visit('/checkout')
+    if (confirm('Proceed to checkout and place order?')) {
+        isOpen.value = false
+        router.post('/checkout', {}, {
+            onSuccess: () => {
+                fetchCartItems()
+            }
+        })
+    }
 }
 
 // Fetch cart items on component mount
 onMounted(() => {
     fetchCartItems()
+
+    // Listen for cart-updated events
+    window.addEventListener('cart-updated', fetchCartItems)
+})
+
+// Clean up event listener on unmount
+onUnmounted(() => {
+    window.removeEventListener('cart-updated', fetchCartItems)
 })
 
 // Expose the refresh function so parent components can trigger it

@@ -28,6 +28,12 @@ Route::post('login', [AuthController::class, 'storeLogin'])
 Route::middleware('auth')->group(function () {
     Route::resource('cart',CartController::class)->only(['index','store','update','destroy']);
     Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
+
+    // Orders
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
+
     Route::post('logout', [AuthController::class, 'logout'])
     ->name('logout');
 });

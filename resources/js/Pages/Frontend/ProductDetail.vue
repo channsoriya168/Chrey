@@ -240,10 +240,13 @@ const addToCart = () => {
             quantity: quantity.value
         },
         {
+            preserveScroll: true,
             onSuccess: () => {
                 isAddingToCart.value = false
                 // Reset quantity after successful add
                 quantity.value = 1
+                // Trigger cart refresh by dispatching a custom event
+                window.dispatchEvent(new CustomEvent('cart-updated'))
             },
             onError: () => {
                 isAddingToCart.value = false

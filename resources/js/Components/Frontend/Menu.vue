@@ -38,6 +38,13 @@
                                     v-if="showUserMenu"
                                     class="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white py-1 shadow-lg"
                                 >
+                                    <!-- My Orders link -->
+                                    <Link
+                                        :href="route('orders.index')"
+                                        class="block px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                                    >
+                                        My Orders
+                                    </Link>
                                     <!-- Admin link -->
                                     <Link
                                         v-if="authUser && authUser.roles && authUser.roles.includes('admin')"
@@ -136,10 +143,17 @@
                                 Logged in as: {{ authUser ? authUser.name : '' }}
                             </div>
                             <Link
+                                :href="route('orders.index')"
+                                @click="closeMobileMenu"
+                                class="block w-full rounded-md border border-gray-300 px-4 py-2 text-center font-medium text-gray-700 transition-colors hover:border-indigo-300 hover:text-indigo-600 mb-2"
+                            >
+                                My Orders
+                            </Link>
+                            <Link
                                 v-if="authUser && authUser.roles && authUser.roles.includes('admin')"
                                 :href="route('dashboard.index')"
                                 @click="closeMobileMenu"
-                                class="block w-full rounded-md border border-gray-300 px-4 py-2 text-center font-medium text-gray-700 transition-colors hover:border-indigo-300 hover:text-indigo-600"
+                                class="block w-full rounded-md border border-gray-300 px-4 py-2 text-center font-medium text-gray-700 transition-colors hover:border-indigo-300 hover:text-indigo-600 mb-2"
                             >
                                 Dashboard
                             </Link>
