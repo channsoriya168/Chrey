@@ -10,6 +10,9 @@ import { Ziggy } from './ziggy'
 import { Link } from '@inertiajs/vue3'
 import { Form, Field } from 'vee-validate'
 
+// i18n
+import i18n from './i18n'
+
 import DashboardLayout from './Layouts/DashboardLayout.vue'
 import FrontendLayout from './Layouts/FrontendLayout.vue'
 
@@ -47,6 +50,7 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .use(i18n)
             .component('Head', Head)
             .component('Link', Link)
             .component('vee-form', Form)

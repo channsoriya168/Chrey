@@ -15,8 +15,9 @@
                                     <h1
                                         class="text-base font-bold leading-tight text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
                                     >
-                                        ធ្វើដោយដៃ<br />
-                                        គុណភាព ទំនុកចិត្ត <span class="text-pink-600">100%</span>
+                                        {{ t('home.hero.slide1.title') }}<br />
+                                        {{ t('home.hero.slide1.subtitle').replace('100%', '') }}
+                                        <span class="text-pink-600">100%</span>
                                     </h1>
                                     <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg"></p>
                                 </div>
@@ -39,19 +40,19 @@
                                     <h1
                                         class="text-base font-bold leading-tight text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
                                     >
-                                        ផលិតដោយ<br />
-                                        <span class="text-purple-600">ប្រជាជនខេត្ត តាកែវ</span>
+                                        {{ t('home.hero.slide2.title') }}<br />
+                                        <span class="text-purple-600">{{ t('home.hero.slide2.subtitle') }}</span>
                                     </h1>
                                     <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg">
-                                        គាំទ្រផលិតផលខ្មែរដូរជួយអោយប្រជាជនខ្មែរមានជីវភាពប្រសើរជាងមុខ
+                                        {{ t('home.hero.slide2.description') }}
                                     </p>
                                 </div>
                                 <div class="flex items-center justify-center">
-                                     <img
+                                    <img
                                         :src="secondImage"
                                         alt="Best sellers"
                                         class="h-auto max-h-[180px] w-full rounded-lg object-cover sm:max-h-[240px] md:max-h-96"
-                                    /> 
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -78,8 +79,7 @@
         <!-- Featured Products Section -->
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
             <div class="mb-6 flex items-center justify-between md:mb-8">
-                <h2 class="text-xl font-bold text-gray-900 md:text-3xl">Featured Products</h2>
-                <a href="#" class="text-xs font-semibold text-pink-600 hover:text-pink-700 md:text-sm">See All →</a>
+                <h2 class="text-xl font-bold text-gray-900 md:text-3xl">{{ t('home.products.featured') }}</h2>
             </div>
 
             <div class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
@@ -108,7 +108,9 @@
                             <div class="flex text-[10px] text-yellow-400 md:text-xs">
                                 <span v-for="star in 5" :key="star">★</span>
                             </div>
-                            <span class="ml-1 text-[10px] text-gray-500 md:text-xs">(0)</span>
+                            <span class="ml-1 text-[10px] text-gray-500 md:text-xs"
+                                >(0 {{ t('home.products.reviews') }})</span
+                            >
                         </div>
                         <div class="flex items-center justify-between">
                             <div>
@@ -135,13 +137,13 @@
                     class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
                     preserve-scroll
                 >
-                    ← Previous
+                    ← {{ t('home.pagination.previous') }}
                 </Link>
                 <span
                     v-else
                     class="cursor-not-allowed rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-400"
                 >
-                    ← Previous
+                    ← {{ t('home.pagination.previous') }}
                 </span>
 
                 <!-- Page Numbers -->
@@ -171,13 +173,13 @@
                     class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
                     preserve-scroll
                 >
-                    Next →
+                    {{ t('home.pagination.next') }} →
                 </Link>
                 <span
                     v-else
                     class="cursor-not-allowed rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-400"
                 >
-                    Next →
+                    {{ t('home.pagination.next') }} →
                 </span>
             </div>
         </div>
@@ -187,8 +189,11 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { useI18n } from 'vue-i18n'
 import firstImage from '@/../images/01.png'
 import secondImage from '@/../images/02.png'
+
+const { t } = useI18n()
 
 const props = defineProps({
     products: {

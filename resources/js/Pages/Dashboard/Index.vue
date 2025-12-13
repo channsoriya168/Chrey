@@ -55,105 +55,10 @@
                                 />
                             </svg>
                         </div>
-                        <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-medium">+8%</span>
                     </div>
                     <div class="space-y-1">
                         <h3 class="khmer-text text-sm font-medium opacity-90">ផលិតផលសរុប</h3>
                         <p class="text-4xl font-bold">{{ products }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Secondary Stats -->
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <!-- Revenue Chart Placeholder -->
-            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-2">
-                <div class="mb-6 flex items-center justify-between">
-                    <h3 class="khmer-text text-lg font-semibold text-gray-800">ចំណូលប្រចាំខែ</h3>
-                    <select
-                        class="rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option>ខែនេះ</option>
-                        <option>ខែមុន</option>
-                        <option>បីខែចុងក្រោយ</option>
-                    </select>
-                </div>
-                <div
-                    class="flex h-64 items-center justify-center rounded-xl bg-gradient-to-br from-gray-50 to-gray-100"
-                >
-                    <div class="text-center text-gray-400">
-                        <svg class="mx-auto mb-2 h-16 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                            />
-                        </svg>
-                        <p class="khmer-text">គំនូសតាងនឹងត្រូវបានបង្ហាញនៅទីនេះ</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                <h3 class="khmer-text mb-6 text-lg font-semibold text-gray-800">សកម្មភាពថ្មីៗ</h3>
-                <div class="space-y-4">
-                    <div class="flex items-start gap-3">
-                        <div class="rounded-lg bg-blue-100 p-2">
-                            <svg class="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <p class="khmer-text text-sm font-medium text-gray-800">អ្នកប្រើថ្មី បានចុះឈ្មោះ</p>
-                            <p class="text-xs text-gray-500">២ នាទីមុន</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <div class="rounded-lg bg-green-100 p-2">
-                            <svg class="h-4 w-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <p class="khmer-text text-sm font-medium text-gray-800">ការបញ្ជាទិញបានបញ្ចប់</p>
-                            <p class="text-xs text-gray-500">១៥ នាទីមុន</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <div class="rounded-lg bg-amber-100 p-2">
-                            <svg class="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                                <path
-                                    d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"
-                                />
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <p class="khmer-text text-sm font-medium text-gray-800">ផលិតផលថ្មី បានបន្ថែម</p>
-                            <p class="text-xs text-gray-500">៣០ នាទីមុន</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <div class="rounded-lg bg-purple-100 p-2">
-                            <svg class="h-4 w-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <p class="khmer-text text-sm font-medium text-gray-800">ការជូនដំណឹង ពីប្រព័ន្ធ</p>
-                            <p class="text-xs text-gray-500">១ ម៉ោងមុន</p>
-                        </div>
                     </div>
                 </div>
             </div>

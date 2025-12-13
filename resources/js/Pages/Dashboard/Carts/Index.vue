@@ -5,21 +5,29 @@
         <!-- Breadcrumb -->
         <div class="flex items-center justify-between">
             <DashboardBreadcrumb
-                :items="[{ label: 'ផ្ទាំងគ្រប់គ្រង', href: route('dashboard.index') }, { label: 'កន្ត្រកទំនិញ' }]"
+                :items="[
+                    {
+                        label: 'ផ្ទាំងគ្រប់គ្រង',
+                        href: route('dashboard.index'),
+                    },
+                    { label: 'កន្ត្រកទំនិញ' },
+                ]"
             />
         </div>
 
         <!-- Table Card -->
         <div class="overflow-hidden">
             <!-- Search Section -->
-            <div class="flex items-center justify-between border-b border-gray-200 py-4">
+            <div
+                class="flex items-center justify-between border-b border-gray-200 py-4"
+            >
                 <div class="flex items-center gap-4">
                     <!-- Status Filter -->
                     <select
                         v-model="filter.status"
                         class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 transition-colors focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
                     >
-                        <option value="">ស្ថានភាពទាំងអស់</option>
+                        <option :value="null">ស្ថានភាពទាំងអស់</option>
                         <option value="pending">កំពុងរង់ចាំ</option>
                         <option value="completed">បានបញ្ចប់</option>
                         <option value="cancelled">បានលុបចោល</option>
@@ -58,19 +66,27 @@
                 <!-- Custom Cell: User -->
                 <template #cell-user="{ item }">
                     <div class="flex flex-col gap-0.5">
-                        <span class="text-sm font-medium text-gray-900">{{ item.user?.name }}</span>
-                        <span class="text-xs text-gray-500">{{ item.user?.email }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{
+                            item.user?.name
+                        }}</span>
+                        <span class="text-xs text-gray-500">{{
+                            item.user?.email
+                        }}</span>
                     </div>
                 </template>
 
                 <!-- Custom Cell: Items Count -->
                 <template #cell-items_count="{ item }">
-                    <span class="text-sm text-gray-900">{{ item.items_count }} items</span>
+                    <span class="text-sm text-gray-900"
+                        >{{ item.items_count }} items</span
+                    >
                 </template>
 
                 <!-- Custom Cell: Total -->
                 <template #cell-total="{ item }">
-                    <span class="text-sm font-semibold text-gray-900">${{ item.total?.toFixed(2) }}</span>
+                    <span class="text-sm font-semibold text-gray-900"
+                        >${{ item.total?.toFixed(2) }}</span
+                    >
                 </template>
 
                 <!-- Custom Cell: Status -->
@@ -82,7 +98,7 @@
                                 ? 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'
                                 : item.status === 'completed'
                                   ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                  : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
+                                  : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20',
                         ]"
                     >
                         {{ item.status }}
@@ -91,17 +107,25 @@
 
                 <!-- Custom Cell: Created At -->
                 <template #cell-created_at="{ item }">
-                    <span class="text-sm text-gray-600">{{ formatDate(item.created_at) }}</span>
+                    <span class="text-sm text-gray-600">{{
+                        formatDate(item.created_at)
+                    }}</span>
                 </template>
 
                 <!-- Empty State Slot -->
                 <template #empty>
-                    <div class="flex flex-col items-center justify-center py-12">
+                    <div
+                        class="flex flex-col items-center justify-center py-12"
+                    >
                         <div class="mb-4 rounded-full bg-gray-100 p-6">
                             <ShoppingCart class="h-12 w-12 text-gray-400" />
                         </div>
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">គ្មានកន្ត្រកទំនិញទេ</h3>
-                        <p class="text-sm text-gray-500">រកមិនឃើញកន្ត្រកទំនិញណាមួយទេ។</p>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                            គ្មានកន្ត្រកទំនិញទេ
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            រកមិនឃើញកន្ត្រកទំនិញណាមួយទេ។
+                        </p>
                     </div>
                 </template>
             </DataTable>
@@ -110,11 +134,11 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { router, Head } from '@inertiajs/vue3'
-import DataTable from '@/Components/ui/DataTable.vue'
-import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
-import { Search, ShoppingCart } from 'lucide-vue-next'
+import { ref, watch } from "vue";
+import { router, Head } from "@inertiajs/vue3";
+import DataTable from "@/Components/ui/DataTable.vue";
+import DashboardBreadcrumb from "@/Components/Dashboard/DashboardBreadcrumb.vue";
+import { Search, ShoppingCart } from "lucide-vue-next";
 
 // Props from Inertia
 const props = defineProps({
@@ -127,58 +151,59 @@ const props = defineProps({
             per_page: 10,
             total: 0,
             from: 0,
-            to: 0
-        })
+            to: 0,
+        }),
     },
+
     filters: {
         type: Object,
         default: () => ({
             per_page: 10,
             search: null,
-            status: null
-        })
-    }
-})
+            status: null,
+        }),
+    },
+});
 
 // State
-const loading = ref(false)
+const loading = ref(false);
 
 const filter = ref({
     search: props.filters?.search || null,
-    status: props.filters?.status || null
-})
+    status: props.filters?.status || null,
+});
 
 // Table columns configuration
 const columns = [
     {
-        key: 'user',
-        label: 'អតិថិជន'
+        key: "user",
+        label: "អតិថិជន",
     },
     {
-        key: 'items_count',
-        label: 'ចំនួនទំនិញ'
+        key: "items_count",
+        label: "ចំនួនទំនិញ",
     },
     {
-        key: 'total',
-        label: 'សរុប'
+        key: "total",
+        label: "សរុប",
     },
     {
-        key: 'status',
-        label: 'ស្ថានភាព'
+        key: "status",
+        label: "ស្ថានភាព",
     },
     {
-        key: 'created_at',
-        label: 'កាលបរិច្ឆេទបង្កើត'
-    }
-]
+        key: "created_at",
+        label: "កាលបរិច្ឆេទបង្កើត",
+    },
+];
 
 watch(
     filter,
     () => {
-        filterCallback()
+        filterCallback();
     },
-    { deep: true }
-)
+    { deep: true },
+);
 
 /**
  * Filter callback.
@@ -187,25 +212,25 @@ watch(
  */
 const filterCallback = () => {
     router.reload({
-        only: ['carts'],
+        only: ["carts"],
         data: {
             filter: filter.value,
-            page: 1
-        }
-    })
-}
+            page: 1,
+        },
+    });
+};
 
 // Navigate to view page
 const viewCallback = (item) => {
-    router.visit(`/dashboard/carts/${item.id}`)
-}
+    router.visit(`/dashboard/carts/${item.id}`);
+};
 
 // Delete cart
 const deleteCallback = (item) => {
     router.delete(`/dashboard/carts/${item.id}`, {
-        preserveScroll: true
-    })
-}
+        preserveScroll: true,
+    });
+};
 
 /**
  * Handle page change.
@@ -215,14 +240,14 @@ const deleteCallback = (item) => {
  */
 const handlePageChange = (page) => {
     router.reload({
-        only: ['carts'],
+        only: ["carts"],
         data: {
             filter: filter.value,
             page: page,
-            per_page: props.filters.per_page
-        }
-    })
-}
+            per_page: props.filters.per_page,
+        },
+    });
+};
 
 /**
  * Handle per page change.
@@ -232,14 +257,14 @@ const handlePageChange = (page) => {
  */
 const handlePerPageChange = (perPage) => {
     router.reload({
-        only: ['carts'],
+        only: ["carts"],
         data: {
             filter: filter.value,
             page: 1,
-            per_page: perPage
-        }
-    })
-}
+            per_page: perPage,
+        },
+    });
+};
 
 /**
  * Format date.
@@ -248,12 +273,12 @@ const handlePerPageChange = (perPage) => {
  * @return {String}
  */
 const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    })
-}
+    return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
 </script>

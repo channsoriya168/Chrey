@@ -21,7 +21,6 @@
         <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
             <div class="border-b border-gray-200 pb-4 mb-6">
                 <h2 class="khmer-text mb-1 text-2xl font-bold text-gray-900">បង្កើតផលិតផលថ្មី</h2>
-                <p class="text-gray-600">បំពេញព័ត៍មានខាងក្រោមដើម្បីបង្កើតផលិតផលថ្មី</p>
             </div>
             <vee-form
                 :validation-schema="validationSchema"

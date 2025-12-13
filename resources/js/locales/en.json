@@ -1,0 +1,94 @@
+{
+    "nav": {
+        "brand": "Chrey",
+        "menu": {
+            "home": "Home",
+            "about": "About",
+            "contact": "Contact"
+        },
+        "auth": {
+            "login": "Login",
+            "register": "Register",
+            "logout": "Logout",
+            "myOrders": "My Orders",
+            "dashboard": "Dashboard",
+            "loggedInAs": "Logged in as:"
+        },
+        "language": {
+            "title": "Language",
+            "english": "EN",
+            "khmer": "ខ្មែរ"
+        }
+    },
+    "home": {
+        "hero": {
+            "slide1": {
+                "title": "Handcrafted",
+                "subtitle": "Quality & Trust 100%"
+            },
+            "slide2": {
+                "title": "Made by",
+                "subtitle": "People of Takeo Province",
+                "description": "Support local Khmer products to help improve the lives of Khmer people"
+            }
+        },
+        "products": {
+            "featured": "Featured Products",
+            "seeAll": "See All",
+            "reviews": "reviews"
+        },
+        "pagination": {
+            "previous": "Previous",
+            "next": "Next"
+        }
+    },
+    "cart": {
+        "title": "Shopping Cart",
+        "description": "no items | {count} item in your cart | {count} items in your cart",
+        "empty": {
+            "title": "Your cart is empty",
+            "description": "Add items to get started"
+        },
+        "loading": "Loading cart...",
+        "error": {
+            "title": "Failed to load cart",
+            "retry": "Try Again"
+        },
+        "item": {
+            "remove": "Remove item",
+            "decrease": "Decrease quantity",
+            "increase": "Increase quantity",
+            "maxStock": "Max stock",
+            "removeConfirm": "Remove item from cart?",
+            "removeDescription": "{name} will be removed from your cart",
+            "removeButton": "Remove",
+            "cancel": "Cancel"
+        },
+        "summary": {
+            "subtotal": "Subtotal",
+            "shipping": "Shipping",
+            "shippingFree": "Free",
+            "total": "Total"
+        },
+        "checkout": {
+            "button": "Proceed to Checkout",
+            "processing": "Processing..."
+        },
+        "notifications": {
+            "updated": "Cart updated",
+            "quantityUpdated": "Quantity has been updated successfully",
+            "updateFailed": "Update failed",
+            "itemRemoved": "Item removed",
+            "itemRemovedDescription": "Item has been removed from your cart",
+            "removeFailed": "Failed to remove item",
+            "tryAgain": "Please try again",
+            "orderPlaced": "Order placed!",
+            "orderPlacedDescription": "Your order has been placed successfully",
+            "checkoutFailed": "Checkout failed",
+            "pleaseLogin": "Please login",
+            "loginRequired": "You need to login to view your cart",
+            "loginForCheckout": "You need to login to proceed with checkout",
+            "loadFailed": "Failed to load cart"
+        }
+    }
+}

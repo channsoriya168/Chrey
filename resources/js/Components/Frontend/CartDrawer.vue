@@ -1,7 +1,7 @@
 <template>
     <Sheet v-model:open="isOpen">
         <SheetTrigger as-child>
-            <Button variant="outline" class="relative" size="icon" aria-label="Shopping cart">
+            <Button variant="outline" class="relative" size="icon" :aria-label="t('cart.title')">
                 <ShoppingCart class="h-5 w-5" />
                 <Badge
                     v-if="cartItemCount > 0"
@@ -13,10 +13,14 @@
             </Button>
         </SheetTrigger>
         <SheetContent side="right" class="w-full sm:max-w-lg bg-white flex flex-col p-0">
-            <SheetHeader class="px-6 pt-6 pb-4 border-b">
-                <SheetTitle>Shopping Cart</SheetTitle>
-                <SheetDescription>
-                    {{ cartItemCount }} {{ cartItemCount === 1 ? 'item' : 'items' }} in your cart
+            <SheetHeader class="px-6 pt-6 pb-4 border-b bg-gradient-to-r from-pink-50 to-purple-50">
+                <SheetTitle
+                    class="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent"
+                >
+                    {{ t('cart.title') }}
+                </SheetTitle>
+                <SheetDescription v-if="cartItemCount > 0" class="text-sm text-gray-600">
+                    {{ t('cart.description', cartItemCount) }}
                 </SheetDescription>
             </SheetHeader>
 
@@ -36,12 +40,20 @@
 
             <!-- Error State -->
             <div v-else-if="error" class="flex-1 flex flex-col items-center justify-center px-6 py-12">
-                <AlertCircle class="h-16 w-16 text-red-400 mb-4" />
-                <p class="text-lg font-medium text-gray-900 mb-2">Failed to load cart</p>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-red-100 rounded-full blur-xl opacity-50"></div>
+                    <AlertCircle class="relative h-16 w-16 text-red-500 mb-4" />
+                </div>
+                <p class="text-lg font-semibold text-gray-900 mb-2">{{ t('cart.error.title') }}</p>
                 <p class="text-sm text-gray-500 mb-4">{{ error }}</p>
-                <Button @click="fetchCartItems" variant="outline" size="sm">
+                <Button
+                    @click="fetchCartItems"
+                    variant="outline"
+                    size="sm"
+                    class="hover:bg-pink-50 hover:text-pink-700 hover:border-pink-300"
+                >
                     <RefreshCw class="mr-2 h-4 w-4" />
-                    Try Again
+                    {{ t('cart.error.retry') }}
                 </Button>
             </div>
 
@@ -51,22 +63,24 @@
                     <div
                         v-for="item in cartItems"
                         :key="item.id"
-                        class="flex gap-4 rounded-lg border p-4 transition-all hover:bg-gray-50"
+                        class="group flex gap-4 rounded-xl border border-gray-200 p-4 transition-all hover:shadow-md hover:border-pink-200 bg-white"
                         :class="{ 'opacity-50': processingItems.has(item.id) }"
                     >
                         <!-- Product Image -->
-                        <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border relative">
+                        <div
+                            class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg border-2 border-gray-100 relative shadow-sm"
+                        >
                             <img
                                 :src="getProductImage(item.product)"
                                 :alt="item.product.name"
-                                class="h-full w-full object-cover"
+                                class="h-full w-full object-cover transition-transform group-hover:scale-105"
                                 loading="lazy"
                             />
                             <div
                                 v-if="processingItems.has(item.id)"
-                                class="absolute inset-0 bg-white/50 flex items-center justify-center"
+                                class="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center"
                             >
-                                <Loader2 class="h-4 w-4 animate-spin text-pink-600" />
+                                <Loader2 class="h-5 w-5 animate-spin text-pink-600" />
                             </div>
                         </div>
 
@@ -74,50 +88,56 @@
                         <div class="flex flex-1 flex-col">
                             <div class="flex justify-between">
                                 <div class="flex-1">
-                                    <h4 class="text-sm font-semibold text-gray-900 line-clamp-2">
+                                    <h4 class="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
                                         {{ item.product.name }}
                                     </h4>
-                                    <p class="mt-1 text-sm font-medium text-pink-600">
+                                    <p
+                                        class="text-base font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent"
+                                    >
                                         ${{ Number(item.price).toFixed(2) }}
                                     </p>
                                 </div>
+
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    class="h-8 w-8 -mt-1 -mr-2"
+                                    class="h-8 w-8 -mt-1 -mr-2 hover:bg-red-50 transition-colors"
                                     @click="removeItem(item.id)"
                                     :disabled="processingItems.has(item.id)"
-                                    aria-label="Remove item"
+                                    :aria-label="t('cart.item.remove')"
                                 >
-                                    <Trash2 class="h-4 w-4 text-red-500" />
+                                    <Trash2 class="h-4 w-4 text-red-500 group-hover:scale-110 transition-transform" />
                                 </Button>
                             </div>
 
                             <!-- Quantity Controls -->
-                            <div class="mt-2 flex items-center gap-2">
+                            <div class="mt-3 flex items-center gap-2">
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    class="h-8 w-8"
+                                    class="h-9 w-9 rounded-lg border-2 hover:bg-pink-50 hover:border-pink-300 transition-all"
                                     @click="updateQuantity(item.id, item.quantity - 1)"
                                     :disabled="item.quantity <= 1 || processingItems.has(item.id)"
-                                    aria-label="Decrease quantity"
+                                    :aria-label="t('cart.item.decrease')"
                                 >
-                                    <Minus class="h-3 w-3" />
+                                    <Minus class="h-4 w-4" />
                                 </Button>
-                                <span class="w-8 text-center text-sm font-medium">{{ item.quantity }}</span>
+                                <span class="min-w-10 text-center text-sm font-bold px-2">{{ item.quantity }}</span>
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    class="h-8 w-8"
+                                    class="h-9 w-9 rounded-lg border-2 hover:bg-pink-50 hover:border-pink-300 transition-all"
                                     @click="updateQuantity(item.id, item.quantity + 1)"
                                     :disabled="item.quantity >= item.product.stock || processingItems.has(item.id)"
-                                    aria-label="Increase quantity"
+                                    :aria-label="t('cart.item.increase')"
                                 >
-                                    <Plus class="h-3 w-3" />
+                                    <Plus class="h-4 w-4" />
                                 </Button>
-                                <span v-if="item.quantity >= item.product.stock" class="text-xs text-red-500 ml-2">
-                                    Max stock
+                                <span
+                                    v-if="item.quantity >= item.product.stock"
+                                    class="text-xs text-red-600 font-medium ml-2 bg-red-50 px-2 py-1 rounded-full"
+                                >
+                                    {{ t('cart.item.maxStock') }}
                                 </span>
                             </div>
                         </div>
@@ -127,43 +147,50 @@
 
             <!-- Empty Cart State -->
             <div v-else class="flex-1 flex flex-col items-center justify-center px-6 py-12">
-                <ShoppingCart class="h-16 w-16 text-gray-300" />
-                <p class="mt-4 text-lg font-medium text-gray-500">Your cart is empty</p>
-                <p class="mt-1 text-sm text-gray-400">Add items to get started</p>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gray-100 rounded-full blur-2xl opacity-50"></div>
+                    <ShoppingCart class="relative h-20 w-20 text-gray-300 mb-4" />
+                </div>
+                <p class="mt-4 text-lg font-semibold text-gray-600">{{ t('cart.empty.title') }}</p>
+                <p class="mt-2 text-sm text-gray-400">{{ t('cart.empty.description') }}</p>
             </div>
 
             <!-- Cart Footer -->
-            <div v-if="cartItems.length > 0" class="border-t px-6 py-4 bg-gray-50">
-                <Separator class="mb-4 -mt-4" />
+            <div v-if="cartItems.length > 0" class="border-t px-6 py-5 bg-gradient-to-b from-gray-50 to-white">
+                <Separator class="mb-4 -mt-5" />
 
-                <!-- Subtotal -->
-                <div class="space-y-2 mb-4">
+                <!-- Summary -->
+                <div class="space-y-3 mb-5 bg-white rounded-lg p-4 shadow-sm border border-gray-100">
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-600">Subtotal</span>
-                        <span class="font-medium">${{ subtotal.toFixed(2) }}</span>
+                        <span class="text-gray-600 font-medium">{{ t('cart.summary.subtotal') }}</span>
+                        <span class="font-semibold text-gray-900">${{ subtotal.toFixed(2) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-600">Shipping</span>
-                        <span class="font-medium text-green-600">Free</span>
+                        <span class="text-gray-600 font-medium">{{ t('cart.summary.shipping') }}</span>
+                        <span class="font-semibold text-green-600">{{ t('cart.summary.shippingFree') }}</span>
                     </div>
                     <Separator />
-                    <div class="flex justify-between text-base font-semibold">
-                        <span>Total</span>
-                        <span class="text-pink-600">${{ subtotal.toFixed(2) }}</span>
+                    <div class="flex justify-between text-lg">
+                        <span class="font-bold text-gray-900">{{ t('cart.summary.total') }}</span>
+                        <span
+                            class="font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent"
+                        >
+                            ${{ total.toFixed(2) }}
+                        </span>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
                 <SheetFooter class="flex-col gap-3">
                     <Button
-                        class="w-full bg-pink-600 hover:bg-pink-700"
+                        class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
                         size="lg"
                         @click="checkout"
                         :disabled="isCheckingOut"
                     >
-                        <Loader2 v-if="isCheckingOut" class="mr-2 h-4 w-4 animate-spin" />
-                        <CreditCard v-else class="mr-2 h-4 w-4" />
-                        {{ isCheckingOut ? 'Processing...' : 'Proceed to Checkout' }}
+                        <Loader2 v-if="isCheckingOut" class="mr-2 h-5 w-5 animate-spin" />
+                        <CreditCard v-else class="mr-2 h-5 w-5" />
+                        {{ isCheckingOut ? t('cart.checkout.processing') : t('cart.checkout.button') }}
                     </Button>
                 </SheetFooter>
             </div>
@@ -174,6 +201,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, TransitionGroup } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
+import { useI18n } from 'vue-i18n'
 import {
     Sheet,
     SheetContent,
@@ -187,21 +215,19 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-    ShoppingCart,
-    Trash2,
-    Minus,
-    Plus,
-    CreditCard,
-    Loader2,
-    AlertCircle,
-    RefreshCw
-} from 'lucide-vue-next'
+import { ShoppingCart, Trash2, Minus, Plus, CreditCard, Loader2, AlertCircle, RefreshCw } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 const page = usePage()
+const { t } = useI18n()
 const isOpen = ref(false)
-const cartItems = ref([])
+const data = ref({
+    cartItems: [],
+    subtotal: 0,
+    total: 0,
+    count: 0
+})
+
 const isLoading = ref(false)
 const error = ref(null)
 const processingItems = ref(new Set())
@@ -212,18 +238,21 @@ const isAuthenticated = computed(() => {
     return page.props.auth && page.props.auth.user
 })
 
-const cartItemCount = computed(() => {
-    return cartItems.value.reduce((total, item) => total + item.quantity, 0)
-})
-
-const subtotal = computed(() => {
-    return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
-})
+// Computed properties for easy access
+const cartItems = computed(() => data.value.cartItems)
+const subtotal = computed(() => data.value.subtotal)
+const total = computed(() => data.value.total)
+const cartItemCount = computed(() => data.value.count)
 
 // Fetch cart items from API
 const fetchCartItems = async () => {
     if (!isAuthenticated.value) {
-        cartItems.value = []
+        data.value = {
+            cartItems: [],
+            subtotal: 0,
+            total: 0,
+            count: 0
+        }
         error.value = null
         return
     }
@@ -234,7 +263,7 @@ const fetchCartItems = async () => {
     try {
         const response = await fetch('/api/cart/items', {
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
@@ -243,11 +272,18 @@ const fetchCartItems = async () => {
             throw new Error('Failed to fetch cart items')
         }
 
-        const data = await response.json()
-        cartItems.value = data.cartItems || []
+        const responseData = await response.json()
+
+        // Assign API response to data
+        data.value = {
+            cartItems: responseData.cartItems || [],
+            subtotal: responseData.subtotal || 0,
+            total: responseData.total || 0,
+            count: responseData.count || 0
+        }
     } catch (err) {
         error.value = err.message || 'Something went wrong. Please try again.'
-        toast.error('Failed to load cart', {
+        toast.error(t('cart.notifications.loadFailed'), {
             description: error.value
         })
     } finally {
@@ -278,7 +314,7 @@ const updateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1 || processingItems.value.has(itemId)) return
 
     // Find the item for optimistic update
-    const item = cartItems.value.find(i => i.id === itemId)
+    const item = cartItems.value.find((i) => i.id === itemId)
     if (!item) return
 
     const oldQuantity = item.quantity
@@ -294,8 +330,8 @@ const updateQuantity = async (itemId, newQuantity) => {
             preserveScroll: true,
             onSuccess: () => {
                 processingItems.value.delete(itemId)
-                toast.success('Cart updated', {
-                    description: 'Quantity has been updated successfully'
+                toast.success(t('cart.notifications.updated'), {
+                    description: t('cart.notifications.quantityUpdated')
                 })
                 fetchCartItems() // Refresh to ensure data consistency
             },
@@ -305,7 +341,7 @@ const updateQuantity = async (itemId, newQuantity) => {
                 processingItems.value.delete(itemId)
 
                 const errorMessage = errors.quantity || 'Failed to update cart'
-                toast.error('Update failed', {
+                toast.error(t('cart.notifications.updateFailed'), {
                     description: errorMessage
                 })
             }
@@ -316,37 +352,37 @@ const updateQuantity = async (itemId, newQuantity) => {
 const removeItem = (itemId) => {
     if (processingItems.value.has(itemId)) return
 
-    const item = cartItems.value.find(i => i.id === itemId)
+    const item = cartItems.value.find((i) => i.id === itemId)
     if (!item) return
 
     processingItems.value.add(itemId)
 
     // Show confirmation toast with action
-    toast.warning('Remove item from cart?', {
-        description: `${item.product.name} will be removed from your cart`,
+    toast.warning(t('cart.item.removeConfirm'), {
+        description: t('cart.item.removeDescription', { name: item.product.name }),
         action: {
-            label: 'Remove',
+            label: t('cart.item.removeButton'),
             onClick: () => {
                 router.delete(`/cart/${itemId}`, {
                     preserveScroll: true,
                     onSuccess: () => {
                         processingItems.value.delete(itemId)
-                        toast.success('Item removed', {
-                            description: 'Item has been removed from your cart'
+                        toast.success(t('cart.notifications.itemRemoved'), {
+                            description: t('cart.notifications.itemRemovedDescription')
                         })
                         fetchCartItems()
                     },
                     onError: () => {
                         processingItems.value.delete(itemId)
-                        toast.error('Failed to remove item', {
-                            description: 'Please try again'
+                        toast.error(t('cart.notifications.removeFailed'), {
+                            description: t('cart.notifications.tryAgain')
                         })
                     }
                 })
             }
         },
         cancel: {
-            label: 'Cancel',
+            label: t('cart.item.cancel'),
             onClick: () => {
                 processingItems.value.delete(itemId)
             }
@@ -357,38 +393,81 @@ const removeItem = (itemId) => {
 const checkout = () => {
     if (isCheckingOut.value) return
 
+    // Check if user is authenticated before checkout
+    if (!isAuthenticated.value) {
+        isOpen.value = false
+        router.visit('/login')
+        toast.info(t('cart.notifications.pleaseLogin'), {
+            description: t('cart.notifications.loginForCheckout')
+        })
+        return
+    }
+
     isCheckingOut.value = true
 
-    router.post('/checkout', {}, {
-        preserveScroll: true,
-        onSuccess: () => {
-            isCheckingOut.value = false
-            isOpen.value = false
-            toast.success('Order placed!', {
-                description: 'Your order has been placed successfully'
-            })
-            fetchCartItems()
-        },
-        onError: (errors) => {
-            isCheckingOut.value = false
-            const errorMessage = Object.values(errors)[0] || 'Failed to process checkout'
-            toast.error('Checkout failed', {
-                description: errorMessage
-            })
+    router.post(
+        '/checkout',
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                isCheckingOut.value = false
+                isOpen.value = false
+                toast.success(t('cart.notifications.orderPlaced'), {
+                    description: t('cart.notifications.orderPlacedDescription')
+                })
+                fetchCartItems()
+            },
+            onError: (errors) => {
+                isCheckingOut.value = false
+                const errorMessage = Object.values(errors)[0] || 'Failed to process checkout'
+                toast.error(t('cart.notifications.checkoutFailed'), {
+                    description: errorMessage
+                })
+            }
         }
-    })
+    )
 }
 
 // Watch for drawer open state and fetch cart items when opened
 watch(isOpen, (newValue) => {
     if (newValue) {
+        // Redirect to login if not authenticated
+        if (!isAuthenticated.value) {
+            isOpen.value = false
+            router.visit('/login')
+            toast.info(t('cart.notifications.pleaseLogin'), {
+                description: t('cart.notifications.loginRequired')
+            })
+            return
+        }
         fetchCartItems()
     }
 })
 
-// Listen for cart-updated events
+// Watch for authentication changes
+watch(isAuthenticated, (newValue) => {
+    if (newValue) {
+        // User just logged in, fetch their cart
+        fetchCartItems()
+    } else {
+        // User logged out, clear cart
+        data.value = {
+            cartItems: [],
+            subtotal: 0,
+            total: 0,
+            count: 0
+        }
+    }
+})
+
+// Listen for cart-updated events and fetch initial cart data
 onMounted(() => {
     window.addEventListener('cart-updated', fetchCartItems)
+    // Fetch cart items on mount to show badge immediately
+    if (isAuthenticated.value) {
+        fetchCartItems()
+    }
 })
 
 // Clean up event listener on unmount

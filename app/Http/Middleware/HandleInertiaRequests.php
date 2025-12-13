@@ -36,18 +36,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $cartItems = [];
-
-        if ($request->user()) {
-            $cart = Cart::with(['cartItems.product'])
-                ->where('user_id', $request->user()->id)
-                ->where('status', 'pending')
-                ->first();
-
-            if ($cart) {
-                $cartItems = $cart->cartItems;
-            }
-        }
 
         return [
             ...parent::share($request),
