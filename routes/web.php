@@ -26,7 +26,7 @@ Route::post('login', [AuthController::class, 'storeLogin'])
     ->name('login.store');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('cart',CartController::class)->only(['index','store','update','destroy']);
+    Route::resource('cart',CartController::class)->only(['store','update','destroy']);
     Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
 
     // Orders

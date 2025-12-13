@@ -85,7 +85,7 @@
                 <!-- Mobile menu button -->
                 <div class="flex items-center space-x-2 md:hidden">
                     <!-- Cart Button Mobile -->
-                    <CartDrawer :items="cartItems" />
+                    <CartDrawer />
 
                     <button
                         @click="toggleMobileMenu"
@@ -203,9 +203,6 @@ const pages = ref([
     { name: 'អំពី', path: '/about' },
     { name: 'ទំនាក់ទំនង', path: '/contact' }
 ])
-
-// Cart items from shared Inertia props
-const cartItems = computed(() => page.props.cartItems || [])
 
 const showMobileMenu = ref(false)
 const showLanguageMenu = ref(false)

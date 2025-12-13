@@ -10,22 +10,6 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $cart = Cart::with(['cartItems.product'])
-            ->where('user_id', auth()->id())
-            ->where('status', 'pending')
-            ->first();
-
-        return inertia('Cart/Index', [
-            'cart' => $cart,
-            'cartItems' => $cart ? $cart->cartItems : []
-        ]);
-    }
-
-    /**
      * Get cart items for API
      */
     public function getCartItems()
