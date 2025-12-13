@@ -22,7 +22,7 @@
                             class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                         />
                         <div
-                            v-if="product.data.discount_price_percent>0"
+                            v-if="product.data.discount_price_percent > 0"
                             class="absolute top-4 left-4 rounded-lg bg-red-500 px-3 py-1 text-sm font-bold text-white"
                         >
                             {{ product.data.discount_price_percent }}% OFF
@@ -50,14 +50,14 @@
                 </div>
 
                 <!-- Product Information -->
-                <div class="space-y-6">          
+                <div class="space-y-6">
                     <!-- Product Title & Rating -->
                     <div>
                         <h1 class="mb-3 text-3xl font-bold text-gray-900 md:text-4xl">{{ product.data.name }}</h1>
-                         <!-- Description -->
-                            <p class="leading-relaxed text-gray-600">
-                                    {{ product.data.description}}
-                                </p>
+                        <!-- Description -->
+                        <p class="leading-relaxed text-gray-600">
+                            {{ product.data.description }}
+                        </p>
                         <div class="flex items-center space-x-4">
                             <div class="flex items-center">
                                 <div class="flex text-lg text-yellow-400">
@@ -65,13 +65,14 @@
                                 </div>
                                 <span class="ml-2 text-sm text-gray-600">(0 reviews)</span>
                             </div>
-
                         </div>
                     </div>
-                    
+
                     <!-- Price -->
                     <div class="flex items-baseline space-x-3">
-                        <span class="text-4xl font-bold text-pink-600">${{ product.data.discount_price || product.data.price }}</span>
+                        <span class="text-4xl font-bold text-pink-600"
+                            >${{ product.data.discount_price || product.data.price }}</span
+                        >
                         <span
                             v-if="product.data.discount_price && product.data.discount_price < product.data.price"
                             class="text-2xl text-gray-400 line-through"
@@ -89,7 +90,7 @@
                                     clip-rule="evenodd"
                                 />
                             </svg>
-                          In Stock  {{product.data.stock}}
+                            In Stock {{ product.data.stock }}
                         </span>
                     </div>
 
@@ -127,7 +128,13 @@
                             :disabled="product.data.stock === 0 || isAddingToCart"
                             class="flex flex-1 items-center justify-center space-x-2 rounded-lg bg-pink-600 px-8 py-4 font-semibold text-white transition-colors duration-200 hover:bg-pink-700 disabled:cursor-not-allowed disabled:bg-gray-400"
                         >
-                            <svg v-if="!isAddingToCart" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                v-if="!isAddingToCart"
+                                class="h-6 w-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -136,8 +143,19 @@
                                 />
                             </svg>
                             <svg v-else class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <circle
+                                    class="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    stroke-width="4"
+                                ></circle>
+                                <path
+                                    class="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
                             </svg>
                             <span>{{ isAddingToCart ? 'Adding...' : 'Add to Cart' }}</span>
                         </button>
@@ -207,7 +225,6 @@
 import { ref } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 
-
 const props = defineProps({
     product: {
         type: Object,
@@ -259,13 +276,13 @@ const addToCart = () => {
 function getProductImages() {
     if (props.product.data.image_url) {
         if (Array.isArray(props.product.data.image_url) && props.product.data.image_url.length > 0) {
-            return props.product.data.image_url.map(path => `/storage/${path}`)
+            return props.product.data.image_url.map((path) => `/storage/${path}`)
         }
         if (typeof props.product.data.image_url === 'string') {
             try {
                 const parsed = JSON.parse(props.product.data.image_url)
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed.map(path => `/storage/${path}`)
+                    return parsed.map((path) => `/storage/${path}`)
                 }
             } catch (e) {
                 return [`/storage/${props.product.image_url}`]

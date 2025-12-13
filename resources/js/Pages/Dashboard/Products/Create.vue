@@ -19,7 +19,7 @@
 
         <!-- Form Card -->
         <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-            <div class="border-b border-gray-200 pb-4 mb-6">
+            <div class="mb-6 border-b border-gray-200 pb-4">
                 <h2 class="khmer-text mb-1 text-2xl font-bold text-gray-900">បង្កើតផលិតផលថ្មី</h2>
             </div>
             <vee-form
@@ -92,7 +92,6 @@ const validationSchema = yup.object({
 })
 
 const handleSubmit = (values) => {
-
     form.post(route('dashboard.products.store'))
 }
 

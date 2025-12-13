@@ -51,10 +51,10 @@
                                 :class="[
                                     'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
                                     cart.status === 'pending'
-                                        ? 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'
+                                        ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
                                         : cart.status === 'completed'
-                                          ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                          : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
+                                          ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
+                                          : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
                                 ]"
                             >
                                 {{ cart.status }}
@@ -94,10 +94,7 @@
                                 :alt="item.product?.name"
                                 class="h-full w-full object-cover"
                             />
-                            <div
-                                v-else
-                                class="flex h-full w-full items-center justify-center bg-gray-50"
-                            >
+                            <div v-else class="flex h-full w-full items-center justify-center bg-gray-50">
                                 <ImageIcon class="h-5 w-5 text-gray-400" />
                             </div>
                         </div>

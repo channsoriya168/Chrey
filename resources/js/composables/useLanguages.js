@@ -6,5 +6,5 @@ export const languages = [
 
 // Get current language object
 export function getCurrentLanguage(locale) {
-    return languages.find(lang => lang.code === locale) || languages[1]
+    return languages.find((lang) => lang.code === locale) || languages[1]
 }

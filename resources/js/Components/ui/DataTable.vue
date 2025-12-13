@@ -17,14 +17,14 @@
                             ]"
                         >
                             <slot :name="`header-${column.key}`" :column="column">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-white">
+                                <span class="text-xs font-semibold tracking-wide text-white uppercase">
                                     {{ column.label }}
                                 </span>
                             </slot>
                         </TableHead>
                         <TableHead v-if="$slots.actions || hasActionButtons" :class="['text-center', 'rounded-r-lg']">
                             <slot name="header-actions">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-white">សកម្មភាព</span>
+                                <span class="text-xs font-semibold tracking-wide text-white uppercase">សកម្មភាព</span>
                             </slot>
                         </TableHead>
                     </TableRow>
@@ -39,9 +39,9 @@
                         >
                             <div class="flex items-center justify-center">
                                 <div
-                                    class="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"
+                                    class="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"
                                 ></div>
-                                <span class="ml-2 text-muted-foreground">Loading...</span>
+                                <span class="text-muted-foreground ml-2">Loading...</span>
                             </div>
                         </TableCell>
                     </TableRow>

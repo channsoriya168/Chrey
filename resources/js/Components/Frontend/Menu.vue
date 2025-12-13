@@ -121,6 +121,7 @@
                     </div>
                 </div>
 
+
                 <!-- Mobile menu button -->
                 <div class="flex items-center space-x-2 md:hidden">
                     <!-- Language Switcher Mobile -->
@@ -135,6 +136,7 @@
 
                     <!-- Cart Button Mobile -->
                     <CartDrawer />
+                    
 
                     <!-- Auth Button Mobile -->
                     <div v-if="authUser" class="relative" ref="userMenuMobile">
@@ -156,6 +158,8 @@
                 </div>
             </div>
         </div>
+
+        
 
         <!-- Language Dropdown for Mobile -->
         <div
@@ -221,11 +225,11 @@
     </nav>
 </template>
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { usePage, router, Link } from '@inertiajs/vue3'
-import { useI18n } from 'vue-i18n'
+import { getCurrentLanguage, languages } from '@/composables/useLanguages'
 import { Icon } from '@iconify/vue'
-import { languages, getCurrentLanguage } from '@/composables/useLanguages'
+import { Link, router, usePage } from '@inertiajs/vue3'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CartDrawer from './CartDrawer.vue'
 
 const page = usePage()

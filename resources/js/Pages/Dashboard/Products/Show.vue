@@ -26,7 +26,10 @@
         <!-- Product Details Card -->
         <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <!-- Product Images -->
-            <div v-if="product.image_url && product.image_url.length > 0" class="border-b border-gray-200 bg-gray-50 p-8">
+            <div
+                v-if="product.image_url && product.image_url.length > 0"
+                class="border-b border-gray-200 bg-gray-50 p-8"
+            >
                 <div class="mx-auto max-w-4xl">
                     <!-- Main Image -->
                     <div class="mb-4 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
@@ -60,7 +63,9 @@
                 </div>
             </div>
             <div v-else class="border-b border-gray-200 bg-gray-50 p-8">
-                <div class="mx-auto flex h-96 max-w-4xl items-center justify-center rounded-lg border border-gray-200 bg-white">
+                <div
+                    class="mx-auto flex h-96 max-w-4xl items-center justify-center rounded-lg border border-gray-200 bg-white"
+                >
                     <div class="text-center">
                         <ImageIcon class="mx-auto mb-3 h-16 w-16 text-gray-400" />
                         <p class="text-sm text-gray-500">No image available</p>
@@ -105,8 +110,9 @@
                                     </p>
                                 </div>
                                 <p v-if="product.discount_price_percent" class="mt-1 text-sm text-green-600">
-                                    Save {{ product.discount_price_percent }}%
-                                    (${{ (product.price - product.discount_price).toFixed(2) }})
+                                    Save {{ product.discount_price_percent }}% (${{
+                                        (product.price - product.discount_price).toFixed(2)
+                                    }})
                                 </p>
                             </div>
 
@@ -118,32 +124,21 @@
                                         :class="[
                                             'inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium',
                                             product.stock > 50
-                                                ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
+                                                ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
                                                 : product.stock > 0
-                                                  ? 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'
-                                                  : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
+                                                  ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
+                                                  : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
                                         ]"
                                     >
                                         {{ product.stock }} units
                                     </span>
-                                    <span
-                                        v-if="product.stock === 0"
-                                        class="text-sm font-medium text-red-600"
-                                    >
+                                    <span v-if="product.stock === 0" class="text-sm font-medium text-red-600">
                                         Out of stock
                                     </span>
-                                    <span
-                                        v-else-if="product.stock <= 50"
-                                        class="text-sm font-medium text-yellow-600"
-                                    >
+                                    <span v-else-if="product.stock <= 50" class="text-sm font-medium text-yellow-600">
                                         Low stock
                                     </span>
-                                    <span
-                                        v-else
-                                        class="text-sm font-medium text-green-600"
-                                    >
-                                        In stock
-                                    </span>
+                                    <span v-else class="text-sm font-medium text-green-600"> In stock </span>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +147,7 @@
                     <!-- Description -->
                     <div v-if="product.description" class="border-t border-gray-200 pt-6">
                         <label class="mb-2 block text-sm font-medium text-gray-500">ការពិពណ៌នា</label>
-                        <p class="whitespace-pre-line text-base text-gray-700">{{ product.description }}</p>
+                        <p class="text-base whitespace-pre-line text-gray-700">{{ product.description }}</p>
                     </div>
 
                     <!-- Metadata -->

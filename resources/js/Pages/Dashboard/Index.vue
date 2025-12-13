@@ -17,7 +17,7 @@
             <div
                 class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-800 to-amber-900 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
             >
-                <div class="absolute right-0 top-0 -mr-4 -mt-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
                         <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
@@ -42,7 +42,7 @@
             <div
                 class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
             >
-                <div class="absolute right-0 top-0 -mr-4 -mt-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
                         <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">

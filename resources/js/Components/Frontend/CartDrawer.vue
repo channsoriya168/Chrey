@@ -5,17 +5,17 @@
                 <ShoppingCart class="h-5 w-5" />
                 <Badge
                     v-if="cartItemCount > 0"
-                    class="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center"
+                    class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full p-0"
                     variant="destructive"
                 >
                     {{ cartItemCount }}
                 </Badge>
             </Button>
         </SheetTrigger>
-        <SheetContent side="right" class="w-full sm:max-w-lg bg-white flex flex-col p-0">
-            <SheetHeader class="px-6 pt-6 pb-4 border-b bg-gradient-to-r from-pink-50 to-purple-50">
+        <SheetContent side="right" class="flex w-full flex-col bg-white p-0 sm:max-w-lg">
+            <SheetHeader class="border-b bg-gradient-to-r from-pink-50 to-purple-50 px-6 pt-6 pb-4">
                 <SheetTitle
-                    class="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent"
+                    class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-xl font-bold text-transparent"
                 >
                     {{ t('cart.title') }}
                 </SheetTitle>
@@ -32,25 +32,25 @@
                         <div class="flex-1 space-y-2">
                             <Skeleton class="h-4 w-3/4" />
                             <Skeleton class="h-3 w-1/2" />
-                            <Skeleton class="h-8 w-24 mt-2" />
+                            <Skeleton class="mt-2 h-8 w-24" />
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Error State -->
-            <div v-else-if="error" class="flex-1 flex flex-col items-center justify-center px-6 py-12">
+            <div v-else-if="error" class="flex flex-1 flex-col items-center justify-center px-6 py-12">
                 <div class="relative">
-                    <div class="absolute inset-0 bg-red-100 rounded-full blur-xl opacity-50"></div>
-                    <AlertCircle class="relative h-16 w-16 text-red-500 mb-4" />
+                    <div class="absolute inset-0 rounded-full bg-red-100 opacity-50 blur-xl"></div>
+                    <AlertCircle class="relative mb-4 h-16 w-16 text-red-500" />
                 </div>
-                <p class="text-lg font-semibold text-gray-900 mb-2">{{ t('cart.error.title') }}</p>
-                <p class="text-sm text-gray-500 mb-4">{{ error }}</p>
+                <p class="mb-2 text-lg font-semibold text-gray-900">{{ t('cart.error.title') }}</p>
+                <p class="mb-4 text-sm text-gray-500">{{ error }}</p>
                 <Button
                     @click="fetchCartItems"
                     variant="outline"
                     size="sm"
-                    class="hover:bg-pink-50 hover:text-pink-700 hover:border-pink-300"
+                    class="hover:border-pink-300 hover:bg-pink-50 hover:text-pink-700"
                 >
                     <RefreshCw class="mr-2 h-4 w-4" />
                     {{ t('cart.error.retry') }}
@@ -63,12 +63,12 @@
                     <div
                         v-for="item in cartItems"
                         :key="item.id"
-                        class="group flex gap-4 rounded-xl border border-gray-200 p-4 transition-all hover:shadow-md hover:border-pink-200 bg-white"
+                        class="group flex gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-pink-200 hover:shadow-md"
                         :class="{ 'opacity-50': processingItems.has(item.id) }"
                     >
                         <!-- Product Image -->
                         <div
-                            class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg border-2 border-gray-100 relative shadow-sm"
+                            class="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg border-2 border-gray-100 shadow-sm"
                         >
                             <img
                                 :src="getProductImage(item.product)"
@@ -78,7 +78,7 @@
                             />
                             <div
                                 v-if="processingItems.has(item.id)"
-                                class="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center"
+                                class="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm"
                             >
                                 <Loader2 class="h-5 w-5 animate-spin text-pink-600" />
                             </div>
@@ -88,11 +88,11 @@
                         <div class="flex flex-1 flex-col">
                             <div class="flex justify-between">
                                 <div class="flex-1">
-                                    <h4 class="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
+                                    <h4 class="mb-1 line-clamp-2 text-sm font-semibold text-gray-900">
                                         {{ item.product.name }}
                                     </h4>
                                     <p
-                                        class="text-base font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent"
+                                        class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-base font-bold text-transparent"
                                     >
                                         ${{ Number(item.price).toFixed(2) }}
                                     </p>
@@ -101,12 +101,12 @@
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    class="h-8 w-8 -mt-1 -mr-2 hover:bg-red-50 transition-colors"
+                                    class="-mt-1 -mr-2 h-8 w-8 transition-colors hover:bg-red-50"
                                     @click="removeItem(item.id)"
                                     :disabled="processingItems.has(item.id)"
                                     :aria-label="t('cart.item.remove')"
                                 >
-                                    <Trash2 class="h-4 w-4 text-red-500 group-hover:scale-110 transition-transform" />
+                                    <Trash2 class="h-4 w-4 text-red-500 transition-transform group-hover:scale-110" />
                                 </Button>
                             </div>
 
@@ -115,18 +115,18 @@
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    class="h-9 w-9 rounded-lg border-2 hover:bg-pink-50 hover:border-pink-300 transition-all"
+                                    class="h-9 w-9 rounded-lg border-2 transition-all hover:border-pink-300 hover:bg-pink-50"
                                     @click="updateQuantity(item.id, item.quantity - 1)"
                                     :disabled="item.quantity <= 1 || processingItems.has(item.id)"
                                     :aria-label="t('cart.item.decrease')"
                                 >
                                     <Minus class="h-4 w-4" />
                                 </Button>
-                                <span class="min-w-10 text-center text-sm font-bold px-2">{{ item.quantity }}</span>
+                                <span class="min-w-10 px-2 text-center text-sm font-bold">{{ item.quantity }}</span>
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    class="h-9 w-9 rounded-lg border-2 hover:bg-pink-50 hover:border-pink-300 transition-all"
+                                    class="h-9 w-9 rounded-lg border-2 transition-all hover:border-pink-300 hover:bg-pink-50"
                                     @click="updateQuantity(item.id, item.quantity + 1)"
                                     :disabled="item.quantity >= item.product.stock || processingItems.has(item.id)"
                                     :aria-label="t('cart.item.increase')"
@@ -135,7 +135,7 @@
                                 </Button>
                                 <span
                                     v-if="item.quantity >= item.product.stock"
-                                    class="text-xs text-red-600 font-medium ml-2 bg-red-50 px-2 py-1 rounded-full"
+                                    class="ml-2 rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-600"
                                 >
                                     {{ t('cart.item.maxStock') }}
                                 </span>
@@ -146,34 +146,34 @@
             </div>
 
             <!-- Empty Cart State -->
-            <div v-else class="flex-1 flex flex-col items-center justify-center px-6 py-12">
+            <div v-else class="flex flex-1 flex-col items-center justify-center px-6 py-12">
                 <div class="relative">
-                    <div class="absolute inset-0 bg-gray-100 rounded-full blur-2xl opacity-50"></div>
-                    <ShoppingCart class="relative h-20 w-20 text-gray-300 mb-4" />
+                    <div class="absolute inset-0 rounded-full bg-gray-100 opacity-50 blur-2xl"></div>
+                    <ShoppingCart class="relative mb-4 h-20 w-20 text-gray-300" />
                 </div>
                 <p class="mt-4 text-lg font-semibold text-gray-600">{{ t('cart.empty.title') }}</p>
                 <p class="mt-2 text-sm text-gray-400">{{ t('cart.empty.description') }}</p>
             </div>
 
             <!-- Cart Footer -->
-            <div v-if="cartItems.length > 0" class="border-t px-6 py-5 bg-gradient-to-b from-gray-50 to-white">
-                <Separator class="mb-4 -mt-5" />
+            <div v-if="cartItems.length > 0" class="border-t bg-gradient-to-b from-gray-50 to-white px-6 py-5">
+                <Separator class="-mt-5 mb-4" />
 
                 <!-- Summary -->
-                <div class="space-y-3 mb-5 bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <div class="mb-5 space-y-3 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-600 font-medium">{{ t('cart.summary.subtotal') }}</span>
+                        <span class="font-medium text-gray-600">{{ t('cart.summary.subtotal') }}</span>
                         <span class="font-semibold text-gray-900">${{ subtotal.toFixed(2) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-600 font-medium">{{ t('cart.summary.shipping') }}</span>
+                        <span class="font-medium text-gray-600">{{ t('cart.summary.shipping') }}</span>
                         <span class="font-semibold text-green-600">{{ t('cart.summary.shippingFree') }}</span>
                     </div>
                     <Separator />
                     <div class="flex justify-between text-lg">
                         <span class="font-bold text-gray-900">{{ t('cart.summary.total') }}</span>
                         <span
-                            class="font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent"
+                            class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text font-bold text-transparent"
                         >
                             ${{ total.toFixed(2) }}
                         </span>
@@ -183,7 +183,7 @@
                 <!-- Action Buttons -->
                 <SheetFooter class="flex-col gap-3">
                     <Button
-                        class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
+                        class="w-full bg-gradient-to-r from-pink-600 to-purple-600 shadow-lg transition-all hover:from-pink-700 hover:to-purple-700 hover:shadow-xl"
                         size="lg"
                         @click="checkout"
                         :disabled="isCheckingOut"

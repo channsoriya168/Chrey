@@ -13,7 +13,7 @@
                             >
                                 <div class="space-y-2 sm:space-y-3 md:space-y-6">
                                     <h1
-                                        class="text-base font-bold leading-tight text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
+                                        class="text-base leading-tight font-bold text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
                                     >
                                         {{ t('home.hero.slide1.title') }}<br />
                                         {{ t('home.hero.slide1.subtitle').replace('100%', '') }}
@@ -38,7 +38,7 @@
                             >
                                 <div class="space-y-2 sm:space-y-3 md:space-y-6">
                                     <h1
-                                        class="text-base font-bold leading-tight text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
+                                        class="text-base leading-tight font-bold text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl"
                                     >
                                         {{ t('home.hero.slide2.title') }}<br />
                                         <span class="text-purple-600">{{ t('home.hero.slide2.subtitle') }}</span>
@@ -97,7 +97,7 @@
                         />
                         <div
                             v-if="calculateDiscount(product.price, product.discount_price)"
-                            class="absolute left-1.5 top-1.5 rounded bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white md:left-2 md:top-2 md:px-2 md:py-1 md:text-xs"
+                            class="absolute top-1.5 left-1.5 rounded bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white md:top-2 md:left-2 md:px-2 md:py-1 md:text-xs"
                         >
                             -{{ calculateDiscount(product.price, product.discount_price) }}%
                         </div>

@@ -1,7 +1,9 @@
 <template>
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-4 py-3 bg-gray-50/50 border-t border-gray-200 relative z-10">
+    <div
+        class="relative z-10 flex flex-col items-start justify-between gap-4 border-t border-gray-200 bg-gray-50/50 px-4 py-3 sm:flex-row sm:items-center"
+    >
         <!-- Info Section -->
-        <div class="text-sm text-gray-600 font-medium">
+        <div class="text-sm font-medium text-gray-600">
             <slot name="info">
                 <span v-if="total > 0">
                     Showing <span class="font-semibold text-gray-900">{{ from }}</span> to
@@ -16,18 +18,21 @@
         <div class="flex flex-wrap items-center gap-4 sm:gap-6">
             <!-- Rows per page selector -->
             <div class="flex items-center gap-2">
-                <label for="rows-per-page" class="text-sm font-medium text-gray-700 whitespace-nowrap">
+                <label for="rows-per-page" class="text-sm font-medium whitespace-nowrap text-gray-700">
                     Rows per page
                 </label>
                 <Select v-model="selectedPerPage">
-                    <SelectTrigger id="rows-per-page" class="h-9 w-[75px] border-gray-300 hover:border-gray-400 transition-colors focus:ring-2 focus:ring-amber-500/20">
+                    <SelectTrigger
+                        id="rows-per-page"
+                        class="h-9 w-[75px] border-gray-300 transition-colors hover:border-gray-400 focus:ring-2 focus:ring-amber-500/20"
+                    >
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent
                         side="top"
                         align="end"
                         :sideOffset="4"
-                        class="min-w-[75px] z-[100] bg-white"
+                        class="z-[100] min-w-[75px] bg-white"
                         :avoidCollisions="true"
                         :collisionPadding="8"
                     >
@@ -44,7 +49,7 @@
             </div>
 
             <!-- Page info -->
-            <div class="flex items-center justify-center text-sm font-medium text-gray-700 min-w-[120px]">
+            <div class="flex min-w-[120px] items-center justify-center text-sm font-medium text-gray-700">
                 Page <span class="mx-1 font-semibold text-gray-900">{{ currentPage }}</span> of
                 <span class="ml-1 font-semibold text-gray-900">{{ lastPage }}</span>
             </div>
@@ -54,7 +59,7 @@
                 <Button
                     variant="outline"
                     size="icon"
-                    class="h-9 w-9 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300 border-gray-300 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-gray-300"
+                    class="h-9 w-9 border-gray-300 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-300 disabled:hover:bg-transparent"
                     :disabled="currentPage === 1"
                     @click="$emit('update:currentPage', 1)"
                     title="First page"
@@ -65,7 +70,7 @@
                 <Button
                     variant="outline"
                     size="icon"
-                    class="h-9 w-9 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300 border-gray-300 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-gray-300"
+                    class="h-9 w-9 border-gray-300 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-300 disabled:hover:bg-transparent"
                     :disabled="currentPage === 1"
                     @click="$emit('update:currentPage', currentPage - 1)"
                     title="Previous page"
@@ -76,7 +81,7 @@
                 <Button
                     variant="outline"
                     size="icon"
-                    class="h-9 w-9 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300 border-gray-300 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-gray-300"
+                    class="h-9 w-9 border-gray-300 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-300 disabled:hover:bg-transparent"
                     :disabled="currentPage === lastPage"
                     @click="$emit('update:currentPage', currentPage + 1)"
                     title="Next page"
@@ -87,7 +92,7 @@
                 <Button
                     variant="outline"
                     size="icon"
-                    class="h-9 w-9 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300 border-gray-300 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-gray-300"
+                    class="h-9 w-9 border-gray-300 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-300 disabled:hover:bg-transparent"
                     :disabled="currentPage === lastPage"
                     @click="$emit('update:currentPage', lastPage)"
                     title="Last page"

@@ -19,7 +19,7 @@
 
         <!-- Form Card -->
         <div class="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-            <div class="border-b border-gray-200 pb-4 mb-6">
+            <div class="mb-6 border-b border-gray-200 pb-4">
                 <h2 class="khmer-text mb-1 text-2xl font-bold text-gray-900">កែប្រែផលិតផល</h2>
                 <p class="text-gray-600">កែប្រែព័ត៍មានខាងក្រោមដើម្បីធ្វើបច្ចុប្បន្នភាពផលិតផល</p>
             </div>
@@ -80,17 +80,9 @@ const existingImageUrls = ref(Array.isArray(props.product?.image_url) ? [...prop
 
 // Validation Schema
 const validationSchema = yup.object({
-    code: yup
-        .string()
-        .required('សូមបញ្ចូលលេខកូដផលិតផល')
-        .min(2, 'លេខកូដត្រូវតែមានយ៉ាងហោចណាស់ 2 តួអក្សរ'),
-    name: yup
-        .string()
-        .required('សូមបញ្ចូលឈ្មោះផលិតផល')
-        .min(3, 'ឈ្មោះត្រូវតែមានយ៉ាងហោចណាស់ 3 តួអក្សរ'),
-    description: yup
-        .string()
-        .nullable(),
+    code: yup.string().required('សូមបញ្ចូលលេខកូដផលិតផល').min(2, 'លេខកូដត្រូវតែមានយ៉ាងហោចណាស់ 2 តួអក្សរ'),
+    name: yup.string().required('សូមបញ្ចូលឈ្មោះផលិតផល').min(3, 'ឈ្មោះត្រូវតែមានយ៉ាងហោចណាស់ 3 តួអក្សរ'),
+    description: yup.string().nullable(),
     price: yup
         .number()
         .required('សូមបញ្ចូលតម្លៃ')
@@ -108,14 +100,10 @@ const validationSchema = yup.object({
         .integer('ចំនួនស្តុកត្រូវតែជាលេខគត់')
         .min(0, 'ចំនួនស្តុកត្រូវតែធំជាង ឬស្មើ 0')
         .typeError('សូមបញ្ចូលលេខត្រឹមត្រូវ'),
-    size: yup
-        .string()
-        .required('សូមជ្រើសរើសទំហំ')
-        .oneOf(['តូច', 'មធ្យម', 'ធំ'], 'សូមជ្រើសរើសទំហំត្រឹមត្រូវ')
+    size: yup.string().required('សូមជ្រើសរើសទំហំ').oneOf(['តូច', 'មធ្យម', 'ធំ'], 'សូមជ្រើសរើសទំហំត្រឹមត្រូវ')
 })
 
 const handleSubmit = (values) => {
-
     form.transform((data) => {
         const formData = new FormData()
 

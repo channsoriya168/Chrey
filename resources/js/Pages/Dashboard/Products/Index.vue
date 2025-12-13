@@ -23,14 +23,14 @@
             <div class="flex items-center justify-end border-b border-gray-200 py-4">
                 <div class="relative w-full sm:w-96">
                     <Search
-                        class="pointer-events-none absolute left-3 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-gray-400"
+                        class="pointer-events-none absolute top-1/2 left-3 z-10 h-5 w-5 -translate-y-1/2 text-gray-400"
                     />
                     <input
                         type="text"
                         id="search"
                         v-model="filter.search"
                         placeholder="ស្វែងរកផលិតផល"
-                        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pr-4 pl-10 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 focus:outline-none"
                     />
                 </div>
             </div>
@@ -98,7 +98,7 @@
                     <div class="flex flex-col gap-1">
                         <span
                             v-if="item.discount_price_percent && item.discount_price_percent > 0"
-                            class="text-sm font-semibold text-red-600 pa-5"
+                            class="pa-5 text-sm font-semibold text-red-600"
                             >{{ parseFloat(item.discount_price_percent) }}%</span
                         >
                         <span v-else class="text-sm font-semibold text-red-600">0%</span>
@@ -111,10 +111,10 @@
                         :class="[
                             'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
                             item.stock > 50
-                                ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
+                                ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
                                 : item.stock > 0
-                                  ? 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'
-                                  : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
+                                  ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
+                                  : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
                         ]"
                     >
                         {{ item.stock }} units

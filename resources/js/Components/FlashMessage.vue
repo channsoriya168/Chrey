@@ -2,7 +2,7 @@
     <!-- Fixed position container for toast notifications -->
     <Teleport to="body">
         <div
-            class="fixed top-4 right-4 z-50 flex flex-col gap-3 w-full max-w-md pointer-events-none"
+            class="pointer-events-none fixed top-4 right-4 z-50 flex w-full max-w-md flex-col gap-3"
             aria-live="polite"
             aria-atomic="true"
         >
@@ -19,18 +19,13 @@
                     v-if="show && flash.success"
                     key="success"
                     variant="success"
-                    class="pointer-events-auto shadow-lg border-l-4 border-l-green-700"
+                    class="pointer-events-auto border-l-4 border-l-green-700 shadow-lg"
                 >
                     <div class="flex items-start gap-3">
                         <div
-                            class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center"
+                            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/20 dark:bg-white/10"
                         >
-                            <svg
-                                class="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -40,19 +35,17 @@
                             </svg>
                         </div>
                         <div class="flex-1 pt-1">
-                            <h4 class="font-semibold text-sm text-white mb-1">
-                                Success!
-                            </h4>
+                            <h4 class="mb-1 text-sm font-semibold text-white">Success!</h4>
                             <AlertDescription class="text-sm text-white/90">
                                 {{ flash.success }}
                             </AlertDescription>
                         </div>
                         <button
                             @click="clearMessage('success')"
-                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-white/20 dark:hover:bg-white/10 transition-colors"
+                            class="flex-shrink-0 rounded-md p-1.5 transition-colors hover:bg-white/20 dark:hover:bg-white/10"
                             aria-label="Dismiss"
                         >
-                            <svg class="w-4 h-4 text-green" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="text-green h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path
                                     fill-rule="evenodd"
                                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -61,7 +54,11 @@
                             </svg>
                         </button>
                     </div>
-                    <div v-if="props.autoDismiss && !flash.error" class="absolute bottom-0 left-0 h-1 bg-green-700 rounded-b" :style="{ width: progressWidth + '%' }"></div>
+                    <div
+                        v-if="props.autoDismiss && !flash.error"
+                        class="absolute bottom-0 left-0 h-1 rounded-b bg-green-700"
+                        :style="{ width: progressWidth + '%' }"
+                    ></div>
                 </Alert>
 
                 <!-- Error Message -->
@@ -69,18 +66,13 @@
                     v-if="show && (flash.error || (errors && Object.keys(errors).length > 0))"
                     key="error"
                     variant="destructive"
-                    class="pointer-events-auto shadow-lg border-l-4 border-l-red-700"
+                    class="pointer-events-auto border-l-4 border-l-red-700 shadow-lg"
                 >
                     <div class="flex items-start gap-3">
                         <div
-                            class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center"
+                            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/20 dark:bg-white/10"
                         >
-                            <svg
-                                class="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -90,20 +82,17 @@
                             </svg>
                         </div>
                         <div class="flex-1 pt-1">
-                            <h4 class="font-semibold text-sm text-white mb-1">
-                                Error!
-                            </h4>
+                            <h4 class="mb-1 text-sm font-semibold text-white">Error!</h4>
                             <AlertDescription v-if="flash.error" class="text-sm text-white/90">
                                 {{ flash.error }}
                             </AlertDescription>
-                            <AlertDescription v-else-if="errors && Object.keys(errors).length > 0" class="text-sm text-white/90">
-                                <ul class="space-y-1 mt-1">
-                                    <li
-                                        v-for="(error, key) in errors"
-                                        :key="key"
-                                        class="flex items-start gap-2"
-                                    >
-                                        <span class="text-white mt-0.5">•</span>
+                            <AlertDescription
+                                v-else-if="errors && Object.keys(errors).length > 0"
+                                class="text-sm text-white/90"
+                            >
+                                <ul class="mt-1 space-y-1">
+                                    <li v-for="(error, key) in errors" :key="key" class="flex items-start gap-2">
+                                        <span class="mt-0.5 text-white">•</span>
                                         <span>{{ Array.isArray(error) ? error[0] : error }}</span>
                                     </li>
                                 </ul>
@@ -111,10 +100,10 @@
                         </div>
                         <button
                             @click="clearMessage('error')"
-                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-white/20 dark:hover:bg-white/10 transition-colors"
+                            class="flex-shrink-0 rounded-md p-1.5 transition-colors hover:bg-white/20 dark:hover:bg-white/10"
                             aria-label="Dismiss"
                         >
-                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path
                                     fill-rule="evenodd"
                                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -130,14 +119,14 @@
                     v-if="show && flash.warning"
                     key="warning"
                     variant="warning"
-                    class="pointer-events-auto shadow-lg border-l-4 border-l-amber-500"
+                    class="pointer-events-auto border-l-4 border-l-amber-500 shadow-lg"
                 >
                     <div class="flex items-start gap-3">
                         <div
-                            class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center"
+                            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30"
                         >
                             <svg
-                                class="w-5 h-5 text-amber-600 dark:text-amber-400"
+                                class="h-5 w-5 text-amber-600 dark:text-amber-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -151,19 +140,21 @@
                             </svg>
                         </div>
                         <div class="flex-1 pt-1">
-                            <h4 class="font-semibold text-sm text-amber-900 dark:text-amber-100 mb-1">
-                                Warning!
-                            </h4>
+                            <h4 class="mb-1 text-sm font-semibold text-amber-900 dark:text-amber-100">Warning!</h4>
                             <AlertDescription class="text-sm text-amber-800 dark:text-amber-200">
                                 {{ flash.warning }}
                             </AlertDescription>
                         </div>
                         <button
                             @click="clearMessage('warning')"
-                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
+                            class="flex-shrink-0 rounded-md p-1.5 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/50"
                             aria-label="Dismiss"
                         >
-                            <svg class="w-4 h-4 text-amber-600 dark:text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg
+                                class="h-4 w-4 text-amber-600 dark:text-amber-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
                                 <path
                                     fill-rule="evenodd"
                                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -172,7 +163,11 @@
                             </svg>
                         </button>
                     </div>
-                    <div v-if="props.autoDismiss" class="absolute bottom-0 left-0 h-1 bg-amber-500 rounded-b" :style="{ width: progressWidth + '%' }"></div>
+                    <div
+                        v-if="props.autoDismiss"
+                        class="absolute bottom-0 left-0 h-1 rounded-b bg-amber-500"
+                        :style="{ width: progressWidth + '%' }"
+                    ></div>
                 </Alert>
 
                 <!-- Info Message -->
@@ -180,14 +175,14 @@
                     v-if="show && flash.info"
                     key="info"
                     variant="default"
-                    class="pointer-events-auto shadow-lg border-l-4 border-l-blue-500"
+                    class="pointer-events-auto border-l-4 border-l-blue-500 shadow-lg"
                 >
                     <div class="flex items-start gap-3">
                         <div
-                            class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"
+                            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30"
                         >
                             <svg
-                                class="w-5 h-5 text-blue-600 dark:text-blue-400"
+                                class="h-5 w-5 text-blue-600 dark:text-blue-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -201,19 +196,21 @@
                             </svg>
                         </div>
                         <div class="flex-1 pt-1">
-                            <h4 class="font-semibold text-sm text-blue-900 dark:text-blue-100 mb-1">
-                                Info
-                            </h4>
+                            <h4 class="mb-1 text-sm font-semibold text-blue-900 dark:text-blue-100">Info</h4>
                             <AlertDescription class="text-sm text-blue-800 dark:text-blue-200">
                                 {{ flash.info }}
                             </AlertDescription>
                         </div>
                         <button
                             @click="clearMessage('info')"
-                            class="flex-shrink-0 rounded-md p-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                            class="flex-shrink-0 rounded-md p-1.5 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/50"
                             aria-label="Dismiss"
                         >
-                            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg
+                                class="h-4 w-4 text-blue-600 dark:text-blue-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
                                 <path
                                     fill-rule="evenodd"
                                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -222,7 +219,11 @@
                             </svg>
                         </button>
                     </div>
-                    <div v-if="props.autoDismiss" class="absolute bottom-0 left-0 h-1 bg-blue-500 rounded-b" :style="{ width: progressWidth + '%' }"></div>
+                    <div
+                        v-if="props.autoDismiss"
+                        class="absolute bottom-0 left-0 h-1 rounded-b bg-blue-500"
+                        :style="{ width: progressWidth + '%' }"
+                    ></div>
                 </Alert>
             </TransitionGroup>
         </div>
@@ -268,7 +269,7 @@ const hasMessages = computed(() => {
 const startProgressBar = () => {
     progressWidth.value = 100
     const step = 100 / (props.dismissTimeout / 50)
-    
+
     progressInterval = setInterval(() => {
         progressWidth.value -= step
         if (progressWidth.value <= 0) {
@@ -300,7 +301,7 @@ watch(
             // Only auto-dismiss success, warning, and info messages
             if (props.autoDismiss && !flash.value.error && !(errors.value && Object.keys(errors.value).length > 0)) {
                 startProgressBar()
-                
+
                 timeoutId = setTimeout(() => {
                     show.value = false
                     stopProgressBar()
@@ -317,7 +318,7 @@ watch(
 const clearMessage = (type) => {
     stopProgressBar()
     clearTimeout(timeoutId)
-    
+
     if (type === 'error') {
         // Clear both flash error and validation errors
         page.props.flash.error = null
