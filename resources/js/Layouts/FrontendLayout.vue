@@ -3,9 +3,7 @@
         <Menu />
 
         <main class="main-content">
-            <div class="container mx-auto px-4">
-                <FlashMessage />
-            </div>
+            <FlashMessage />
             <slot />
         </main>
         <Footer />

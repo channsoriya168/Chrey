@@ -26,7 +26,8 @@ Route::post('login', [AuthController::class, 'storeLogin'])
     ->name('login.store');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('cart',CartController::class)->only(['store','update','destroy']);
+    // checkout 
+    Route::resource('cart', CartController::class)->only(['store', 'update', 'destroy']);
     Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
 
     // Orders
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
 
     Route::post('logout', [AuthController::class, 'logout'])
-    ->name('logout');
+        ->name('logout');
 });
 
 // Include dashboard routes

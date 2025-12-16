@@ -1,25 +1,33 @@
 <template>
-    <nav class="sticky top-0 z-50 bg-white shadow-lg">
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex h-16 items-center justify-between">
+            <div class="flex h-20 items-center justify-between">
                 <!-- Logo/Brand -->
                 <div class="flex flex-shrink-0 items-center">
-                    <Link href="/" class="text-2xl font-bold text-indigo-600 transition-colors hover:text-indigo-700">
-                        Chrey
+                    <Link href="/" class="group flex items-center gap-2">
+                        <span class="text-2xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105">
+                            Chrey
+                        </span>
                     </Link>
                 </div>
 
                 <!-- Right Side Actions -->
-                <div class="hidden items-center space-x-4 md:flex">
+                <div class="hidden items-center space-x-2 md:flex">
                     <!-- Language Switcher -->
                     <div class="relative" ref="languageMenu">
                         <button
                             @click="showLanguageMenu = !showLanguageMenu"
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100"
+                            class="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-gray-700 transition-all duration-200 hover:bg-gray-100/80 hover:shadow-sm"
                         >
-                            <Icon :icon="currentLanguage.flag" class="w-6 h-6" />
+                            <Icon :icon="currentLanguage.flag" class="w-5 h-5" />
                             <span class="text-sm font-medium">{{ currentLanguage.name }}</span>
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                class="h-4 w-4 transition-transform duration-200"
+                                :class="{ 'rotate-180': showLanguageMenu }"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -30,24 +38,24 @@
                         </button>
                         <div
                             v-if="showLanguageMenu"
-                            class="absolute right-0 z-10 mt-2 w-48 rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+                            class="absolute right-0 z-10 mt-3 w-52 rounded-xl bg-white py-2 shadow-xl ring-1 ring-gray-900/5 backdrop-blur-sm"
                         >
                             <button
                                 v-for="lang in languages"
                                 :key="lang.code"
                                 @click="handleLanguageSwitch(lang.code)"
                                 :class="[
-                                    'flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors',
+                                    'flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-all duration-150',
                                     locale === lang.code
-                                        ? 'bg-pink-50 text-pink-700 font-semibold'
-                                        : 'text-gray-700 hover:bg-gray-100'
+                                        ? 'bg-gray-100 text-gray-900 font-semibold'
+                                        : 'text-gray-700 hover:bg-gray-50'
                                 ]"
                             >
-                                <Icon :icon="lang.flag" class="w-6 h-6" />
+                                <Icon :icon="lang.flag" class="w-5 h-5" />
                                 <span>{{ lang.fullName }}</span>
                                 <svg
                                     v-if="locale === lang.code"
-                                    class="ml-auto h-4 w-4 text-pink-600"
+                                    class="ml-auto h-4 w-4 text-gray-900"
                                     fill="currentColor"
                                     viewBox="0 0 20 20"
                                 >
@@ -65,44 +73,45 @@
                     <CartDrawer />
 
                     <!-- Auth Buttons -->
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-2">
                         <div v-if="authUser">
                             <!-- User dropdown -->
                             <div class="relative" ref="userMenu">
                                 <button
                                     @click="toggleUserMenu"
-                                    class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                                    class="flex items-center justify-center rounded-full p-2.5 text-gray-600 transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900 hover:shadow-sm"
                                     :title="authUser ? authUser.name : ''"
                                 >
-                                    <Icon icon="heroicons:user-circle-solid" class="h-8 w-8" />
+                                    <Icon icon="heroicons:user-circle-solid" class="h-7 w-7" />
                                 </button>
 
                                 <div
                                     v-if="showUserMenu"
-                                    class="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white py-1 shadow-lg"
+                                    class="absolute right-0 z-10 mt-3 w-52 rounded-xl bg-white py-2 shadow-xl ring-1 ring-gray-900/5"
                                 >
                                     <!-- My Orders link -->
                                     <Link
                                         :href="route('orders.index')"
-                                        class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                                        class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-50"
                                     >
-                                        <Icon icon="heroicons:shopping-bag" class="h-4 w-4" />
+                                        <Icon icon="heroicons:shopping-bag" class="h-5 w-5" />
                                         {{ t('nav.auth.myOrders') }}
                                     </Link>
                                     <!-- Admin link -->
                                     <Link
                                         v-if="authUser && authUser.roles && authUser.roles.includes('admin')"
                                         :href="route('dashboard.index')"
-                                        class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                                        class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-50"
                                     >
-                                        <Icon icon="heroicons:chart-bar" class="h-4 w-4" />
+                                        <Icon icon="heroicons:chart-bar" class="h-5 w-5" />
                                         {{ t('nav.auth.dashboard') }}
                                     </Link>
+                                    <div class="my-1 h-px bg-gray-100"></div>
                                     <button
                                         @click="logout"
-                                        class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                                        class="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-red-600 transition-all duration-150 hover:bg-red-50"
                                     >
-                                        <Icon icon="heroicons:arrow-left-on-rectangle" class="h-4 w-4" />
+                                        <Icon icon="heroicons:arrow-left-on-rectangle" class="h-5 w-5" />
                                         {{ t('nav.auth.logout') }}
                                     </button>
                                 </div>
@@ -112,10 +121,10 @@
                         <div v-else>
                             <button
                                 @click="LoginView"
-                                class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                                class="flex items-center justify-center rounded-full p-2.5 text-gray-600 transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900 hover:shadow-sm"
                                 :title="t('nav.auth.login')"
                             >
-                                <Icon icon="heroicons:user-circle-solid" class="h-8 w-8" />
+                                <Icon icon="heroicons:user-circle-solid" class="h-7 w-7" />
                             </button>
                         </div>
                     </div>
@@ -123,12 +132,12 @@
 
 
                 <!-- Mobile menu button -->
-                <div class="flex items-center space-x-2 md:hidden">
+                <div class="flex items-center space-x-1.5 md:hidden">
                     <!-- Language Switcher Mobile -->
                     <div class="relative" ref="languageMenuMobile">
                         <button
                             @click="showLanguageMenu = !showLanguageMenu"
-                            class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100"
+                            class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-all duration-200 hover:bg-gray-100/80"
                         >
                             <Icon :icon="currentLanguage.flag" class="w-6 h-6" />
                         </button>
@@ -136,13 +145,13 @@
 
                     <!-- Cart Button Mobile -->
                     <CartDrawer />
-                    
+
 
                     <!-- Auth Button Mobile -->
                     <div v-if="authUser" class="relative" ref="userMenuMobile">
                         <button
                             @click="toggleUserMenu"
-                            class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                            class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900"
                         >
                             <Icon icon="heroicons:user-circle-solid" class="h-7 w-7" />
                         </button>
@@ -150,7 +159,7 @@
                     <div v-else>
                         <button
                             @click="LoginView"
-                            class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                            class="flex items-center justify-center rounded-full p-2 text-gray-600 transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900"
                         >
                             <Icon icon="heroicons:user-circle-solid" class="h-7 w-7" />
                         </button>
@@ -159,27 +168,27 @@
             </div>
         </div>
 
-        
+
 
         <!-- Language Dropdown for Mobile -->
         <div
             v-if="showLanguageMenu"
-            class="absolute right-4 top-16 z-50 mt-2 w-48 rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 md:hidden"
+            class="absolute right-4 top-20 z-50 mt-2 w-52 rounded-xl bg-white py-2 shadow-xl ring-1 ring-gray-900/5 md:hidden"
         >
             <button
                 v-for="lang in languages"
                 :key="lang.code"
                 @click="handleLanguageSwitch(lang.code)"
                 :class="[
-                    'flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors',
-                    locale === lang.code ? 'bg-pink-50 text-pink-700 font-semibold' : 'text-gray-700 hover:bg-gray-100'
+                    'flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-all duration-150',
+                    locale === lang.code ? 'bg-gray-100 text-gray-900 font-semibold' : 'text-gray-700 hover:bg-gray-50'
                 ]"
             >
-                <Icon :icon="lang.flag" class="w-6 h-6" />
+                <Icon :icon="lang.flag" class="w-5 h-5" />
                 <span>{{ lang.fullName }}</span>
                 <svg
                     v-if="locale === lang.code"
-                    class="ml-auto h-4 w-4 text-pink-600"
+                    class="ml-auto h-4 w-4 text-gray-900"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                 >
@@ -195,30 +204,31 @@
         <!-- User Menu Dropdown for Mobile -->
         <div
             v-if="showUserMenu && authUser"
-            class="absolute right-4 top-16 z-50 mt-2 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 md:hidden"
+            class="absolute right-4 top-20 z-50 mt-2 w-52 rounded-xl bg-white py-2 shadow-xl ring-1 ring-gray-900/5 md:hidden"
         >
             <Link
                 :href="route('orders.index')"
                 @click="closeMenus"
-                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-50"
             >
-                <Icon icon="heroicons:shopping-bag" class="h-4 w-4" />
+                <Icon icon="heroicons:shopping-bag" class="h-5 w-5" />
                 {{ t('nav.auth.myOrders') }}
             </Link>
             <Link
                 v-if="authUser && authUser.roles && authUser.roles.includes('admin')"
                 :href="route('dashboard.index')"
                 @click="closeMenus"
-                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-50"
             >
-                <Icon icon="heroicons:chart-bar" class="h-4 w-4" />
+                <Icon icon="heroicons:chart-bar" class="h-5 w-5" />
                 {{ t('nav.auth.dashboard') }}
             </Link>
+            <div class="my-1 h-px bg-gray-100"></div>
             <button
                 @click="logout"
-                class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                class="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-red-600 transition-all duration-150 hover:bg-red-50"
             >
-                <Icon icon="heroicons:arrow-left-on-rectangle" class="h-4 w-4" />
+                <Icon icon="heroicons:arrow-left-on-rectangle" class="h-5 w-5" />
                 {{ t('nav.auth.logout') }}
             </button>
         </div>
@@ -357,57 +367,60 @@ onUnmounted(() => {
 <style scoped>
 .nav-link {
     color: #374151;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
+    padding: 0.625rem 1rem;
+    border-radius: 0.75rem;
     font-size: 0.875rem;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     position: relative;
 }
 
 .nav-link:hover {
-    color: #4f46e5;
-    background-color: #f9fafb;
+    color: #111827;
+    background-color: rgba(249, 250, 251, 0.8);
+    transform: translateY(-1px);
 }
 
 .nav-link.active {
-    color: #4f46e5;
-    background-color: #eef2ff;
+    color: #111827;
+    background-color: rgba(243, 244, 246, 0.9);
+    font-weight: 600;
 }
 
 .nav-link.active::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -2px;
     left: 50%;
     transform: translateX(-50%);
-    width: 50%;
+    width: 60%;
     height: 2px;
-    background-color: #4f46e5;
+    background: linear-gradient(to right, transparent, #111827, transparent);
     border-radius: 9999px;
 }
 
 .mobile-nav-link {
     display: block;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
     font-size: 1rem;
     font-weight: 500;
     color: #374151;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
 }
 
 .mobile-nav-link:hover {
-    color: #4f46e5;
-    background-color: #f9fafb;
+    color: #111827;
+    background-color: rgba(249, 250, 251, 0.8);
 }
 
 .mobile-nav-link.active {
-    color: #4f46e5;
-    background-color: #eef2ff;
-    border-left: 4px solid #4f46e5;
+    color: #111827;
+    background-color: rgba(243, 244, 246, 0.9);
+    font-weight: 600;
+    border-left: 3px solid #111827;
 }
 
 /* Custom scrollbar for mobile menu */
@@ -416,15 +429,15 @@ onUnmounted(() => {
 }
 
 .mobile-menu::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #f3f4f6;
 }
 
 .mobile-menu::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: #d1d5db;
     border-radius: 3px;
 }
 
 .mobile-menu::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: #9ca3af;
 }
 </style>

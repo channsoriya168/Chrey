@@ -39,7 +39,8 @@
         },
         "pagination": {
             "previous": "Previous",
-            "next": "Next"
+            "next": "Next",
+            "noMore": "No more products to load"
         }
     },
     "cart": {
