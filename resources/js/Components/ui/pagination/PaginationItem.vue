@@ -2,7 +2,7 @@
 import { reactiveOmit } from '@vueuse/core'
 import { PaginationListItem } from 'reka-ui'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/Components/ui/button'
 
 const props = defineProps({
     value: { type: Number, required: true },

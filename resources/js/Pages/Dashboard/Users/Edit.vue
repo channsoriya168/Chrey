@@ -143,8 +143,8 @@
 <script setup>
 import { Link, useForm, Head } from '@inertiajs/vue3'
 import DashboardLayout from '@/Layouts/DashboardLayout.vue'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
 import { Save, X } from 'lucide-vue-next'
 import {
     Breadcrumb,
@@ -153,7 +153,7 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator
-} from '@/components/ui/breadcrumb'
+} from '@/Components/ui/breadcrumb'
 
 const props = defineProps({
     user: Object,

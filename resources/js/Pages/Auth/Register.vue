@@ -573,7 +573,7 @@ import { useForm } from '@inertiajs/vue3'
 import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import * as yup from 'yup'
-import { Label } from '@/components/ui/label'
+import { Label } from '@/Components/ui/label'
 import FlashMessage from '@/Components/FlashMessage.vue'
 
 // Show password toggles

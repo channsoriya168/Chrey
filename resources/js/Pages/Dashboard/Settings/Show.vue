@@ -149,7 +149,7 @@
 
 <script setup>
 import { router, Head } from '@inertiajs/vue3'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/Components/ui/button'
 import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
 import { ArrowLeft, ImageIcon } from 'lucide-vue-next'
 

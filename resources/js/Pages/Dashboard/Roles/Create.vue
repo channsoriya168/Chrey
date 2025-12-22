@@ -76,8 +76,8 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3'
 import DashboardLayout from '@/Layouts/DashboardLayout.vue'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
 
 const props = defineProps({
     permissions: Object

@@ -15,7 +15,7 @@
 import Menu from '@/Components/Frontend/Menu.vue'
 import Footer from '../Components/Frontend/footer.vue'
 import FlashMessage from '@/Components/FlashMessage.vue'
-import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from '@/Components/ui/sonner'
 </script>
 
 <style scoped>
