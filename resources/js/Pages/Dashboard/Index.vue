@@ -96,20 +96,7 @@
                     <TrendingUp class="h-5 w-5 text-green-500" />
                 </div>
                 <div class="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart :data="charts.salesTrend" :margin="{ top: 5, right: 30, left: 0, bottom: 5 }">
-                            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                            <XAxis dataKey="date" stroke="#9ca3af" style="font-size: 12px" />
-                            <YAxis stroke="#9ca3af" style="font-size: 12px" />
-                            <Tooltip
-                                contentStyle="{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }" />
-                            <Legend />
-                            <Line type="monotone" dataKey="orders" stroke="#8b5cf6" strokeWidth={2} name="Orders"
-                                dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                            <Line type="monotone" dataKey="revenue" stroke="#f59e0b" strokeWidth={2} name="Revenue ($)"
-                                dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                        </LineChart>
-                    </ResponsiveContainer>
+                    <Line :data="salesTrendData" :options="salesTrendOptions" />
                 </div>
             </div>
 
@@ -120,17 +107,7 @@
                     <PieChartIcon class="h-5 w-5 text-purple-500" />
                 </div>
                 <div class="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                            <Pie :data="charts.ordersByStatus" cx="50%" cy="50%" labelLine={false}
-                                :label="renderCustomLabel" outerRadius={100} fill="#8884d8" dataKey="value">
-                                <Cell v-for="(entry, index) in charts.ordersByStatus" :key="`cell-${index}`"
-                                    :fill="COLORS[index % COLORS.length]" />
-                            </Pie>
-                            <Tooltip />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                    <Pie :data="ordersByStatusData" :options="pieChartOptions" />
                 </div>
             </div>
 
@@ -141,16 +118,7 @@
                     <BarChart3 class="h-5 w-5 text-emerald-500" />
                 </div>
                 <div class="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart :data="charts.topProducts" :margin="{ top: 5, right: 30, left: 0, bottom: 5 }">
-                            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                            <XAxis dataKey="name" stroke="#9ca3af" style="font-size: 12px" angle={-45}
-                                textAnchor="end" height={80} />
-                            <YAxis stroke="#9ca3af" style="font-size: 12px" />
-                            <Tooltip />
-                            <Bar dataKey="sales" fill="#10b981" radius={[8, 8, 0, 0]} />
-                        </BarChart>
-                    </ResponsiveContainer>
+                    <Bar :data="topProductsData" :options="barChartOptions" />
                 </div>
             </div>
 
@@ -161,17 +129,7 @@
                     <CreditCard class="h-5 w-5 text-blue-500" />
                 </div>
                 <div class="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                            <Pie :data="charts.ordersByPaymentStatus" cx="50%" cy="50%" innerRadius={60} outerRadius={100}
-                                fill="#8884d8" paddingAngle={5} dataKey="value" :label="renderCustomLabel">
-                                <Cell v-for="(entry, index) in charts.ordersByPaymentStatus" :key="`cell-${index}`"
-                                    :fill="PAYMENT_COLORS[index % PAYMENT_COLORS.length]" />
-                            </Pie>
-                            <Tooltip />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                    <Doughnut :data="paymentStatusData" :options="doughnutChartOptions" />
                 </div>
             </div>
         </div>
@@ -246,21 +204,32 @@ import {
     BarChart3,
     CreditCard
 } from 'lucide-vue-next'
+import { Line, Bar, Pie, Doughnut } from 'vue-chartjs'
 import {
-    LineChart,
-    Line,
-    BarChart,
-    Bar,
-    PieChart,
-    Pie,
-    Cell,
-    XAxis,
-    YAxis,
-    CartesianGrid,
+    Chart as ChartJS,
+    Title,
     Tooltip,
     Legend,
-    ResponsiveContainer
-} from 'recharts'
+    LineElement,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    ArcElement
+} from 'chart.js'
+
+// Register Chart.js components
+ChartJS.register(
+    Title,
+    Tooltip,
+    Legend,
+    LineElement,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    ArcElement
+)
 
 const props = defineProps({
     stats: {
@@ -312,25 +281,158 @@ const formatNumber = (num) => {
     return num.toFixed(2)
 }
 
-// Custom label renderer for pie charts
-const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-    const RADIAN = Math.PI / 180
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-    const x = cx + radius * Math.cos(-midAngle * RADIAN)
-    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+// Sales Trend Chart Data
+const salesTrendData = computed(() => ({
+    labels: props.charts.salesTrend.map(item => item.date),
+    datasets: [
+        {
+            label: 'Orders',
+            data: props.charts.salesTrend.map(item => item.orders),
+            borderColor: '#8b5cf6',
+            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+            tension: 0.4,
+            fill: true
+        },
+        {
+            label: 'Revenue ($)',
+            data: props.charts.salesTrend.map(item => item.revenue),
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            tension: 0.4,
+            fill: true
+        }
+    ]
+}))
 
-    return (
-        <text
-            x={x}
-            y={y}
-            fill="white"
-            textAnchor={x > cx ? 'start' : 'end'}
-            dominantBaseline="central"
-            style="font-size: 12px; font-weight: 600;"
-        >
-            {`${(percent * 100).toFixed(0)}%`}
-        </text>
-    )
+const salesTrendOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: true,
+            position: 'bottom'
+        },
+        tooltip: {
+            mode: 'index',
+            intersect: false
+        }
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            grid: {
+                color: '#f0f0f0'
+            }
+        },
+        x: {
+            grid: {
+                display: false
+            }
+        }
+    }
+}
+
+// Orders by Status Chart Data
+const ordersByStatusData = computed(() => ({
+    labels: props.charts.ordersByStatus.map(item => item.name),
+    datasets: [
+        {
+            data: props.charts.ordersByStatus.map(item => item.value),
+            backgroundColor: COLORS,
+            borderWidth: 0
+        }
+    ]
+}))
+
+const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            position: 'bottom'
+        },
+        tooltip: {
+            callbacks: {
+                label: function (context) {
+                    const label = context.label || ''
+                    const value = context.parsed || 0
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0)
+                    const percentage = ((value / total) * 100).toFixed(0)
+                    return `${label}: ${value} (${percentage}%)`
+                }
+            }
+        }
+    }
+}
+
+// Top Products Chart Data
+const topProductsData = computed(() => ({
+    labels: props.charts.topProducts.map(item => item.name),
+    datasets: [
+        {
+            label: 'Sales',
+            data: props.charts.topProducts.map(item => item.sales),
+            backgroundColor: '#10b981',
+            borderRadius: 8
+        }
+    ]
+}))
+
+const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: false
+        }
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            grid: {
+                color: '#f0f0f0'
+            }
+        },
+        x: {
+            grid: {
+                display: false
+            }
+        }
+    }
+}
+
+// Payment Status Chart Data
+const paymentStatusData = computed(() => ({
+    labels: props.charts.ordersByPaymentStatus.map(item => item.name),
+    datasets: [
+        {
+            data: props.charts.ordersByPaymentStatus.map(item => item.value),
+            backgroundColor: PAYMENT_COLORS,
+            borderWidth: 0
+        }
+    ]
+}))
+
+const doughnutChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            position: 'bottom'
+        },
+        tooltip: {
+            callbacks: {
+                label: function (context) {
+                    const label = context.label || ''
+                    const value = context.parsed || 0
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0)
+                    const percentage = ((value / total) * 100).toFixed(0)
+                    return `${label}: ${value} (${percentage}%)`
+                }
+            }
+        }
+    },
+    cutout: '60%'
 }
 
 // Status badge classes

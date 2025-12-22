@@ -205,7 +205,9 @@
 
     const checkout = () => {
         isCheckingOut.value = true
-        router.post(route('checkout'), {}, {
+        router.post(route('checkout'), {
+            payment_method: 'khqr'
+        }, {
             onSuccess: () => {
                 toast.success(t('cart.notifications.orderPlaced'))
             },

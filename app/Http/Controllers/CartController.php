@@ -45,7 +45,7 @@ class CartController extends Controller
             ->where('status', 'pending')
             ->first();
 
-        $cartItems = $cart ? $cart->cartItems : [];
+        $cartItems = $cart ? $cart->cartItems : collect([]);
 
         $subtotal = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
