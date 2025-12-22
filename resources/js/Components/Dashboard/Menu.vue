@@ -101,11 +101,10 @@
 </template>
 
 <script setup>
-    import { router, usePage } from '@inertiajs/vue3'
-    import { computed, toRefs, onMounted, onUnmounted, ref } from 'vue'
     import { cn } from '@/lib/utils'
-    import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar'
-    import { GraduationCap, LayoutDashboard, Package, Users, Shield, Home, LogOut, ShoppingBag } from 'lucide-vue-next'
+    import { router, usePage } from '@inertiajs/vue3'
+    import { GraduationCap, LayoutDashboard, Package, Shield, ShoppingBag, Users } from 'lucide-vue-next'
+    import { computed, onMounted, onUnmounted, ref, toRefs } from 'vue'
 
     const props = defineProps({
         modelValue: {

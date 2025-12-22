@@ -12,20 +12,20 @@
 </template>
 
 <script setup>
-import Menu from '@/Components/Frontend/Menu.vue'
-import Footer from '../Components/Frontend/footer.vue'
-import FlashMessage from '@/Components/FlashMessage.vue'
-import { Toaster } from '@/Components/ui/sonner'
+    import FlashMessage from '@/Components/FlashMessage.vue';
+    import Menu from '@/Components/Frontend/Menu.vue';
+    import { Toaster } from '@/Components/ui/sonner';
+    import Footer from '../Components/Frontend/footer.vue';
 </script>
 
 <style scoped>
-.frontend-layout {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+    .frontend-layout {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-.main-content {
-    flex: 1;
-}
+    .main-content {
+        flex: 1;
+    }
 </style>

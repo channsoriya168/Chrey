@@ -1,21 +1,17 @@
 <template>
+
     <Head title="លម្អិតការបញ្ជាទិញ" />
 
     <div class="space-y-6">
         <!-- Breadcrumb -->
         <div class="flex items-center justify-between">
-            <DashboardBreadcrumb
-                :items="[
-                    { label: 'ផ្ទាំងគ្រប់គ្រង', href: route('dashboard.index') },
-                    { label: 'ការបញ្ជាទិញ', href: route('dashboard.orders.index') },
-                    { label: 'លម្អិត' }
-                ]"
-            />
-            <Button
-                @click="goBack"
-                variant="outline"
-                class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-700 transition-colors hover:bg-gray-50"
-            >
+            <DashboardBreadcrumb :items="[
+                { label: 'ផ្ទាំងគ្រប់គ្រង', href: route('dashboard.index') },
+                { label: 'ការបញ្ជាទិញ', href: route('dashboard.orders.index') },
+                { label: 'លម្អិត' }
+            ]" />
+            <Button @click="goBack" variant="outline"
+                class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-700 transition-colors hover:bg-gray-50">
                 <ArrowLeft class="h-4 w-4" />
                 <span class="khmer-text">ត្រឡប់ក្រោយ</span>
             </Button>
@@ -51,35 +47,31 @@
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-600">ស្ថានភាព:</span>
-                            <span
-                                :class="[
-                                    'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
-                                    order.status === 'pending'
-                                        ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
-                                        : order.status === 'processing'
-                                          ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 ring-inset'
-                                          : order.status === 'shipped'
+                            <span :class="[
+                                'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
+                                order.status === 'pending'
+                                    ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
+                                    : order.status === 'processing'
+                                        ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 ring-inset'
+                                        : order.status === 'shipped'
                                             ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-600/20 ring-inset'
                                             : order.status === 'completed'
-                                              ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
-                                              : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
-                                ]"
-                            >
+                                                ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
+                                                : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
+                            ]">
                                 {{ order.status }}
                             </span>
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-600">ស្ថានភាពទូទាត់:</span>
-                            <span
-                                :class="[
-                                    'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
-                                    order.payment_status === 'pending'
-                                        ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
-                                        : order.payment_status === 'paid'
-                                          ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
-                                          : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
-                                ]"
-                            >
+                            <span :class="[
+                                'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
+                                order.payment_status === 'pending'
+                                    ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
+                                    : order.payment_status === 'paid'
+                                        ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
+                                        : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
+                            ]">
                                 {{ order.payment_status }}
                             </span>
                         </div>
@@ -104,19 +96,13 @@
 
             <div class="p-6">
                 <div v-if="order.order_items && order.order_items.length > 0" class="space-y-4">
-                    <div
-                        v-for="item in order.order_items"
-                        :key="item.id"
-                        class="flex gap-4 rounded-lg border border-gray-200 p-4"
-                    >
+                    <div v-for="item in order.order_items" :key="item.id"
+                        class="flex gap-4 rounded-lg border border-gray-200 p-4">
                         <!-- Product Image -->
                         <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200">
-                            <img
-                                v-if="item.product?.image_url && item.product.image_url.length > 0"
-                                :src="`/storage/${item.product.image_url[0]}`"
-                                :alt="item.product_name"
-                                class="h-full w-full object-cover"
-                            />
+                            <img v-if="item.product?.image_url && item.product.image_url.length > 0"
+                                :src="`/storage/${item.product.image_url[0]}`" :alt="item.product_name"
+                                class="h-full w-full object-cover" />
                             <div v-else class="flex h-full w-full items-center justify-center bg-gray-50">
                                 <ImageIcon class="h-5 w-5 text-gray-400" />
                             </div>
@@ -181,45 +167,45 @@
 </template>
 
 <script setup>
-import { router, Head } from '@inertiajs/vue3'
-import { Button } from '@/Components/ui/button'
-import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
-import { ArrowLeft, ImageIcon } from 'lucide-vue-next'
+    import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
+    import { Button } from '@/Components/ui/button'
+    import { Head, router } from '@inertiajs/vue3'
+    import { ArrowLeft, ImageIcon } from 'lucide-vue-next'
 
-// Props from Inertia
-const props = defineProps({
-    order: {
-        type: Object,
-        required: true
-    },
-    itemsSubtotal: {
-        type: Number,
-        default: 0
-    },
-    itemsTotal: {
-        type: Number,
-        default: 0
-    }
-})
-
-// Go back to orders list
-const goBack = () => {
-    router.visit('/dashboard/orders')
-}
-
-/**
- * Format date.
- *
- * @param {String} date
- * @return {String}
- */
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+    // Props from Inertia
+    const props = defineProps({
+        order: {
+            type: Object,
+            required: true
+        },
+        itemsSubtotal: {
+            type: Number,
+            default: 0
+        },
+        itemsTotal: {
+            type: Number,
+            default: 0
+        }
     })
-}
+
+    // Go back to orders list
+    const goBack = () => {
+        router.visit('/dashboard/orders')
+    }
+
+    /**
+     * Format date.
+     *
+     * @param {String} date
+     * @return {String}
+     */
+    const formatDate = (date) => {
+        return new Date(date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        })
+    }
 </script>

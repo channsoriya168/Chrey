@@ -103,14 +103,12 @@
 </template>
 
 <script setup>
-    import { ref, watch } from 'vue'
-    import { router, Head } from '@inertiajs/vue3'
-    import FormField from '@/Components/ui/FormField.vue'
-    import { Button } from '@/Components/ui/button'
-    import { Input } from '@/Components/ui/input'
-    import DataTable from '@/Components/ui/DataTable.vue'
     import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
-    import { Plus, Search, ImageIcon, Package } from 'lucide-vue-next'
+    import DataTable from '@/Components/ui/DataTable.vue'
+    import { Button } from '@/Components/ui/button'
+    import { Head, router } from '@inertiajs/vue3'
+    import { ImageIcon, Package, Plus, Search } from 'lucide-vue-next'
+    import { ref, watch } from 'vue'
 
     // Props from Inertia
     const props = defineProps({
