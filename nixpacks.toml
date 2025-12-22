@@ -4,12 +4,13 @@ nixPkgs = ['nodejs_20', 'php83', 'php83Packages.composer']
 [phases.install]
 cmds = [
     'composer install --optimize-autoloader --no-interaction',
-    'npm install',
-    'npm run build'
+    'npm install'
 ]
 
 [phases.build]
 cmds = [
+    'php artisan ziggy:generate',
+    'npm run build',
     'php artisan storage:link || true'
 ]
 
