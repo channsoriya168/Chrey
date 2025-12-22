@@ -4,16 +4,15 @@ nixPkgs = ['nodejs_20', 'php83', 'php83Packages.composer']
 [phases.install]
 cmds = [
     'composer install --optimize-autoloader --no-interaction',
-    'npm install'
+    'npm install',
+    'touch resources/js/ziggy.js'
 ]
 
 [phases.build]
 cmds = [
-    'php artisan ziggy:generate',
     'npm run build',
-    'php artisan storage:link || true',
-    'php artisan config:clear'
+    'php artisan storage:link || true'
 ]
 
 [start]
-cmd = 'php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT'
+cmd = 'php artisan config:clear && php artisan ziggy:generate && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT'
