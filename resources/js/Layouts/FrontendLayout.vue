@@ -1,5 +1,5 @@
 <template>
-    <div class="frontend-layout">
+    <div class="frontend-layout bg-gradient-to-b from-white via-gray-50 to-white">
         <Menu />
 
         <main class="main-content">
@@ -25,11 +25,7 @@ import { Toaster } from '@/components/ui/sonner'
     flex-direction: column;
 }
 
-.footer {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-top: 1px solid #dee2e6;
-    text-align: center;
-    color: #6c757d;
+.main-content {
+    flex: 1;
 }
 </style>

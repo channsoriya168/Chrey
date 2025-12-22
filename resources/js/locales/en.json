@@ -66,10 +66,13 @@
             "cancel": "Cancel"
         },
         "summary": {
+            "title": "Order Summary",
             "subtotal": "Subtotal",
             "shipping": "Shipping",
             "shippingFree": "Free",
-            "total": "Total"
+            "total": "Total",
+            "grandTotal": "Grand Total",
+            "discount": "Discount"
         },
         "checkout": {
             "button": "Proceed to Checkout",
@@ -91,5 +94,10 @@
             "loginForCheckout": "You need to login to proceed with checkout",
             "loadFailed": "Failed to load cart"
         }
+    },
+    "product": {
+        "sku": "SKU",
+        "quantity": "Quantity",
+        "available": "Available"
     }
 }

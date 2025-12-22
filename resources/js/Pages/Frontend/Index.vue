@@ -1,27 +1,26 @@
 <template>
-    <div class="min-h-screen">
+    <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <!-- Hero Carousel Section -->
-        <div class="mx-auto max-w-7xl px-1 sm:px-1 lg:px-1 pt-2">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4">
             <div class="relative">
                 <!-- Carousel Container -->
-                <div class="overflow-hidden">
-                    <div class="relative h-[220px] sm:h-[280px] md:h-[500px]">
+                <div class="overflow-hidden rounded-3xl shadow-2xl">
+                    <div class="relative h-[240px] sm:h-[320px] md:h-[500px] bg-gradient-to-br from-orange-50 to-orange-100">
                         <!-- Slide 1 -->
                         <div v-show="currentSlide === 0" class="absolute inset-0 transition-opacity duration-500">
                             <div
-                                class="grid h-full grid-cols-2 items-center gap-3 px-4 py-2 sm:gap-4 sm:px-6 sm:py-8 md:gap-8 md:px-16 md:py-0">
-                                <div class="space-y-2 sm:space-y-3 md:space-y-6">
+                                class="grid h-full grid-cols-2 items-center gap-4 px-6 py-4 sm:gap-6 sm:px-8 sm:py-8 md:gap-12 md:px-16 md:py-0">
+                                <div class="space-y-3 sm:space-y-4 md:space-y-6">
                                     <h1
-                                        class="text-base leading-tight font-bold text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl">
+                                        class="text-lg leading-tight font-bold text-gray-900 sm:text-3xl md:text-5xl lg:text-6xl">
                                         {{ t('home.hero.slide1.title') }}<br />
                                         {{ t('home.hero.slide1.subtitle').replace('100%', '') }}
-                                        <span class="text-pink-600">100%</span>
+                                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">100%</span>
                                     </h1>
-                                    <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg"></p>
                                 </div>
                                 <div class="flex items-center justify-center">
                                     <img :src="firstImage" alt="Fashion products"
-                                        class="h-auto max-h-[180px] w-full rounded-lg object-cover sm:max-h-[240px] md:max-h-96" />
+                                        class="h-auto max-h-[200px] w-full rounded-2xl object-cover shadow-xl sm:max-h-[280px] md:max-h-96" />
                                 </div>
                             </div>
                         </div>
@@ -29,20 +28,20 @@
                         <!-- Slide 2 -->
                         <div v-show="currentSlide === 1" class="absolute inset-0 transition-opacity duration-500">
                             <div
-                                class="grid h-full grid-cols-2 items-center gap-3 px-4 py-2 sm:gap-4 sm:px-6 sm:py-8 md:gap-8 md:px-16 md:py-0">
-                                <div class="space-y-2 sm:space-y-3 md:space-y-6">
+                                class="grid h-full grid-cols-2 items-center gap-4 px-6 py-4 sm:gap-6 sm:px-8 sm:py-8 md:gap-12 md:px-16 md:py-0">
+                                <div class="space-y-3 sm:space-y-4 md:space-y-6">
                                     <h1
-                                        class="text-base leading-tight font-bold text-gray-900 sm:text-2xl md:text-5xl lg:text-6xl">
+                                        class="text-lg leading-tight font-bold text-gray-900 sm:text-3xl md:text-5xl lg:text-6xl">
                                         {{ t('home.hero.slide2.title') }}<br />
-                                        <span class="text-purple-600">{{ t('home.hero.slide2.subtitle') }}</span>
+                                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">{{ t('home.hero.slide2.subtitle') }}</span>
                                     </h1>
-                                    <p class="hidden text-xs text-gray-600 sm:block sm:text-sm md:text-lg">
+                                    <p class="hidden text-sm text-gray-700 sm:block sm:text-base md:text-lg">
                                         {{ t('home.hero.slide2.description') }}
                                     </p>
                                 </div>
                                 <div class="flex items-center justify-center">
                                     <img :src="secondImage" alt="Best sellers"
-                                        class="h-auto max-h-[180px] w-full rounded-lg object-cover sm:max-h-[240px] md:max-h-96" />
+                                        class="h-auto max-h-[200px] w-full rounded-2xl object-cover shadow-xl sm:max-h-[280px] md:max-h-96" />
                                 </div>
                             </div>
                         </div>
@@ -50,10 +49,10 @@
 
                     <!-- Carousel Indicators -->
                     <div
-                        class="absolute bottom-1 left-1/2 z-10 flex -translate-x-1/2 transform space-x-1.5 sm:bottom-3 md:bottom-6 md:space-x-2">
+                        class="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 transform space-x-2 sm:bottom-5 md:bottom-8 md:space-x-3">
                         <button v-for="index in 2" :key="index" @click="currentSlide = index - 1" :class="[
-                            'h-1.5 w-1.5 rounded-full transition-all duration-300 md:h-2 md:w-2',
-                            currentSlide === index - 1 ? 'w-6 bg-pink-600 md:w-8' : 'bg-gray-300'
+                            'h-2 w-2 rounded-full transition-all duration-300 shadow-md md:h-2.5 md:w-2.5',
+                            currentSlide === index - 1 ? 'w-8 bg-gradient-to-r from-orange-500 to-orange-600 md:w-12' : 'bg-white/80 hover:bg-white'
                         ]" />
                     </div>
                 </div>
@@ -61,18 +60,16 @@
         </div>
 
         <!-- Discount Products Section -->
-        <div v-if="discountProducts.length > 0" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-            <div class="mb-6 flex items-center justify-between md:mb-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Special Offers</h2>
-                    <p class="mt-1 text-sm text-gray-500">Limited time deals - Don't miss out!</p>
-                </div>
+        <div v-if="discountProducts.length > 0" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="mb-8 text-center md:mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 md:text-4xl">🔥 Special Offers</h2>
+                <p class="mt-2 text-base text-gray-600 md:text-lg">Limited time deals - Don't miss out!</p>
             </div>
 
-            <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide md:gap-6" style="scroll-behavior: smooth;">
+            <div class="flex gap-5 overflow-x-auto pb-4 scrollbar-hide md:gap-6" style="scroll-behavior: smooth;">
                 <Link v-for="(product, index) in discountProducts" :key="'discount-' + product.id"
                     :href="`/product/${product.slug}`"
-                    class="group relative cursor-pointer overflow-hidden rounded-2xl bg-white border border-gray-200 transition-all duration-300 hover:border-gray-300 hover:shadow-xl flex-shrink-0 w-[160px] sm:w-[200px] md:w-[240px] discount-card-slide-in"
+                    class="group relative cursor-pointer overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl flex-shrink-0 w-[170px] sm:w-[210px] md:w-[250px] discount-card-slide-in"
                     :style="`animation-delay: ${index * 80}ms`">
                     <!-- Image Container -->
                     <div class="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
@@ -80,19 +77,19 @@
                             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         <!-- Discount Badge -->
                         <div class="absolute top-3 left-3 z-10">
-                            <div class="rounded-xl bg-gradient-to-r from-red-500 to-pink-500 px-3 py-1.5 shadow-lg">
+                            <div class="rounded-xl bg-gradient-to-r from-red-500 to-orange-500 px-3 py-2 shadow-xl">
                                 <span class="text-xs font-bold text-white md:text-sm">
                                     -{{ calculateDiscount(product.price, product.discount_price) }}%
                                 </span>
                             </div>
                         </div>
                         <!-- Overlay on hover -->
-                        <div class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         </div>
                     </div>
 
                     <!-- Product Info -->
-                    <div class="p-3 md:p-4">
+                    <div class="p-4 md:p-5">
                         <h3 class="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-semibold text-gray-900 md:text-base">
                             {{ product.name }}
                         </h3>
@@ -102,20 +99,20 @@
                             <div class="flex text-yellow-400">
                                 <span v-for="star in 5" :key="star" class="text-xs md:text-sm">★</span>
                             </div>
-                            <span class="text-xs text-gray-500">(0)</span>
+                            <span class="text-xs font-medium text-gray-500">(0)</span>
                         </div>
 
                         <!-- Price -->
-                        <div class="flex flex-col gap-1">
+                        <div class="flex flex-col gap-1.5">
                             <div class="flex items-baseline gap-2">
-                                <span class="text-lg font-bold text-gray-900 md:text-xl">
+                                <span class="text-xl font-bold text-orange-600 md:text-2xl">
                                     ${{ getDisplayPrice(product) }}
                                 </span>
                                 <span class="text-sm text-gray-400 line-through md:text-base">
                                     ${{ product.price }}
                                 </span>
                             </div>
-                            <span class="text-xs font-medium text-green-600">
+                            <span class="text-xs font-semibold text-green-600">
                                 Save ${{ (product.price - product.discount_price).toFixed(2) }}
                             </span>
                         </div>
@@ -125,12 +122,10 @@
         </div>
 
         <!-- All Products Section -->
-        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
-            <div class="mb-6 flex items-center justify-between md:mb-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 md:text-3xl">{{ t('home.products.featured') }}</h2>
-                    <p class="mt-1 text-sm text-gray-500">Discover our full collection</p>
-                </div>
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+            <div class="mb-8 text-center md:mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 md:text-4xl">{{ t('home.products.featured') }}</h2>
+                <p class="mt-2 text-base text-gray-600 md:text-lg">Discover our full collection</p>
             </div>
 
             <!-- Initial Loading Shimmer -->
@@ -161,9 +156,9 @@
             </div>
 
             <!-- Products Grid -->
-            <div v-else class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+            <div v-else class="grid grid-cols-2 gap-5 sm:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
                 <Link v-for="product in allProducts" :key="product.id" :href="`/product/${product.slug}`"
-                    class="group relative cursor-pointer overflow-hidden rounded-2xl bg-white border border-gray-200 transition-all duration-300 hover:border-gray-300 hover:shadow-xl product-card-fade-in">
+                    class="group relative cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl product-card-fade-in">
                     <!-- Image Container -->
                     <div class="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
                         <img :src="getImageUrl(product)" :alt="product.name"
@@ -171,19 +166,19 @@
                         <!-- Discount Badge (if applicable) -->
                         <div v-if="calculateDiscount(product.price, product.discount_price)"
                             class="absolute top-3 left-3 z-10">
-                            <div class="rounded-xl bg-gradient-to-r from-red-500 to-pink-500 px-3 py-1.5 shadow-lg">
+                            <div class="rounded-xl bg-gradient-to-r from-red-500 to-orange-500 px-3 py-2 shadow-xl">
                                 <span class="text-xs font-bold text-white md:text-sm">
                                     -{{ calculateDiscount(product.price, product.discount_price) }}%
                                 </span>
                             </div>
                         </div>
                         <!-- Overlay on hover -->
-                        <div class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         </div>
                     </div>
 
                     <!-- Product Info -->
-                    <div class="p-3 md:p-4">
+                    <div class="p-4 md:p-5">
                         <h3 class="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-semibold text-gray-900 md:text-base">
                             {{ product.name }}
                         </h3>
@@ -193,12 +188,12 @@
                             <div class="flex text-yellow-400">
                                 <span v-for="star in 5" :key="star" class="text-xs md:text-sm">★</span>
                             </div>
-                            <span class="text-xs text-gray-500">(0)</span>
+                            <span class="text-xs font-medium text-gray-500">(0)</span>
                         </div>
 
                         <!-- Price -->
                         <div class="flex items-baseline gap-2">
-                            <span class="text-lg font-bold text-gray-900 md:text-xl">
+                            <span class="text-lg font-bold text-orange-600 md:text-xl">
                                 ${{ getDisplayPrice(product) }}
                             </span>
                             <span v-if="product.discount_price && product.discount_price < product.price"

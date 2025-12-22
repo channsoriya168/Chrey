@@ -66,10 +66,13 @@
             "cancel": "បោះបង់"
         },
         "summary": {
+            "title": "សង្ខេបការបញ្ជាទិញ",
             "subtotal": "សរុបរង",
             "shipping": "ការដឹកជញ្ជូន",
             "shippingFree": "ឥតគិតថ្លៃ",
-            "total": "សរុប"
+            "total": "សរុប",
+            "grandTotal": "សរុបទាំងអស់",
+            "discount": "បញ្ចុះតម្លៃ"
         },
         "checkout": {
             "button": "បន្តទៅការទូទាត់",
@@ -91,5 +94,10 @@
             "loginForCheckout": "អ្នកត្រូវចូលគណនីដើម្បីបន្តទៅការទូទាត់",
             "loadFailed": "មិនអាចផ្ទុកកន្ត្រក"
         }
+    },
+    "product": {
+        "sku": "លេខកូដ",
+        "quantity": "ចំនួន",
+        "available": "មានចំនួន"
     }
 }

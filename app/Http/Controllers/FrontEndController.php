@@ -25,7 +25,8 @@ class FrontEndController
         ];
 
         // If it's an AJAX request (for infinite scroll), return JSON
-        if ($request->wantsJson() || $request->ajax()) {
+        // But exclude Inertia requests - they need Inertia responses
+        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
             return response()->json([
                 'props' => [
                     'products' => $productsData

@@ -22,8 +22,8 @@ class OrderController extends Controller
 
         // Calculate total for each order
         $orders->getCollection()->transform(function ($order) {
-            $order->total = $order->orderItems->sum(function ($item) {
-                return $item->price * $item->quantity;
+            $order->calculated_total = $order->orderItems->sum(function ($item) {
+                return $item->total;
             });
             return $order;
         });
@@ -45,59 +45,83 @@ class OrderController extends Controller
 
         $order->load(['user', 'orderItems.product']);
 
-        // Calculate subtotal and total
-        $subtotal = $order->orderItems->sum(function ($item) {
-            return $item->price * $item->quantity;
+        // Calculate totals
+        $itemsSubtotal = $order->orderItems->sum(function ($item) {
+            return $item->subtotal;
+        });
+
+        $itemsTotal = $order->orderItems->sum(function ($item) {
+            return $item->total;
         });
 
         return inertia('Orders/Show', [
             'order' => $order,
-            'subtotal' => $subtotal,
-            'total' => $subtotal
+            'itemsSubtotal' => $itemsSubtotal,
+            'itemsTotal' => $itemsTotal
         ]);
     }
 
     /**
      * Create order from cart (checkout)
      */
-    public function checkout()
+    public function checkout(Request $request)
     {
+        // Only KHQR payment method is supported
+        $request->validate([
+            'payment_method' => 'required|in:khqr'
+        ]);
+
         $cart = Cart::with(['cartItems.product'])
             ->where('user_id', auth()->id())
             ->where('status', 'pending')
             ->first();
 
         if (!$cart || $cart->cartItems->isEmpty()) {
-            return redirect()->route('cart.index')
-                ->with('error', 'Your cart is empty');
+            return back()->with('error', 'Your cart is empty');
         }
 
         // Verify stock availability for all items
         foreach ($cart->cartItems as $item) {
             if ($item->product->stock < $item->quantity) {
-                return redirect()->route('cart.index')
-                    ->with('error', "Insufficient stock for {$item->product->name}");
+                return back()->with('error', "Insufficient stock for {$item->product->name}");
             }
         }
 
         try {
             DB::beginTransaction();
 
-            // Create order
+            // Calculate order totals
+            $subtotal = $cart->cartItems->sum(function ($item) {
+                return $item->price * $item->quantity;
+            });
+
+            // Create order with KHQR payment method
             $order = Order::create([
                 'user_id' => auth()->id(),
+                'order_number' => 'ORD-' . strtoupper(uniqid()),
                 'status' => 'pending',
                 'payment_status' => 'pending',
-                'payment_method' => 'cash', // Default for now
+                'payment_method' => 'khqr',
+                'subtotal' => $subtotal,
+                'total_amount' => $subtotal,
             ]);
 
             // Create order items and update product stock
             foreach ($cart->cartItems as $cartItem) {
+                $itemSubtotal = $cartItem->price * $cartItem->quantity;
+                $itemDiscount = 0; // No discount for now
+                $itemTotal = $itemSubtotal - $itemDiscount;
+
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cartItem->product_id,
+                    'product_name' => $cartItem->product->name,
+                    'product_code' => $cartItem->product->code ?? 'N/A',
                     'quantity' => $cartItem->quantity,
-                    'price' => $cartItem->price
+                    'unit_price' => $cartItem->price,
+                    'subtotal' => $itemSubtotal,
+                    'discount' => $itemDiscount,
+                    'total' => $itemTotal,
                 ]);
 
                 // Update product stock
@@ -109,12 +133,14 @@ class OrderController extends Controller
 
             DB::commit();
 
-            return redirect()->route('orders.show', $order->id)
-                ->with('success', 'Order placed successfully!');
+            // Redirect to KHQR payment page
+            return redirect()->route('payment.khqr', $order->id);
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('cart.index')
-                ->with('error', 'Failed to place order. Please try again.');
+            \Log::error('Checkout failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'Failed to place order: ' . $e->getMessage());
         }
     }
 }

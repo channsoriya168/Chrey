@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
                 'name' => 'កាហ្វេត្រជាក់',
                 'slug' => 'iced-coffee',
                 'description' => 'កាហ្វេត្រជាក់ពិសេស ជាមួយទឹកដោះគោ និងទឹកកក។ រសជាតិកំពុក មានជាតិ caffeine ខ្ពស់ ជួយឱ្យភ្ញាក់។',
-                'price' => 3.50,
+                'price' => 0.01,
                 'discount_price_percent' => null,
                 'stock' => 200,
                 'size' => 'មធ្យម',

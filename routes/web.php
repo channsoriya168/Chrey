@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FrontEndController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,7 +27,8 @@ Route::post('login', [AuthController::class, 'storeLogin'])
     ->name('login.store');
 
 Route::middleware('auth')->group(function () {
-    // checkout 
+    // checkout
+    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
     Route::resource('cart', CartController::class)->only(['store', 'update', 'destroy']);
     Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
 
@@ -35,9 +37,16 @@ Route::middleware('auth')->group(function () {
     Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
 
+    // Payment - KHQR
+    Route::get('payment/khqr/{order}', [PaymentController::class, 'showKhqrPayment'])->name('payment.khqr');
+    Route::get('payment/status/{order}', [PaymentController::class, 'checkPaymentStatus'])->name('payment.status');
+
     Route::post('logout', [AuthController::class, 'logout'])
         ->name('logout');
 });
+
+// Bakong Webhook (outside auth middleware)
+Route::post('webhook/bakong', [PaymentController::class, 'handleWebhook'])->name('webhook.bakong');
 
 // Include dashboard routes
 require __DIR__ . '/dashboard.php';

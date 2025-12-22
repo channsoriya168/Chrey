@@ -1,11 +1,11 @@
 <template>
-    <div class="min-h-screen bg-gray-50">
+    <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <!-- Breadcrumb -->
-        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <nav class="flex items-center space-x-2 text-sm">
-                <Link href="/" class="text-gray-500 hover:text-pink-600">ទំព័រដើម</Link>
+                <Link href="/" class="text-gray-600 transition-colors hover:text-orange-600">ទំព័រដើម</Link>
                 <span class="text-gray-400">/</span>
-                <span class="font-medium text-gray-900">{{ product.data.name }}</span>
+                <span class="font-semibold text-gray-900">{{ product.data.name }}</span>
             </nav>
         </div>
 
@@ -15,36 +15,24 @@
                 <!-- Product Images -->
                 <div class="space-y-4">
                     <!-- Main Image -->
-                    <div class="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-white">
-                        <img
-                            :src="selectedImage"
-                            :alt="product.data.name"
-                            class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                        />
-                        <div
-                            v-if="product.data.discount_price_percent > 0"
-                            class="absolute top-4 left-4 rounded-lg bg-red-500 px-3 py-1 text-sm font-bold text-white"
-                        >
+                    <div class="group relative aspect-square overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-200/50 transition-all duration-300 hover:shadow-2xl">
+                        <img :src="selectedImage" :alt="product.data.name"
+                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div v-if="product.data.discount_price_percent > 0"
+                            class="absolute top-4 left-4 rounded-xl bg-gradient-to-r from-red-500 to-orange-500 px-4 py-2 text-sm font-bold text-white shadow-lg">
                             {{ product.data.discount_price_percent }}% OFF
                         </div>
                     </div>
 
                     <!-- Thumbnail Images -->
                     <div v-if="productImages.length > 1" class="grid grid-cols-4 gap-3">
-                        <button
-                            v-for="(image, index) in productImages"
-                            :key="index"
-                            @click="selectedImage = image"
+                        <button v-for="(image, index) in productImages" :key="index" @click="selectedImage = image"
                             :class="[
-                                'aspect-square overflow-hidden rounded-lg border-2 transition-all duration-200',
-                                selectedImage === image ? 'border-pink-600' : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <img
-                                :src="image"
-                                :alt="`${product.data.name} - Image ${index + 1}`"
-                                class="h-full w-full object-cover"
-                            />
+                                'aspect-square overflow-hidden rounded-xl border-2 shadow-sm transition-all duration-300 hover:shadow-md',
+                                selectedImage === image ? 'border-orange-500 ring-2 ring-orange-500/20' : 'border-gray-200 hover:border-gray-300'
+                            ]">
+                            <img :src="image" :alt="`${product.data.name} - Image ${index + 1}`"
+                                class="h-full w-full object-cover" />
                         </button>
                     </div>
                 </div>
@@ -52,70 +40,62 @@
                 <!-- Product Information -->
                 <div class="space-y-6">
                     <!-- Product Title & Rating -->
-                    <div>
-                        <h1 class="mb-3 text-3xl font-bold text-gray-900 md:text-4xl">{{ product.data.name }}</h1>
-                        <!-- Description -->
-                        <p class="leading-relaxed text-gray-600">
-                            {{ product.data.description }}
-                        </p>
+                    <div class="space-y-4">
+                        <h1 class="text-3xl font-bold leading-tight text-gray-900 md:text-4xl lg:text-5xl">{{ product.data.name }}</h1>
                         <div class="flex items-center space-x-4">
                             <div class="flex items-center">
                                 <div class="flex text-lg text-yellow-400">
                                     <span v-for="star in 5" :key="star">★</span>
                                 </div>
-                                <span class="ml-2 text-sm text-gray-600">(0 reviews)</span>
+                                <span class="ml-2 text-sm font-medium text-gray-600">(0 reviews)</span>
                             </div>
                         </div>
+                        <!-- Description -->
+                        <p class="text-base leading-relaxed text-gray-600 md:text-lg">
+                            {{ product.data.description }}
+                        </p>
                     </div>
 
                     <!-- Price -->
-                    <div class="flex items-baseline space-x-3">
-                        <span class="text-4xl font-bold text-pink-600"
-                            >${{ product.data.discount_price || product.data.price }}</span
-                        >
-                        <span
-                            v-if="product.data.discount_price && product.data.discount_price < product.data.price"
-                            class="text-2xl text-gray-400 line-through"
-                            >${{ product.data.price }}</span
-                        >
+                    <div class="rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100/50 p-6 shadow-sm">
+                        <div class="flex items-baseline space-x-3">
+                            <span class="text-4xl font-bold text-orange-600 md:text-5xl">${{ product.data.discount_price ||
+                                product.data.price }}</span>
+                            <span v-if="product.data.discount_price && product.data.discount_price < product.data.price"
+                                class="text-2xl text-gray-500 line-through">${{ product.data.price }}</span>
+                        </div>
+                        <p v-if="product.data.discount_price && product.data.discount_price < product.data.price" class="mt-2 text-sm font-medium text-green-600">
+                            You save ${{ (product.data.price - product.data.discount_price).toFixed(2) }}
+                        </p>
                     </div>
 
                     <!-- Stock Status -->
                     <div class="flex items-center space-x-2">
-                        <span v-if="product.data.stock > 0" class="flex items-center font-medium text-green-600">
-                            <svg class="mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    fill-rule="evenodd"
+                        <span v-if="product.data.stock > 0" class="flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
+                            <svg class="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd"
-                                />
+                                    clip-rule="evenodd" />
                             </svg>
-                            In Stock {{ product.data.stock }}
+                            In Stock ({{ product.data.stock }} available)
+                        </span>
+                        <span v-else class="flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-700">
+                            Out of Stock
                         </span>
                     </div>
 
                     <!-- Quantity Selector -->
                     <div class="flex items-center space-x-4">
-                        <span class="font-medium text-gray-700">Quantity:</span>
-                        <div class="flex items-center rounded-lg border border-gray-300">
-                            <button
-                                @click="decrementQuantity"
-                                class="px-4 py-2 text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
+                        <span class="text-sm font-semibold text-gray-700">Quantity:</span>
+                        <div class="flex items-center rounded-xl border-2 border-gray-300 bg-white shadow-sm">
+                            <button @click="decrementQuantity"
+                                class="px-5 py-3 text-lg font-semibold text-gray-600 transition-all hover:bg-gray-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-50">
                                 −
                             </button>
-                            <input
-                                v-model.number="quantity"
-                                type="number"
-                                min="1"
-                                :max="product.data.stock"
-                                class="w-16 border-x border-gray-300 py-2 text-center focus:outline-none"
-                            />
-                            <button
-                                @click="incrementQuantity"
-                                :disa
-                                class="px-4 py-2 text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
+                            <input v-model.number="quantity" type="number" min="1" :max="product.data.stock"
+                                class="w-20 border-x-2 border-gray-300 py-3 text-center font-semibold focus:outline-none" />
+                            <button @click="incrementQuantity" :disabled="quantity >= product.data.stock"
+                                class="px-5 py-3 text-lg font-semibold text-gray-600 transition-all hover:bg-gray-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-50">
                                 +
                             </button>
                         </div>
@@ -123,52 +103,27 @@
 
                     <!-- Action Buttons -->
                     <div class="flex flex-col gap-4 pt-4 sm:flex-row">
-                        <button
-                            @click="addToCart"
-                            :disabled="product.data.stock === 0 || isAddingToCart"
-                            class="flex flex-1 items-center justify-center space-x-2 rounded-lg bg-pink-600 px-8 py-4 font-semibold text-white transition-colors duration-200 hover:bg-pink-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-                        >
-                            <svg
-                                v-if="!isAddingToCart"
-                                class="h-6 w-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
+                        <button @click="addToCart" :disabled="product.data.stock === 0 || isAddingToCart"
+                            class="group flex flex-1 items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-4 font-bold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:from-orange-600 hover:to-orange-700 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-400 disabled:opacity-60">
+                            <svg v-if="!isAddingToCart" class="h-6 w-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                             <svg v-else class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle
-                                    class="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    stroke-width="4"
-                                ></circle>
-                                <path
-                                    class="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                ></path>
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
                             </svg>
                             <span>{{ isAddingToCart ? 'Adding...' : 'Add to Cart' }}</span>
                         </button>
                         <button
-                            class="flex items-center justify-center space-x-2 rounded-lg border-2 border-pink-600 px-8 py-4 font-semibold text-pink-600 transition-colors duration-200 hover:bg-pink-50"
-                        >
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                />
+                            class="group flex items-center justify-center space-x-2 rounded-xl border-2 border-orange-600 bg-white px-8 py-4 font-bold text-orange-600 shadow-md transition-all duration-300 hover:scale-[1.02] hover:bg-orange-50 hover:shadow-lg">
+                            <svg class="h-6 w-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
                             <span class="hidden sm:inline">Wishlist</span>
                         </button>
@@ -177,41 +132,31 @@
             </div>
 
             <!-- Related Products Section -->
-            <div v-if="relatedProducts && relatedProducts.length > 0" class="mt-16">
-                <h2 class="mb-8 text-2xl font-bold text-gray-900 md:text-3xl">You May Also Like</h2>
+            <div v-if="relatedProducts && relatedProducts.length > 0" class="mt-20">
+                <div class="mb-10 text-center">
+                    <h2 class="text-3xl font-bold text-gray-900 md:text-4xl">You May Also Like</h2>
+                    <p class="mt-2 text-gray-600">Discover more amazing products</p>
+                </div>
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
-                    <Link
-                        v-for="relatedProduct in relatedProducts"
-                        :key="relatedProduct.id"
+                    <Link v-for="relatedProduct in relatedProducts" :key="relatedProduct.id"
                         :href="`/product/${relatedProduct.slug}`"
-                        class="group cursor-pointer overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-200 hover:shadow-lg"
-                    >
-                        <div class="relative aspect-square bg-gray-100">
-                            <img
-                                :src="getImageUrl(relatedProduct)"
-                                :alt="relatedProduct.name"
-                                class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
-                            />
+                        class="group cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+                        <div class="relative aspect-square overflow-hidden bg-gray-100">
+                            <img :src="getImageUrl(relatedProduct)" :alt="relatedProduct.name"
+                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         </div>
                         <div class="p-4">
-                            <h3 class="mb-2 truncate text-sm font-semibold text-gray-800">{{ relatedProduct.name }}</h3>
-                            <div class="mb-2 flex items-center">
+                            <h3 class="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-semibold text-gray-800 md:text-base">{{ relatedProduct.name }}</h3>
+                            <div class="mb-3 flex items-center">
                                 <div class="flex text-xs text-yellow-400">
                                     <span v-for="star in 5" :key="star">★</span>
                                 </div>
                                 <span class="ml-1 text-xs text-gray-500">(0)</span>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <span
-                                        v-if="
-                                            relatedProduct.discount_price &&
-                                            relatedProduct.discount_price < relatedProduct.price
-                                        "
-                                        class="ml-2 text-sm text-gray-400 line-through"
-                                        >${{ relatedProduct.price }}</span
-                                    >
-                                </div>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-lg font-bold text-orange-600">${{ relatedProduct.discount_price || relatedProduct.price }}</span>
+                                <span v-if="relatedProduct.discount_price && relatedProduct.discount_price < relatedProduct.price"
+                                    class="text-sm text-gray-400 line-through">${{ relatedProduct.price }}</span>
                             </div>
                         </div>
                     </Link>
@@ -222,120 +167,125 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Link, router } from '@inertiajs/vue3'
+    import { Link, router } from '@inertiajs/vue3'
+    import { ref } from 'vue'
 
-const props = defineProps({
-    product: {
-        type: Object,
-        required: true
-    },
-    relatedProducts: {
-        type: Array,
-        default: () => []
-    }
-})
-
-// Initialize quantity and selected image
-const quantity = ref(1)
-const productImages = ref(getProductImages())
-const selectedImage = ref(productImages.value[0])
-const isAddingToCart = ref(false)
-
-// Add to cart function
-const addToCart = () => {
-    if (props.product.data.stock < 1 || isAddingToCart.value) {
-        return
-    }
-
-    isAddingToCart.value = true
-
-    router.post(
-        '/cart',
-        {
-            product_id: props.product.data.id,
-            quantity: quantity.value
+    const props = defineProps({
+        product: {
+            type: Object,
+            required: true
         },
-        {
-            preserveScroll: true,
-            onSuccess: () => {
-                isAddingToCart.value = false
-                // Reset quantity after successful add
-                quantity.value = 1
-                // Trigger cart refresh by dispatching a custom event
-                window.dispatchEvent(new CustomEvent('cart-updated'))
+        relatedProducts: {
+            type: Array,
+            default: () => []
+        }
+    })
+
+    // Initialize quantity and selected image
+    const quantity = ref(1)
+    const productImages = ref(getProductImages())
+    const selectedImage = ref(productImages.value[0])
+    const isAddingToCart = ref(false)
+
+    // Add to cart function
+    const addToCart = () => {
+        if (props.product.data.stock < 1 || isAddingToCart.value) {
+            return
+        }
+
+        isAddingToCart.value = true
+
+        router.post(
+            '/cart',
+            {
+                product_id: props.product.data.id,
+                quantity: quantity.value
             },
-            onError: () => {
-                isAddingToCart.value = false
-            }
-        }
-    )
-}
-
-// Get all product images
-function getProductImages() {
-    if (props.product.data.image_url) {
-        if (Array.isArray(props.product.data.image_url) && props.product.data.image_url.length > 0) {
-            return props.product.data.image_url.map((path) => `/storage/${path}`)
-        }
-        if (typeof props.product.data.image_url === 'string') {
-            try {
-                const parsed = JSON.parse(props.product.data.image_url)
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed.map((path) => `/storage/${path}`)
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    isAddingToCart.value = false
+                    // Reset quantity after successful add
+                    quantity.value = 1
+                    // Trigger cart refresh by dispatching a custom event
+                    window.dispatchEvent(new CustomEvent('cart-updated'))
+                },
+                onError: () => {
+                    isAddingToCart.value = false
                 }
-            } catch (e) {
-                return [`/storage/${props.product.image_url}`]
             }
-        }
+        )
     }
-    return ['']
-}
 
-// Quantity controls
-const incrementQuantity = () => {
-    if (quantity.value < props.product.data.stock) {
-        quantity.value++
-    }
-}
-
-const decrementQuantity = () => {
-    if (quantity.value > 1) {
-        quantity.value--
-    }
-}
-
-// Get image URL for related products
-const getImageUrl = (product) => {
-    if (product.image_url) {
-        if (Array.isArray(product.image_url) && product.image_url.length > 0) {
-            return `/storage/${product.image_url[0]}`
-        }
-        if (typeof product.image_url === 'string') {
-            try {
-                const parsed = JSON.parse(product.image_url)
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    return `/storage/${parsed[0]}`
+    // Get all product images
+    function getProductImages() {
+        if (props.product.data.image_url) {
+            if (Array.isArray(props.product.data.image_url) && props.product.data.image_url.length > 0) {
+                return props.product.data.image_url.map((path) => path)
+            }
+            if (typeof props.product.data.image_url === 'string') {
+                try {
+                    const parsed = JSON.parse(props.product.data.image_url)
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        return parsed.map((path) => path)
+                    }
+                } catch (e) {
+                    return [props.product.image_url]
                 }
-            } catch (e) {
-                return `/storage/${product.image_url}`
             }
         }
+        return ['']
     }
-    return null
-}
+
+    // Quantity controls
+    const incrementQuantity = () => {
+        if (quantity.value < props.product.data.stock) {
+            quantity.value++
+        }
+    }
+
+    const decrementQuantity = () => {
+        if (quantity.value > 1) {
+            quantity.value--
+        }
+    }
+
+    // Get image URL (first image from array or placeholder)
+    const getImageUrl = (product) => {
+        // Check if image_url exists and is an array with items
+        if (product.image_url) {
+            if (Array.isArray(product.image_url) && product.image_url.length > 0) {
+                return product.image_url[0]
+            }
+            // If it's a string (in case it wasn't properly parsed)
+            if (typeof product.image_url === 'string') {
+                try {
+                    const parsed = JSON.parse(product.image_url)
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        return parsed[0]
+                    }
+                } catch (e) {
+                    // If it's just a plain URL string
+                    return product.image_url
+                }
+            }
+        }
+        // Fallback to placeholder
+        return 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop'
+    }
 </script>
 
 <style scoped>
-/* Remove number input spinner arrows */
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
 
-input[type='number'] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
+    /* Remove number input spinner arrows */
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
 </style>

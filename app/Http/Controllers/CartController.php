@@ -10,6 +10,32 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     /**
+     * Display the cart page
+     */
+    public function index()
+    {
+        $cart = Cart::with(['cartItems.product'])
+            ->where('user_id', auth()->id())
+            ->where('status', 'pending')
+            ->first();
+
+        $cartItems = $cart ? $cart->cartItems : collect();
+
+
+        $subtotal = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+
+        return inertia('Frontend/Cart/Index', [
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+            'total' => $subtotal,
+            'discount' => 0,
+            'count' => $cartItems->count()
+        ]);
+    }
+
+    /**
      * Get cart items for API
      */
     public function getCartItems()

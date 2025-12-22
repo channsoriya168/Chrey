@@ -20,6 +20,8 @@ class Order extends Model
         'shipping_address_id',
         'billing_address_id',
         'notes',
+        'bakong_transaction_id',
+        'bakong_qr_data',
     ];
 
     protected $casts = [
