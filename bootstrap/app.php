@@ -1,12 +1,5 @@
 <?php
 
-// Force file sessions on Railway until database is fully migrated
-if (isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_SERVER['RAILWAY_ENVIRONMENT'])) {
-    $_ENV['SESSION_DRIVER'] = 'file';
-    $_SERVER['SESSION_DRIVER'] = 'file';
-    putenv('SESSION_DRIVER=file');
-}
-
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
