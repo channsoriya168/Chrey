@@ -35,12 +35,8 @@ RUN chown -R www-data:www-data /app \
     && chmod -R 755 /app/storage \
     && chmod -R 755 /app/bootstrap/cache
 
-# Copy startup script
-COPY docker-start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
 # Expose port
 EXPOSE 8080
 
-# Start command
-ENTRYPOINT ["/usr/local/bin/start.sh"]
+# Start command - run migrations then start server
+CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
