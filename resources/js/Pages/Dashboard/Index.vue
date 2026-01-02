@@ -166,7 +166,7 @@
                                 </Link>
                             </td>
                             <td class="py-4 text-gray-900">{{ order.customer }}</td>
-                            <td class="py-4 font-semibold text-gray-900">${{ order.total.toFixed(2) }}</td>
+                            <td class="py-4 font-semibold text-gray-900">${{ parseFloat(order.total).toFixed(2) }}</td>
                             <td class="py-4">
                                 <span :class="getStatusBadgeClass(order.status)">
                                     {{ order.status }}

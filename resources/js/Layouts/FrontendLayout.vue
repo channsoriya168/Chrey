@@ -1,5 +1,5 @@
 <template>
-    <div class="frontend-layout bg-gradient-to-b from-white via-gray-50 to-white">
+    <div class="frontend-layout bg-gradient-to-br from-purple-900 via-slate-900 to-slate-950">
         <Menu />
 
         <main class="main-content">

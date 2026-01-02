@@ -72,7 +72,7 @@
 
                 <!-- Custom Cell: Total -->
                 <template #cell-total_amount="{ item }">
-                    <span class="text-sm font-semibold text-gray-900">${{ item.total_amount?.toFixed(2) }}</span>
+                    <span class="text-sm font-semibold text-gray-900">${{ parseFloat(item.total_amount || 0).toFixed(2) }}</span>
                 </template>
 
                 <!-- Custom Cell: Status -->

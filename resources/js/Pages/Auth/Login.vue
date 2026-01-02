@@ -1,6 +1,6 @@
 <template>
     <div
-        class="khmer-text relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-4">
+        class="khmer-text relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-purple-900 via-slate-900 to-slate-950 p-4">
 
         <Head title="ចូលគណនី" />
 
@@ -10,13 +10,13 @@
 
             <!-- Login Card -->
             <div
-                class="hover:shadow-3xl animate-fade-in-up transform overflow-hidden rounded-2xl border border-white/20 bg-white/90 shadow-2xl backdrop-blur-xl transition-all duration-500">
+                class="hover:shadow-3xl animate-fade-in-up transform overflow-hidden rounded-2xl border border-blue-500/20 bg-slate-800/40 shadow-2xl shadow-blue-500/20 backdrop-blur-xl transition-all duration-500">
                 <!-- Header Section -->
                 <div class="relative overflow-hidden px-6 py-6">
                     <div
-                        class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent">
+                        class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent">
                     </div>
-                    <h1 class="relative z-10 text-center text-2xl font-bold text-black">ចូលគណនី</h1>
+                    <h1 class="relative z-10 text-center text-2xl font-bold text-white">ចូលគណនី</h1>
                 </div>
 
                 <!-- Form Section -->
@@ -28,9 +28,8 @@
                             <vee-field name="email" v-slot="{ field, errors, meta }">
                                 <div class="group space-y-1.5">
                                     <Label for="email"
-                                        class="flex items-center gap-1.5 text-xs font-bold tracking-wide text-gray-800">
-                                        <div
-                                            class="h-3 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500">
+                                        class="flex items-center gap-1.5 text-xs font-bold tracking-wide text-gray-200">
+                                        <div class="h-3 w-1 rounded-full bg-gradient-to-b from-blue-500 to-cyan-500">
                                         </div>
                                         អ៊ីម៉ែល
                                     </Label>
@@ -38,9 +37,9 @@
                                         <div
                                             class="pointer-events-none absolute inset-y-0 left-0 z-10 flex items-center pl-3">
                                             <div
-                                                class="rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 p-1.5 transition-all duration-300 group-focus-within:from-indigo-200 group-focus-within:to-purple-200">
-                                                <svg class="h-3.5 w-3.5 text-indigo-600" fill="none"
-                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                class="rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1.5 transition-all duration-300 group-focus-within:from-blue-500/30 group-focus-within:to-cyan-500/30">
+                                                <svg class="h-3.5 w-3.5 text-blue-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2.5"
                                                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -49,26 +48,14 @@
                                         </div>
                                         <input v-model="form.email" v-bind="field" id="email" type="email"
                                             autocomplete="email" placeholder="សូមបញ្ចូលអ៊ីម៉ែល" :class="[
-                                                'h-12 w-full rounded-lg border-2 pr-12 pl-14 text-sm font-medium transition-all duration-300 outline-none',
-                                                'placeholder:font-normal placeholder:text-gray-400',
+                                                'h-12 w-full rounded-lg border-2 pr-12 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white',
+                                                'placeholder:font-normal placeholder:text-gray-500',
                                                 errors.length || form.errors.email
-                                                    ? 'border-red-400 bg-red-50/70 shadow-sm shadow-red-200/50 focus:border-red-500 focus:ring-4 focus:ring-red-100/60'
+                                                    ? 'border-red-400  shadow-sm shadow-red-500/20 focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
                                                     : meta.valid && meta.touched
-                                                        ? 'border-emerald-400 bg-emerald-50/70 shadow-sm shadow-emerald-200/50 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100/60'
-                                                        : 'border-gray-300 bg-white shadow-sm hover:border-indigo-300 hover:shadow-md focus:border-indigo-500 focus:shadow-lg focus:ring-4 focus:ring-indigo-100/60'
+                                                        ? 'border-emerald-400 shadow-sm shadow-emerald-500/20 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20'
+                                                        : 'border-gray-600 shadow-sm hover:border-blue-400 hover:shadow-md focus:border-blue-500 focus:shadow-lg focus:ring-4 focus:ring-blue-500/20'
                                             ]" />
-                                        <!-- Success Icon -->
-                                        <div v-if="meta.valid && meta.touched && !errors.length && !form.errors.email"
-                                            class="animate-scale-in pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                            <div
-                                                class="rounded-full bg-gradient-to-br from-emerald-500 to-green-500 p-1 shadow-md ring-2 shadow-emerald-300/50 ring-emerald-100">
-                                                <svg class="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </div>
-                                        </div>
                                     </div>
                                     <!-- Error Message -->
                                     <p v-if="errors.length"
@@ -82,9 +69,8 @@
                             <vee-field name="password" v-slot="{ field, errors, meta }">
                                 <div class="group space-y-1.5">
                                     <Label for="password"
-                                        class="flex items-center gap-1.5 text-xs font-bold tracking-wide text-gray-800">
-                                        <div
-                                            class="h-3 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500">
+                                        class="flex items-center gap-1.5 text-xs font-bold tracking-wide text-gray-200">
+                                        <div class="h-3 w-1 rounded-full bg-gradient-to-b from-blue-500 to-cyan-500">
                                         </div>
                                         លេខសម្ងាត់
                                     </Label>
@@ -92,9 +78,9 @@
                                         <div
                                             class="pointer-events-none absolute inset-y-0 left-0 z-10 flex items-center pl-3">
                                             <div
-                                                class="rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 p-1.5 transition-all duration-300 group-focus-within:from-indigo-200 group-focus-within:to-purple-200">
-                                                <svg class="h-3.5 w-3.5 text-indigo-600" fill="none"
-                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                class="rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1.5 transition-all duration-300 group-focus-within:from-blue-500/30 group-focus-within:to-cyan-500/30">
+                                                <svg class="h-3.5 w-3.5 text-blue-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2.5"
                                                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -104,20 +90,20 @@
                                         <input v-model="form.password" v-bind="field" id="password"
                                             :type="showPassword ? 'text' : 'password'" autocomplete="current-password"
                                             placeholder="សូមបញ្ជូលពាក្យសម្ងាត់" :class="[
-                                                'h-12 w-full rounded-lg border-2 pr-20 pl-14 text-sm font-medium transition-all duration-300 outline-none',
-                                                'placeholder:font-normal placeholder:text-gray-400',
+                                                'h-12 w-full rounded-lg border-2 pr-20 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white',
+                                                'placeholder:font-normal placeholder:text-gray-500',
                                                 errors.length || form.errors.password
-                                                    ? 'border-red-400 bg-red-50/70 shadow-sm shadow-red-200/50 focus:border-red-500 focus:ring-4 focus:ring-red-100/60'
+                                                    ? 'border-red-400 shadow-sm shadow-red-500/20 focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
                                                     : meta.valid && meta.touched
-                                                        ? 'border-emerald-400 bg-emerald-50/70 shadow-sm shadow-emerald-200/50 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100/60'
-                                                        : 'border-gray-300 bg-white shadow-sm hover:border-indigo-300 hover:shadow-md focus:border-indigo-500 focus:shadow-lg focus:ring-4 focus:ring-indigo-100/60'
+                                                        ? 'border-emerald-400 shadow-sm shadow-emerald-500/20 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20'
+                                                        : 'border-gray-600 shadow-sm hover:border-blue-400 hover:shadow-md focus:border-blue-500 focus:shadow-lg focus:ring-4 focus:ring-blue-500/20'
                                             ]" :aria-invalid="!!errors.length || !!form.errors.password" />
                                         <!-- Toggle Password & Success Icon -->
                                         <div class="absolute inset-y-0 right-0 z-10 flex items-center gap-1.5 pr-3">
                                             <button type="button" @click="showPassword = !showPassword"
-                                                class="rounded-lg p-1.5 transition-all duration-200 hover:bg-indigo-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 focus:outline-none">
+                                                class="rounded-lg p-1.5 transition-all duration-200 hover:bg-blue-500/10 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-1 focus:outline-none">
                                                 <svg v-if="showPassword"
-                                                    class="h-4 w-4 text-gray-500 transition-colors hover:text-indigo-600"
+                                                    class="h-4 w-4 text-gray-400 transition-colors hover:text-blue-400"
                                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -125,7 +111,7 @@
                                                         stroke-width="2"
                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                 </svg>
-                                                <svg v-else class="h-4 w-4 text-indigo-600" fill="none"
+                                                <svg v-else class="h-4 w-4 text-blue-400" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2"
@@ -146,9 +132,9 @@
                             <div class="flex items-center pt-0.5">
                                 <div class="relative flex items-center">
                                     <input id="remember" v-model="form.remember" type="checkbox"
-                                        class="peer h-4 w-4 cursor-pointer rounded border-2 border-gray-300 text-indigo-600 transition-all checked:bg-gradient-to-br checked:from-indigo-600 checked:to-purple-600 hover:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:ring-offset-0" />
+                                        class="peer h-4 w-4 cursor-pointer rounded border-2 border-gray-600 bg-slate-700/50 text-fuchsia-600 transition-all checked:bg-gradient-to-br checked:from-fuchsia-600 checked:to-pink-600 hover:border-fuchsia-400 focus:ring-2 focus:ring-fuchsia-500/20 focus:ring-offset-0" />
                                     <Label for="remember"
-                                        class="ml-2 cursor-pointer text-xs font-semibold text-gray-700 transition-colors peer-checked:text-indigo-700 hover:text-indigo-600">
+                                        class="ml-2 cursor-pointer text-xs font-semibold text-gray-300 transition-colors peer-checked:text-fuchsia-400 hover:text-fuchsia-300">
                                         ចងចាំខ្ញុំ
                                     </Label>
                                 </div>
@@ -156,11 +142,10 @@
 
                             <!-- Submit Button -->
                             <button type="submit" :disabled="form.processing" :class="[
-                                'h-12 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600',
-                                'hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700',
+                                'h-12 w-full bg-pink-500',
+                                'hover:bg-pink-700',
                                 'rounded-lg text-base font-bold text-white',
                                 'transform transition-all duration-300',
-                                'shadow-lg shadow-indigo-300/50 hover:shadow-xl',
                                 'disabled:cursor-not-allowed disabled:opacity-60',
                                 !form.processing && 'hover:scale-[1.01] active:scale-[0.99]',
                                 'relative overflow-hidden'
@@ -222,20 +207,28 @@
                     <!-- Divider -->
                     <div class="relative my-4">
                         <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-200"></div>
+                            <div class="w-full border-t border-gray-600"></div>
                         </div>
                         <div class="relative flex justify-center text-xs">
-                            <span class="bg-white/90 px-3 font-semibold text-gray-500">ឬ</span>
+                            <span class="bg-slate-800/40 px-3 font-semibold text-gray-400">ឬ</span>
                         </div>
                     </div>
 
                     <!-- Register Link -->
                     <div class="text-center">
-                        <p class="text-sm text-gray-600">
+                        <p class="text-sm text-gray-300">
                             មិនមានគណនី?
                             <Link href="/register"
-                                class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text font-bold text-transparent underline decoration-indigo-400 decoration-2 underline-offset-2 transition-all hover:from-indigo-700 hover:to-purple-700">
+                                class="bg-gradient-to-r from-fuchsia-400 to-pink-400 bg-clip-text font-bold text-transparent underline decoration-fuchsia-400 decoration-2 underline-offset-2 transition-all hover:from-fuchsia-300 hover:to-pink-300">
                                 ចុះឈ្មោះឥឡូវនេះ
+                            </Link>
+                        </p>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p class="text-sm text-gray-300">
+                            <Link href="/"
+                                class="bg-white bg-clip-text  text-transparent decoration-fuchsia-400 decoration-2 transition-all hover:bg-pink-300">
+                                ត្រលប់ទៅទំព័រដើម
                             </Link>
                         </p>
                     </div>
