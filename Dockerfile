@@ -30,6 +30,11 @@ RUN composer install --optimize-autoloader --no-interaction
 RUN npm install
 RUN npm run build
 
+# Set proper permissions
+RUN chown -R www-data:www-data /app \
+    && chmod -R 755 /app/storage \
+    && chmod -R 755 /app/bootstrap/cache
+
 # Copy startup script
 COPY docker-start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
