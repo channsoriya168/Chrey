@@ -221,7 +221,7 @@
                     <div class="text-center mt-3">
                         <p class="text-sm text-gray-300">
                             <Link href="/"
-                                class="bg-white bg-clip-text  text-transparent decoration-fuchsia-400 decoration-2 transition-all hover:bg-pink-300">
+                                class="bg-white font-bold bg-clip-text  text-transparent decoration-fuchsia-400 decoration-2 transition-all hover:bg-pink-300">
                                 ត្រលប់ទៅទំព័រដើម
                             </Link>
                         </p>

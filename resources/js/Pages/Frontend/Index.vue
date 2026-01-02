@@ -5,7 +5,8 @@
             <div class="relative">
                 <!-- Carousel Container -->
                 <div class="overflow-hidden rounded-3xl shadow-2xl shadow-fuchsia-500/10 border border-fuchsia-500/20">
-                    <div class="relative h-[240px] sm:h-[320px] md:h-[500px] bg-gradient-to-br from-slate-800/60 via-purple-900/40 to-slate-900/60 backdrop-blur-sm">
+                    <div
+                        class="relative h-[240px] sm:h-[320px] md:h-[500px] bg-gradient-to-br from-slate-800/60 via-purple-900/40 to-slate-900/60 backdrop-blur-sm">
                         <!-- Slide 1 -->
                         <div v-show="currentSlide === 0" class="absolute inset-0 transition-opacity duration-500">
                             <div
@@ -15,7 +16,8 @@
                                         class="text-lg leading-tight font-bold text-white sm:text-3xl md:text-5xl lg:text-6xl drop-shadow-2xl">
                                         {{ t('home.hero.slide1.title') }}<br />
                                         {{ t('home.hero.slide1.subtitle').replace('100%', '') }}
-                                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-pink-400">100%</span>
+                                        <span
+                                            class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-pink-400">100%</span>
                                     </h1>
                                 </div>
                                 <div class="flex items-center justify-center">
@@ -33,9 +35,12 @@
                                     <h1
                                         class="text-lg leading-tight font-bold text-white sm:text-3xl md:text-5xl lg:text-6xl drop-shadow-2xl">
                                         {{ t('home.hero.slide2.title') }}<br />
-                                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-pink-400">{{ t('home.hero.slide2.subtitle') }}</span>
+                                        <span
+                                            class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-pink-400">{{
+                                            t('home.hero.slide2.subtitle') }}</span>
                                     </h1>
-                                    <p class="hidden text-sm text-white/90 sm:block sm:text-base md:text-lg drop-shadow-lg">
+                                    <p
+                                        class="hidden text-sm text-white/90 sm:block sm:text-base md:text-lg drop-shadow-lg">
                                         {{ t('home.hero.slide2.description') }}
                                     </p>
                                 </div>
@@ -60,66 +65,7 @@
         </div>
 
         <!-- Discount Products Section -->
-        <div v-if="discountProducts.length > 0" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-            <div class="mb-8 text-center md:mb-10">
-                <h2 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-4xl">Special Offers</h2>
-                <p class="mt-2 text-base text-gray-300 md:text-lg">Limited time deals - Don't miss out!</p>
-            </div>
-
-            <div class="flex gap-5 overflow-x-auto pb-4 scrollbar-hide md:gap-6" style="scroll-behavior: smooth;">
-                <Link v-for="(product, index) in discountProducts" :key="'discount-' + product.id"
-                    :href="`/product/${product.slug}`"
-                    class="group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-fuchsia-500/20 shadow-lg shadow-fuchsia-500/10 transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-fuchsia-500/20 hover:border-fuchsia-500/40 flex-shrink-0 w-[170px] sm:w-[210px] md:w-[250px] discount-card-slide-in"
-                    :style="`animation-delay: ${index * 80}ms`">
-                    <!-- Image Container -->
-                    <div class="relative aspect-square bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
-                        <img :src="getImageUrl(product)" :alt="product.name"
-                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                        <!-- Discount Badge -->
-                        <div class="absolute top-3 left-3 z-10">
-                            <div class="rounded-xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-3 py-2 shadow-xl">
-                                <span class="text-xs font-bold text-white md:text-sm">
-                                    -{{ calculateDiscount(product.price, product.discount_price) }}%
-                                </span>
-                            </div>
-                        </div>
-                        <!-- Overlay on hover -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-fuchsia-900/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                        </div>
-                    </div>
-
-                    <!-- Product Info -->
-                    <div class="p-4 md:p-5">
-                        <h3 class="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-semibold text-white md:text-base">
-                            {{ product.name }}
-                        </h3>
-
-                        <!-- Ratings -->
-                        <div class="mb-3 flex items-center gap-1">
-                            <div class="flex text-yellow-400">
-                                <span v-for="star in 5" :key="star" class="text-xs md:text-sm">★</span>
-                            </div>
-                            <span class="text-xs font-medium text-gray-400">(0)</span>
-                        </div>
-
-                        <!-- Price -->
-                        <div class="flex flex-col gap-1.5">
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-2xl">
-                                    ${{ getDisplayPrice(product) }}
-                                </span>
-                                <span class="text-sm text-gray-500 line-through md:text-base">
-                                    ${{ product.price }}
-                                </span>
-                            </div>
-                            <span class="text-xs font-semibold text-green-400">
-                                Save ${{ (parseFloat(product.price) - parseFloat(product.discount_price)).toFixed(2) }}
-                            </span>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-        </div>
+        <ProductDiscount :discountProducts="discountProducts" />
 
         <!-- All Products Section -->
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
@@ -129,27 +75,49 @@
             </div>
 
             <!-- Initial Loading Shimmer -->
-            <div v-if="isInitialLoad" class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
-                <div v-for="i in 10" :key="'initial-shimmer-' + i" class="overflow-hidden rounded-2xl bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 shimmer-card">
+            <div v-if="isInitialLoad"
+                class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+                <div v-for="i in 10" :key="'initial-shimmer-' + i"
+                    class="overflow-hidden rounded-2xl bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 shimmer-card">
                     <!-- Image Shimmer -->
-                    <div class="relative aspect-square bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 shimmer-bg"></div>
+                    <div
+                        class="relative aspect-square bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 shimmer-bg">
+                    </div>
 
                     <!-- Content Shimmer -->
                     <div class="p-3 md:p-4 space-y-3">
                         <div class="space-y-2">
-                            <div class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded w-3/4 shimmer-bg"></div>
+                            <div
+                                class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded w-3/4 shimmer-bg">
+                            </div>
                         </div>
                         <div class="flex gap-1">
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
                         </div>
                         <div class="flex gap-2">
-                            <div class="h-6 w-20 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-6 w-16 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
+                            <div
+                                class="h-6 w-20 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-6 w-16 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -173,7 +141,8 @@
                             </div>
                         </div>
                         <!-- Overlay on hover -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-fuchsia-900/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-fuchsia-900/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         </div>
                     </div>
 
@@ -193,7 +162,8 @@
 
                         <!-- Price -->
                         <div class="flex items-baseline gap-2">
-                            <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-xl">
+                            <span
+                                class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-xl">
                                 ${{ getDisplayPrice(product) }}
                             </span>
                             <span v-if="product.discount_price && product.discount_price < product.price"
@@ -206,34 +176,58 @@
             </div>
 
             <!-- Loading Shimmer (Infinite Scroll) -->
-            <div v-if="isLoading" class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
-                <div v-for="i in 10" :key="'shimmer-' + i" class="overflow-hidden rounded-2xl bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 shimmer-card" :style="`animation-delay: ${i * 50}ms`">
+            <div v-if="isLoading"
+                class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+                <div v-for="i in 10" :key="'shimmer-' + i"
+                    class="overflow-hidden rounded-2xl bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 shimmer-card"
+                    :style="`animation-delay: ${i * 50}ms`">
                     <!-- Image Shimmer -->
-                    <div class="relative aspect-square bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 shimmer-bg"></div>
+                    <div
+                        class="relative aspect-square bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 shimmer-bg">
+                    </div>
 
                     <!-- Content Shimmer -->
                     <div class="p-3 md:p-4 space-y-3">
                         <div class="space-y-2">
-                            <div class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded w-3/4 shimmer-bg"></div>
+                            <div
+                                class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded w-3/4 shimmer-bg">
+                            </div>
                         </div>
                         <div class="flex gap-1">
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-3 w-3 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
                         </div>
                         <div class="flex gap-2">
-                            <div class="h-6 w-20 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
-                            <div class="h-6 w-16 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg"></div>
+                            <div
+                                class="h-6 w-20 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
+                            <div
+                                class="h-6 w-16 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded shimmer-bg">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- End of results message -->
-            <div v-else-if="!hasMorePages && allProducts.length > 0" class="mt-8 text-center" style="animation: fadeInUp 0.5s ease-out">
+            <div v-else-if="!hasMorePages && allProducts.length > 0" class="mt-8 text-center"
+                style="animation: fadeInUp 0.5s ease-out">
                 <p class="text-gray-400 text-sm">{{ t('home.pagination.noMore') || 'No more products to load' }}</p>
             </div>
         </div>
@@ -246,6 +240,7 @@
     import { useI18n } from 'vue-i18n'
     import firstImage from '@/../images/01.png'
     import secondImage from '@/../images/02.png'
+    import ProductDiscount from '@/Components/Frontend/ProductDiscount.vue'
 
     const { t } = useI18n()
 
@@ -374,6 +369,7 @@
 </script>
 
 <style scoped>
+
     /* Hide scrollbar for Chrome, Safari and Opera */
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
@@ -381,8 +377,10 @@
 
     /* Hide scrollbar for IE, Edge and Firefox */
     .scrollbar-hide {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
     }
 
     /* Shimmer Animation */
@@ -390,6 +388,7 @@
         0% {
             background-position: -1000px 0;
         }
+
         100% {
             background-position: 1000px 0;
         }
@@ -406,6 +405,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         100% {
             opacity: 1;
             transform: translateY(0);
@@ -423,6 +423,7 @@
             opacity: 0;
             transform: translateY(30px) scale(0.95);
         }
+
         100% {
             opacity: 1;
             transform: translateY(0) scale(1);
@@ -435,17 +436,49 @@
     }
 
     /* Stagger animation delay for product cards */
-    .product-card-fade-in:nth-child(1) { animation-delay: 0ms; }
-    .product-card-fade-in:nth-child(2) { animation-delay: 50ms; }
-    .product-card-fade-in:nth-child(3) { animation-delay: 100ms; }
-    .product-card-fade-in:nth-child(4) { animation-delay: 150ms; }
-    .product-card-fade-in:nth-child(5) { animation-delay: 200ms; }
-    .product-card-fade-in:nth-child(6) { animation-delay: 250ms; }
-    .product-card-fade-in:nth-child(7) { animation-delay: 300ms; }
-    .product-card-fade-in:nth-child(8) { animation-delay: 350ms; }
-    .product-card-fade-in:nth-child(9) { animation-delay: 400ms; }
-    .product-card-fade-in:nth-child(10) { animation-delay: 450ms; }
-    .product-card-fade-in:nth-child(n+11) { animation-delay: 0ms; }
+    .product-card-fade-in:nth-child(1) {
+        animation-delay: 0ms;
+    }
+
+    .product-card-fade-in:nth-child(2) {
+        animation-delay: 50ms;
+    }
+
+    .product-card-fade-in:nth-child(3) {
+        animation-delay: 100ms;
+    }
+
+    .product-card-fade-in:nth-child(4) {
+        animation-delay: 150ms;
+    }
+
+    .product-card-fade-in:nth-child(5) {
+        animation-delay: 200ms;
+    }
+
+    .product-card-fade-in:nth-child(6) {
+        animation-delay: 250ms;
+    }
+
+    .product-card-fade-in:nth-child(7) {
+        animation-delay: 300ms;
+    }
+
+    .product-card-fade-in:nth-child(8) {
+        animation-delay: 350ms;
+    }
+
+    .product-card-fade-in:nth-child(9) {
+        animation-delay: 400ms;
+    }
+
+    .product-card-fade-in:nth-child(10) {
+        animation-delay: 450ms;
+    }
+
+    .product-card-fade-in:nth-child(n+11) {
+        animation-delay: 0ms;
+    }
 
     /* Loading Indicator Animation */
     @keyframes fadeInUp {
@@ -453,6 +486,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         100% {
             opacity: 1;
             transform: translateY(0);
@@ -465,6 +499,7 @@
             opacity: 0;
             transform: translateX(-30px) scale(0.95);
         }
+
         100% {
             opacity: 1;
             transform: translateX(0) scale(1);

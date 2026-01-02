@@ -108,7 +108,7 @@
 
                         <div v-else>
                             <button @click="LoginView"
-                                class="flex items-center gap-2 rounded-xl px-5 py-2.5 font-semibold text-white shadow-md shadow-fuchsia-500/30 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-fuchsia-500/50"
+                                class="flex items-center gap-2 rounded-xl px-5 py-2.5 font-semibold text-white border border-amber-50 transition-all duration-200 hover:scale-105"
                                 :title="t('nav.auth.login')">
                                 <Icon icon="heroicons:user-circle-solid" class="h-5 w-5" />
                                 <span class="text-sm">ចូលគណនី</span>
