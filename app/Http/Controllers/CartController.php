@@ -10,17 +10,32 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     /**
+     * Get or create cart for current user/session
+     */
+    private function getCart()
+    {
+        if (auth()->check()) {
+            return Cart::with(['cartItems.product'])
+                ->where('user_id', auth()->id())
+                ->where('status', 'pending')
+                ->first();
+        } else {
+            $sessionId = session()->getId();
+            return Cart::with(['cartItems.product'])
+                ->where('session_id', $sessionId)
+                ->where('status', 'pending')
+                ->first();
+        }
+    }
+
+    /**
      * Display the cart page
      */
     public function index()
     {
-        $cart = Cart::with(['cartItems.product'])
-            ->where('user_id', auth()->id())
-            ->where('status', 'pending')
-            ->first();
+        $cart = $this->getCart();
 
         $cartItems = $cart ? $cart->cartItems : collect();
-
 
         $subtotal = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
@@ -40,10 +55,7 @@ class CartController extends Controller
      */
     public function getCartItems()
     {
-        $cart = Cart::with(['cartItems.product'])
-            ->where('user_id', auth()->id())
-            ->where('status', 'pending')
-            ->first();
+        $cart = $this->getCart();
 
         $cartItems = $cart ? $cart->cartItems : collect([]);
 
@@ -84,13 +96,23 @@ class CartController extends Controller
             return back()->with('error', 'Insufficient stock available');
         }
 
-        // Find or create a pending cart for the user
-        $cart = Cart::firstOrCreate(
-            [
-                'user_id' => auth()->id(),
-                'status' => 'pending'
-            ]
-        );
+        // Find or create a pending cart for the user or guest
+        if (auth()->check()) {
+            $cart = Cart::firstOrCreate(
+                [
+                    'user_id' => auth()->id(),
+                    'status' => 'pending'
+                ]
+            );
+        } else {
+            $sessionId = session()->getId();
+            $cart = Cart::firstOrCreate(
+                [
+                    'session_id' => $sessionId,
+                    'status' => 'pending'
+                ]
+            );
+        }
 
         // Check if product already exists in cart
         $cartItem = $cart->cartItems()->where('product_id', $product->id)->first();
@@ -140,24 +162,31 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'quantity' => 'required|integer|min:1'
-        ]);
-
         $cartItem = CartItem::findOrFail($id);
 
-        // Verify the cart item belongs to the user's cart
-        if ($cartItem->cart->user_id !== auth()->id()) {
-            abort(403);
+        // Get the product to check stock
+        $product = $cartItem->product;
+
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1|max:' . $product->stock
+        ]);
+
+        // Verify the cart item belongs to the user's or guest's cart
+        if (auth()->check()) {
+            if ($cartItem->cart->user_id !== auth()->id()) {
+                abort(403);
+            }
+        } else {
+            $sessionId = session()->getId();
+            if ($cartItem->cart->session_id !== $sessionId) {
+                abort(403);
+            }
         }
 
-        // Check stock availability
-        if ($cartItem->product->stock < $validated['quantity']) {
-            return back()->with('error', 'Insufficient stock available');
-        }
-
+        // Update quantity and refresh price from product
         $cartItem->update([
-            'quantity' => $validated['quantity']
+            'quantity' => $validated['quantity'],
+            'price' => $product->discount_price ?? $product->price
         ]);
 
         return back()->with('success', 'Cart updated successfully!');
@@ -170,9 +199,16 @@ class CartController extends Controller
     {
         $cartItem = CartItem::findOrFail($id);
 
-        // Verify the cart item belongs to the user's cart
-        if ($cartItem->cart->user_id !== auth()->id()) {
-            abort(403);
+        // Verify the cart item belongs to the user's or guest's cart
+        if (auth()->check()) {
+            if ($cartItem->cart->user_id !== auth()->id()) {
+                abort(403);
+            }
+        } else {
+            $sessionId = session()->getId();
+            if ($cartItem->cart->session_id !== $sessionId) {
+                abort(403);
+            }
         }
 
         $cartItem->delete();

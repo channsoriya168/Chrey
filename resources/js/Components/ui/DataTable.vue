@@ -1,10 +1,10 @@
 <template>
-    <div class="overflow-hidden bg-white shadow-sm">
+    <div class="overflow-hidden bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 shadow-lg shadow-slate-900/50 rounded-lg">
         <!-- Table Container -->
         <div class="min-h-[200px] overflow-x-auto pb-2">
             <Table>
                 <TableHeader>
-                    <TableRow class="bg-amber-800">
+                    <TableRow class="bg-purple-600/80 border-b border-purple-500/30">
                         <TableHead
                             v-for="(column, colIndex) in columns"
                             :key="column.key"
@@ -63,7 +63,7 @@
                         v-else
                         v-for="(item, index) in data"
                         :key="getRowKey(item, index)"
-                        class="group transition-all duration-200 hover:bg-amber-50"
+                        class="group transition-all duration-200 hover:bg-purple-600/20 border-b border-slate-700/30"
                     >
                         <TableCell
                             v-for="(column, colIndex) in columns"
@@ -71,7 +71,7 @@
                             :class="[
                                 'relative py-4 transition-colors duration-200',
                                 column.cellClass,
-                                'group-hover:bg-gray-200 group-hover:text-white',
+                                'group-hover:bg-purple-600/20',
                                 colIndex === 0 ? 'group-hover:rounded-l-lg' : '',
                                 colIndex === columns.length - 1 && !($slots.actions || hasActionButtons)
                                     ? 'group-hover:rounded-r-lg'
@@ -79,14 +79,14 @@
                             ]"
                         >
                             <slot :name="`cell-${column.key}`" :item="item" :value="item[column.key]" :index="index">
-                                <span class="text-sm text-gray-700 group-hover:text-white">{{ item[column.key] }}</span>
+                                <span class="text-sm text-gray-300">{{ item[column.key] }}</span>
                             </slot>
                         </TableCell>
 
                         <!-- Actions Column -->
                         <TableCell
                             v-if="$slots.actions || hasActionButtons"
-                            class="relative py-4 text-center transition-colors duration-200 group-hover:rounded-r-lg group-hover:bg-gray-200 group-hover:text-white"
+                            class="relative py-4 text-center transition-colors duration-200 group-hover:rounded-r-lg group-hover:bg-purple-600/20"
                         >
                             <slot name="actions" :item="item" :index="index">
                                 <!-- Default Action Buttons -->
@@ -94,7 +94,7 @@
                                     <button
                                         v-if="canView"
                                         @click="handleView(item)"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-all duration-200 hover:bg-amber-50 hover:text-amber-600"
+                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-all duration-200 hover:bg-purple-600/30 hover:text-purple-300"
                                         :title="viewLabel"
                                     >
                                         <Eye class="h-4 w-4" />
@@ -102,7 +102,7 @@
                                     <button
                                         v-if="canEdit"
                                         @click="handleEdit(item)"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-amber-500 transition-all duration-200 hover:bg-amber-50 hover:text-amber-600"
+                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-purple-400 transition-all duration-200 hover:bg-purple-600/30 hover:text-purple-300"
                                         :title="editLabel"
                                     >
                                         <Pencil class="h-4 w-4" />
@@ -110,7 +110,7 @@
                                     <button
                                         v-if="canDelete"
                                         @click="handleDelete(item)"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-red-500 transition-all duration-200 hover:bg-red-50 hover:text-red-600"
+                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-red-400 transition-all duration-200 hover:bg-red-600/30 hover:text-red-300"
                                         :title="deleteLabel"
                                     >
                                         <Trash2 class="h-4 w-4" />

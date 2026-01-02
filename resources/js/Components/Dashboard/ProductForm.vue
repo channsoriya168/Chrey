@@ -85,15 +85,15 @@
                     @drop.prevent="handleDrop" :class="[
                         'group flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed transition-all duration-200',
                         isDragging
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+                            ? 'border-blue-500 bg-blue-500/10'
+                            : 'border-gray-600 bg-slate-700/30 hover:border-blue-400 hover:bg-slate-700/50'
                     ]" role="button" tabindex="0" aria-label="Upload images" @keydown.enter="openImageDialog"
                     @keydown.space.prevent="openImageDialog">
-                    <svg class="h-6 w-6 text-gray-400 transition-colors group-hover:text-gray-600" fill="none"
+                    <svg class="h-6 w-6 text-gray-400 transition-colors group-hover:text-blue-400" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    <span class="khmer-text text-xs text-gray-500">រូបភាព</span>
+                    <span class="khmer-text text-xs text-gray-400 group-hover:text-gray-300">រូបភាព</span>
                 </div>
             </div>
 
@@ -104,20 +104,20 @@
                     @drop.prevent="handleDrop" :class="[
                         'group flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed transition-all duration-200',
                         isDragging
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+                            ? 'border-blue-500 bg-blue-500/10'
+                            : 'border-gray-600 bg-slate-700/30 hover:border-blue-400 hover:bg-slate-700/50'
                     ]" role="button" tabindex="0" aria-label="Add more images" @keydown.enter="openImageDialog"
                     @keydown.space.prevent="openImageDialog">
-                    <svg class="h-6 w-6 text-gray-400 transition-colors group-hover:text-gray-600" fill="none"
+                    <svg class="h-6 w-6 text-gray-400 transition-colors group-hover:text-blue-400" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    <span class="khmer-text text-xs text-gray-500">បន្ថែម</span>
+                    <span class="khmer-text text-xs text-gray-400 group-hover:text-gray-300">បន្ថែម</span>
                 </div>
 
                 <!-- Existing Images -->
                 <div v-for="(image, index) in imagePreviews" :key="index"
-                    class="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md"
+                    class="group relative aspect-square overflow-hidden rounded-lg border border-gray-600 bg-slate-700 shadow-sm transition-all duration-200 hover:shadow-md hover:shadow-blue-500/20"
                     :class="{ 'ring-2 ring-blue-500': index === 0 }">
                     <!-- Image -->
                     <img :src="image" :alt="`Product image ${index + 1}`" class="h-full w-full object-cover"
@@ -168,15 +168,15 @@
             </div>
 
             <!-- Image Upload Info -->
-            <div class="flex items-start gap-2 rounded-lg bg-blue-50 p-3 text-sm">
-                <svg class="h-5 w-5 flex-shrink-0 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex items-start gap-2 rounded-lg bg-blue-500/10 border border-blue-500/20 p-3 text-sm">
+                <svg class="h-5 w-5 flex-shrink-0 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
                         d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
                         clip-rule="evenodd" />
                 </svg>
-                <div class="khmer-text text-blue-900">
+                <div class="khmer-text text-blue-100">
                     <p class="font-medium">ព័ត៌មានអំពីរូបភាព:</p>
-                    <ul class="mt-1 list-inside list-disc space-y-0.5 text-blue-800">
+                    <ul class="mt-1 list-inside list-disc space-y-0.5 text-blue-200">
                         <li>ទំហំអតិបរមា: 2MB ក្នុងមួយរូប</li>
                         <li>ប្រភេទ: JPG, PNG, GIF, WebP</li>
                         <li>អាចអូសទម្លាក់ឬចុចដើម្បីជ្រើសរើស</li>
@@ -202,18 +202,18 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex items-center justify-between gap-4 border-t border-gray-200 pt-6">
-            <p class="khmer-text text-sm text-gray-500">សូមត្រួតពិនិត្យមុនពេលរក្សាទុក</p>
+        <div class="flex items-center justify-between gap-4 border-t border-slate-700/50 pt-6">
+            <p class="khmer-text text-sm text-slate-400">សូមត្រួតពិនិត្យមុនពេលរក្សាទុក</p>
             <div class="flex gap-3">
                 <Button type="button" @click="handleCancel" variant="outline"
-                    class="khmer-text flex items-center gap-2 rounded-lg border-2 border-gray-300 bg-white px-6 py-2.5 font-medium text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-400 hover:bg-gray-50 active:scale-[0.98]">
+                    class="khmer-text flex items-center gap-2 rounded-lg border-2 border-gray-600 bg-transparent px-6 py-2.5 font-medium text-slate-200 shadow-sm transition-all duration-200 hover:border-blue-400 hover:bg-blue-500/10 active:scale-[0.98]">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <span>បោះបង់</span>
                 </Button>
                 <Button type="submit" :disabled="form.processing"
-                    class="khmer-text relative overflow-hidden rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 px-8 py-2.5 font-semibold text-white shadow-lg transition-all duration-200 hover:from-gray-800 hover:to-gray-700 hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60">
+                    class="khmer-text relative overflow-hidden rounded-lg bg-purple-600/80 px-8 py-2.5 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all duration-200 hover:bg-purple-500 hover:shadow-xl hover:shadow-purple-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60">
                     <span v-if="form.processing" class="flex items-center gap-2">
                         <svg class="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">

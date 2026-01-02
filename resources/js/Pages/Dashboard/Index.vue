@@ -4,10 +4,10 @@
         <!-- Welcome Section -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="khmer-text text-3xl font-bold text-gray-800">ស្វាគមន៍មកកាន់ផ្ទាំងគ្រប់គ្រង</h1>
-                <p class="mt-1 text-sm text-gray-500">Overview of your store performance</p>
+                <h1 class="khmer-text text-3xl font-bold text-white">ស្វាគមន៍មកកាន់ផ្ទាំងគ្រប់គ្រង</h1>
+                <p class="mt-1 text-sm text-gray-400">Overview of your store performance</p>
             </div>
-            <div class="text-sm text-gray-500">
+            <div class="text-sm text-gray-400">
                 {{ currentDate }}
             </div>
         </div>
@@ -16,72 +16,68 @@
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <!-- Users Card -->
             <div
-                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                class="group relative overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-blue-500/30 p-6 text-white shadow-lg shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/20 hover:border-blue-500/50">
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
-                        <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
-                            <Users class="h-8 w-8" />
+                        <div class="rounded-xl bg-blue-500/20 p-3 backdrop-blur-sm border border-blue-500/30">
+                            <Users class="h-8 w-8 text-blue-400" />
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <h3 class="khmer-text text-sm font-medium opacity-90">អ្នកប្រើប្រាស់</h3>
-                        <p class="text-4xl font-bold">{{ stats.users }}</p>
+                        <h3 class="khmer-text text-sm font-medium text-gray-300">អ្នកប្រើប្រាស់</h3>
+                        <p class="text-4xl font-bold text-blue-400">{{ stats.users }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Products Card -->
             <div
-                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                class="group relative overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-emerald-500/30 p-6 text-white shadow-lg shadow-emerald-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-500/20 hover:border-emerald-500/50">
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
-                        <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
-                            <Package class="h-8 w-8" />
+                        <div class="rounded-xl bg-emerald-500/20 p-3 backdrop-blur-sm border border-emerald-500/30">
+                            <Package class="h-8 w-8 text-emerald-400" />
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <h3 class="khmer-text text-sm font-medium opacity-90">ផលិតផលសរុប</h3>
-                        <p class="text-4xl font-bold">{{ stats.products }}</p>
+                        <h3 class="khmer-text text-sm font-medium text-gray-300">ផលិតផលសរុប</h3>
+                        <p class="text-4xl font-bold text-emerald-400">{{ stats.products }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Orders Card -->
             <div
-                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                class="group relative overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-purple-500/30 p-6 text-white shadow-lg shadow-purple-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-500/20 hover:border-purple-500/50">
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
-                        <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
-                            <ShoppingBag class="h-8 w-8" />
+                        <div class="rounded-xl bg-purple-500/20 p-3 backdrop-blur-sm border border-purple-500/30">
+                            <ShoppingBag class="h-8 w-8 text-purple-400" />
                         </div>
                         <span v-if="stats.pendingOrders > 0"
                             class="rounded-full bg-red-500 px-2 py-1 text-xs font-bold">{{ stats.pendingOrders
                             }}</span>
                     </div>
                     <div class="space-y-1">
-                        <h3 class="khmer-text text-sm font-medium opacity-90">ការបញ្ជាទិញសរុប</h3>
-                        <p class="text-4xl font-bold">{{ stats.totalOrders }}</p>
+                        <h3 class="khmer-text text-sm font-medium text-gray-300">ការបញ្ជាទិញសរុប</h3>
+                        <p class="text-4xl font-bold text-purple-400">{{ stats.totalOrders }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Revenue Card -->
             <div
-                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl"></div>
+                class="group relative overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-amber-500/30 p-6 text-white shadow-lg shadow-amber-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-500/20 hover:border-amber-500/50">
                 <div class="relative">
                     <div class="mb-4 flex items-start justify-between">
-                        <div class="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
-                            <DollarSign class="h-8 w-8" />
+                        <div class="rounded-xl bg-amber-500/20 p-3 backdrop-blur-sm border border-amber-500/30">
+                            <DollarSign class="h-8 w-8 text-amber-400" />
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <h3 class="khmer-text text-sm font-medium opacity-90">ប្រាក់ចំណូលសរុប</h3>
-                        <p class="text-4xl font-bold">${{ formatNumber(stats.totalRevenue) }}</p>
-                        <p class="text-xs opacity-75">This month: ${{ formatNumber(stats.monthlyRevenue) }}</p>
+                        <h3 class="khmer-text text-sm font-medium text-gray-300">ប្រាក់ចំណូលសរុប</h3>
+                        <p class="text-4xl font-bold text-amber-400">${{ formatNumber(stats.totalRevenue) }}</p>
+                        <p class="text-xs text-gray-400">This month: ${{ formatNumber(stats.monthlyRevenue) }}</p>
                     </div>
                 </div>
             </div>
@@ -90,10 +86,10 @@
         <!-- Charts Section -->
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <!-- Sales Trend Chart -->
-            <div class="rounded-2xl bg-white p-6 shadow-lg">
+            <div class="rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 p-6 shadow-lg shadow-slate-900/50">
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Sales Trend (Last 7 Days)</h2>
-                    <TrendingUp class="h-5 w-5 text-green-500" />
+                    <h2 class="text-lg font-semibold text-white">Sales Trend (Last 7 Days)</h2>
+                    <TrendingUp class="h-5 w-5 text-green-400" />
                 </div>
                 <div class="h-80">
                     <Line :data="salesTrendData" :options="salesTrendOptions" />
@@ -101,10 +97,10 @@
             </div>
 
             <!-- Orders by Status Pie Chart -->
-            <div class="rounded-2xl bg-white p-6 shadow-lg">
+            <div class="rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 p-6 shadow-lg shadow-slate-900/50">
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Orders by Status</h2>
-                    <PieChartIcon class="h-5 w-5 text-purple-500" />
+                    <h2 class="text-lg font-semibold text-white">Orders by Status</h2>
+                    <PieChartIcon class="h-5 w-5 text-purple-400" />
                 </div>
                 <div class="h-80">
                     <Pie :data="ordersByStatusData" :options="pieChartOptions" />
@@ -112,10 +108,10 @@
             </div>
 
             <!-- Top Products Bar Chart -->
-            <div class="rounded-2xl bg-white p-6 shadow-lg">
+            <div class="rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 p-6 shadow-lg shadow-slate-900/50">
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Top Products (Last 30 Days)</h2>
-                    <BarChart3 class="h-5 w-5 text-emerald-500" />
+                    <h2 class="text-lg font-semibold text-white">Top Products (Last 30 Days)</h2>
+                    <BarChart3 class="h-5 w-5 text-emerald-400" />
                 </div>
                 <div class="h-80">
                     <Bar :data="topProductsData" :options="barChartOptions" />
@@ -123,10 +119,10 @@
             </div>
 
             <!-- Payment Status Donut Chart -->
-            <div class="rounded-2xl bg-white p-6 shadow-lg">
+            <div class="rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 p-6 shadow-lg shadow-slate-900/50">
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Payment Status</h2>
-                    <CreditCard class="h-5 w-5 text-blue-500" />
+                    <h2 class="text-lg font-semibold text-white">Payment Status</h2>
+                    <CreditCard class="h-5 w-5 text-blue-400" />
                 </div>
                 <div class="h-80">
                     <Doughnut :data="paymentStatusData" :options="doughnutChartOptions" />
@@ -135,19 +131,19 @@
         </div>
 
         <!-- Recent Orders Table -->
-        <div class="rounded-2xl bg-white p-6 shadow-lg">
+        <div class="rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 p-6 shadow-lg shadow-slate-900/50">
             <div class="mb-4 flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-900">Recent Orders</h2>
+                <h2 class="text-lg font-semibold text-white">Recent Orders</h2>
                 <Link :href="route('dashboard.orders.index')"
-                    class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    class="text-sm text-purple-400 hover:text-purple-300 font-medium">
                     View All →
                 </Link>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="border-b border-gray-200">
-                        <tr class="text-left text-sm text-gray-500">
+                    <thead class="border-b border-slate-700/50">
+                        <tr class="text-left text-sm text-gray-400">
                             <th class="pb-3 font-medium">Order Number</th>
                             <th class="pb-3 font-medium">Customer</th>
                             <th class="pb-3 font-medium">Amount</th>
@@ -158,15 +154,15 @@
                     </thead>
                     <tbody>
                         <tr v-for="order in recentOrders" :key="order.id"
-                            class="border-b border-gray-100 text-sm hover:bg-gray-50 transition-colors">
+                            class="border-b border-slate-700/30 text-sm hover:bg-slate-700/30 transition-colors">
                             <td class="py-4">
                                 <Link :href="`/dashboard/orders/${order.id}`"
-                                    class="font-semibold text-blue-600 hover:text-blue-700">
+                                    class="font-semibold text-purple-400 hover:text-purple-300">
                                     {{ order.order_number }}
                                 </Link>
                             </td>
-                            <td class="py-4 text-gray-900">{{ order.customer }}</td>
-                            <td class="py-4 font-semibold text-gray-900">${{ parseFloat(order.total).toFixed(2) }}</td>
+                            <td class="py-4 text-gray-300">{{ order.customer }}</td>
+                            <td class="py-4 font-semibold text-gray-200">${{ parseFloat(order.total).toFixed(2) }}</td>
                             <td class="py-4">
                                 <span :class="getStatusBadgeClass(order.status)">
                                     {{ order.status }}
@@ -177,10 +173,10 @@
                                     {{ order.payment_status }}
                                 </span>
                             </td>
-                            <td class="py-4 text-gray-600">{{ order.created_at }}</td>
+                            <td class="py-4 text-gray-400">{{ order.created_at }}</td>
                         </tr>
                         <tr v-if="recentOrders.length === 0">
-                            <td colspan="6" class="py-8 text-center text-gray-500">
+                            <td colspan="6" class="py-8 text-center text-gray-400">
                                 No recent orders
                             </td>
                         </tr>

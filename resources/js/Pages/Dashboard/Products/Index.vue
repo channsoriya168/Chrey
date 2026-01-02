@@ -9,7 +9,7 @@
             <DashboardBreadcrumb
                 :items="[{ label: 'ផ្ទាំងគ្រប់គ្រង', href: route('dashboard.index') }, { label: 'ផលិតផល' }]" />
             <Button @click="createCallback"
-                class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-white transition-colors hover:bg-gray-800">
+                class="inline-flex items-center gap-2 rounded-lg bg-purple-600/80 border border-purple-500/30 px-4 py-2.5 text-white transition-colors hover:bg-purple-600 shadow-lg shadow-purple-500/20">
                 <Plus class="h-4 w-4" />
                 <span class="khmer-text">បង្កើត</span>
             </Button>
@@ -18,12 +18,12 @@
         <!-- Table Card -->
         <div class="overflow-hidden">
             <!-- Search Section -->
-            <div class="flex items-center justify-end border-b border-gray-200 py-4">
+            <div class="flex items-center justify-end border-b border-slate-700/50 py-4">
                 <div class="relative w-full sm:w-96">
                     <Search
                         class="pointer-events-none absolute top-1/2 left-3 z-10 h-5 w-5 -translate-y-1/2 text-gray-400" />
                     <input type="text" id="search" v-model="filter.search" placeholder="ស្វែងរកផលិតផល"
-                        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pr-4 pl-10 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 focus:outline-none" />
+                        class="w-full rounded-lg border border-slate-600 bg-slate-700/50 py-2.5 pr-4 pl-10 text-sm text-gray-200 placeholder-gray-400 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none" />
                 </div>
             </div>
 
@@ -36,11 +36,11 @@
                 <template #cell-image_url="{ item }">
                     <div class="flex-shrink-0">
                         <div v-if="item.image_url && item.image_url.length > 0"
-                            class="h-20 w-20 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+                            class="h-20 w-20 overflow-hidden rounded-lg border border-slate-600 bg-slate-700 shadow-sm">
                             <img :src="`${item.image_url[0]}`" :alt="item.name" class="h-full w-full object-cover" />
                         </div>
                         <div v-else
-                            class="flex h-20 w-20 items-center justify-center rounded-lg border border-gray-200 bg-gray-50">
+                            class="flex h-20 w-20 items-center justify-center rounded-lg border border-slate-600 bg-slate-700">
                             <ImageIcon class="h-5 w-5 text-gray-400" />
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                 <!-- Custom Cell: Product -->
                 <template #cell-name="{ item }">
                     <div class="flex flex-col gap-0.5">
-                        <span class="text-sm font-medium text-gray-900">{{ item.name }}</span>
+                        <span class="text-sm font-medium text-gray-200">{{ item.name }}</span>
                     </div>
                 </template>
 
@@ -58,10 +58,10 @@
                     <div class="flex flex-col gap-1">
                         <div v-if="item.discount_price_percent && item.discount_price_percent > 0"
                             class="flex items-center gap-1.5">
-                            <span class="text-sm font-semibold text-green-600">${{ item.discount_price }}</span>
+                            <span class="text-sm font-semibold text-green-400">${{ item.discount_price }}</span>
                             <span class="text-xs text-gray-400 line-through">${{ item.price }}</span>
                         </div>
-                        <span v-else class="text-sm font-semibold text-gray-900">${{ item.price }}</span>
+                        <span v-else class="text-sm font-semibold text-gray-200">${{ item.price }}</span>
                     </div>
                 </template>
                 <!-- Custom Cell: Discount Percentage -->
@@ -91,10 +91,10 @@
                 <!-- Empty State Slot -->
                 <template #empty>
                     <div class="flex flex-col items-center justify-center py-12">
-                        <div class="mb-4 rounded-full bg-gray-100 p-6">
+                        <div class="mb-4 rounded-full bg-slate-700 p-6">
                             <Package class="h-12 w-12 text-gray-400" />
                         </div>
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">No products found</h3>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-300">No products found</h3>
                     </div>
                 </template>
             </DataTable>

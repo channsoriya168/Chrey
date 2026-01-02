@@ -1,9 +1,9 @@
 <template>
-    <div class="min-h-screen bg-gray-50">
+    <div class="min-h-screen bg-slate-900">
         <DashboardMenu v-model="drawer" :rail="rail" />
         <DashboardAppBar @toggle-drawer="toggleDrawer" :drawer="drawer" :rail="rail" />
         <main
-            class="min-h-screen bg-gray-50 pt-[57px] transition-all duration-300"
+            class="min-h-screen bg-slate-900 pt-[57px] transition-all duration-300"
             :class="{ 'ml-64': drawer && !rail, 'ml-16': rail, 'ml-0': !drawer }"
         >
             <div class="px-6 py-6">

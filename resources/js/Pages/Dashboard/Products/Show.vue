@@ -24,15 +24,15 @@
         </div>
 
         <!-- Product Details Card -->
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div class="overflow-hidden rounded-xl border border-slate-700/50 bg-slate-800/80 backdrop-blur-sm shadow-lg shadow-slate-900/50">
             <!-- Product Images -->
             <div
                 v-if="product.image_url && product.image_url.length > 0"
-                class="border-b border-gray-200 bg-gray-50 p-8"
+                class="border-b border-slate-700/50 bg-slate-900/50 p-8"
             >
                 <div class="mx-auto max-w-4xl">
                     <!-- Main Image -->
-                    <div class="mb-4 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+                    <div class="mb-4 overflow-hidden rounded-lg border border-slate-600 bg-slate-700 shadow-sm">
                         <img
                             :src="`/storage/${product.image_url[selectedImageIndex]}`"
                             :alt="product.name"
@@ -49,8 +49,8 @@
                             :class="[
                                 'h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all',
                                 selectedImageIndex === index
-                                    ? 'border-gray-900 ring-2 ring-gray-900 ring-offset-2'
-                                    : 'border-gray-200 hover:border-gray-400'
+                                    ? 'border-purple-500 ring-2 ring-purple-500 ring-offset-2 ring-offset-slate-900'
+                                    : 'border-slate-600 hover:border-purple-400'
                             ]"
                         >
                             <img
@@ -62,13 +62,13 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="border-b border-gray-200 bg-gray-50 p-8">
+            <div v-else class="border-b border-slate-700/50 bg-slate-900/50 p-8">
                 <div
-                    class="mx-auto flex h-96 max-w-4xl items-center justify-center rounded-lg border border-gray-200 bg-white"
+                    class="mx-auto flex h-96 max-w-4xl items-center justify-center rounded-lg border border-slate-600 bg-slate-700"
                 >
                     <div class="text-center">
                         <ImageIcon class="mx-auto mb-3 h-16 w-16 text-gray-400" />
-                        <p class="text-sm text-gray-500">No image available</p>
+                        <p class="text-sm text-gray-400">No image available</p>
                     </div>
                 </div>
             </div>
@@ -78,38 +78,38 @@
                 <div class="mx-auto max-w-4xl space-y-8">
                     <!-- Basic Information -->
                     <div>
-                        <h2 class="mb-6 text-2xl font-bold text-gray-900">{{ product.name }}</h2>
+                        <h2 class="mb-6 text-2xl font-bold text-white">{{ product.name }}</h2>
 
                         <div class="grid gap-6 sm:grid-cols-2">
                             <!-- Product Code -->
                             <div>
-                                <label class="mb-2 block text-sm font-medium text-gray-500">លេខកូដផលិតផល</label>
-                                <p class="text-base font-medium text-gray-900">{{ product.code }}</p>
+                                <label class="mb-2 block text-sm font-medium text-gray-400">លេខកូដផលិតផល</label>
+                                <p class="text-base font-medium text-gray-200">{{ product.code }}</p>
                             </div>
 
                             <!-- Size -->
                             <div>
-                                <label class="mb-2 block text-sm font-medium text-gray-500">ទំហំ</label>
-                                <p class="text-base font-medium text-gray-900">{{ product.size }}</p>
+                                <label class="mb-2 block text-sm font-medium text-gray-400">ទំហំ</label>
+                                <p class="text-base font-medium text-gray-200">{{ product.size }}</p>
                             </div>
 
                             <!-- Price -->
                             <div>
-                                <label class="mb-2 block text-sm font-medium text-gray-500">តម្លៃ</label>
+                                <label class="mb-2 block text-sm font-medium text-gray-400">តម្លៃ</label>
                                 <div class="flex items-center gap-2">
-                                    <p v-if="product.discount_price" class="text-xl font-bold text-green-600">
+                                    <p v-if="product.discount_price" class="text-xl font-bold text-green-400">
                                         ${{ product.discount_price }}
                                     </p>
                                     <p
                                         :class="[
                                             'text-xl font-bold',
-                                            product.discount_price ? 'text-gray-400 line-through' : 'text-gray-900'
+                                            product.discount_price ? 'text-gray-500 line-through' : 'text-gray-200'
                                         ]"
                                     >
                                         ${{ product.price }}
                                     </p>
                                 </div>
-                                <p v-if="product.discount_price_percent" class="mt-1 text-sm text-green-600">
+                                <p v-if="product.discount_price_percent" class="mt-1 text-sm text-green-400">
                                     Save {{ product.discount_price_percent }}% (${{
                                         (product.price - product.discount_price).toFixed(2)
                                     }})
@@ -118,7 +118,7 @@
 
                             <!-- Stock -->
                             <div>
-                                <label class="mb-2 block text-sm font-medium text-gray-500">ចំនួនស្តុក</label>
+                                <label class="mb-2 block text-sm font-medium text-gray-400">ចំនួនស្តុក</label>
                                 <div class="flex items-center gap-2">
                                     <span
                                         :class="[
@@ -132,34 +132,34 @@
                                     >
                                         {{ product.stock }} units
                                     </span>
-                                    <span v-if="product.stock === 0" class="text-sm font-medium text-red-600">
+                                    <span v-if="product.stock === 0" class="text-sm font-medium text-red-400">
                                         Out of stock
                                     </span>
-                                    <span v-else-if="product.stock <= 50" class="text-sm font-medium text-yellow-600">
+                                    <span v-else-if="product.stock <= 50" class="text-sm font-medium text-yellow-400">
                                         Low stock
                                     </span>
-                                    <span v-else class="text-sm font-medium text-green-600"> In stock </span>
+                                    <span v-else class="text-sm font-medium text-green-400"> In stock </span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Description -->
-                    <div v-if="product.description" class="border-t border-gray-200 pt-6">
-                        <label class="mb-2 block text-sm font-medium text-gray-500">ការពិពណ៌នា</label>
-                        <p class="text-base whitespace-pre-line text-gray-700">{{ product.description }}</p>
+                    <div v-if="product.description" class="border-t border-slate-700/50 pt-6">
+                        <label class="mb-2 block text-sm font-medium text-gray-400">ការពិពណ៌នា</label>
+                        <p class="text-base whitespace-pre-line text-gray-300">{{ product.description }}</p>
                     </div>
 
                     <!-- Metadata -->
-                    <div class="border-t border-gray-200 pt-6">
+                    <div class="border-t border-slate-700/50 pt-6">
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
-                                <label class="mb-1 block text-xs font-medium text-gray-500">Created At</label>
-                                <p class="text-sm text-gray-900">{{ formatDate(product.created_at) }}</p>
+                                <label class="mb-1 block text-xs font-medium text-gray-400">Created At</label>
+                                <p class="text-sm text-gray-200">{{ formatDate(product.created_at) }}</p>
                             </div>
                             <div>
-                                <label class="mb-1 block text-xs font-medium text-gray-500">Last Updated</label>
-                                <p class="text-sm text-gray-900">{{ formatDate(product.updated_at) }}</p>
+                                <label class="mb-1 block text-xs font-medium text-gray-400">Last Updated</label>
+                                <p class="text-sm text-gray-200">{{ formatDate(product.updated_at) }}</p>
                             </div>
                         </div>
                     </div>

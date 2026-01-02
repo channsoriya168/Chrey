@@ -4,7 +4,7 @@
 
     <!-- Navigation drawer -->
     <nav :class="cn(
-        'fixed top-0 left-0 z-50 flex h-full flex-col border-r border-gray-200 bg-white transition-all duration-300',
+        'fixed top-0 left-0 z-50 flex h-full flex-col border-r border-slate-700/50 bg-slate-800/90 backdrop-blur-sm transition-all duration-300',
         {
             'translate-x-0': drawer,
             '-translate-x-full': !drawer && mobile,
@@ -12,17 +12,17 @@
             'w-16': rail && !mobile
         }
     )
-        " class="shadow-sm">
+        " class="shadow-lg shadow-slate-900/50">
         <!-- Header section with logo/title -->
-        <div :class="cn('flex items-center border-b border-gray-200 p-4', { 'justify-center': rail && !mobile })">
-            <div :class="cn('flex h-10 w-10 items-center justify-center rounded-lg bg-amber-800', {
+        <div :class="cn('flex items-center border-b border-slate-700/50 p-4', { 'justify-center': rail && !mobile })">
+            <div :class="cn('flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600/80 border border-purple-500/30', {
                 'mr-0': rail && !mobile,
                 'mr-3': !rail || mobile
             })
                 ">
                 <GraduationCap class="h-5 w-5 text-white" />
             </div>
-            <div v-if="!rail || mobile" class="khmer-text text-lg font-bold text-amber-800">ជ្រៃ</div>
+            <div v-if="!rail || mobile" class="khmer-text text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">ជ្រៃ</div>
         </div>
 
         <!-- Main Navigation -->
@@ -31,8 +31,8 @@
                 <button @click="navigateCallback('dashboard.index')" :class="cn(
                     'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                     {
-                        'bg-amber-800 text-white': isActive('dashboard'),
-                        'text-gray-700 hover:bg-gray-100': !isActive('dashboard'),
+                        'bg-purple-600/80 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20': isActive('dashboard'),
+                        'text-gray-300 hover:bg-slate-700/50': !isActive('dashboard'),
                         'justify-center px-0': rail && !mobile
                     }
                 )
@@ -45,8 +45,8 @@
                 <button @click="navigateCallback('dashboard.products.index')" :class="cn(
                     'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                     {
-                        'bg-amber-800 text-white': isActive('products'),
-                        'text-gray-700 hover:bg-gray-100': !isActive('products'),
+                        'bg-purple-600/80 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20': isActive('products'),
+                        'text-gray-300 hover:bg-slate-700/50': !isActive('products'),
                         'justify-center px-0': rail && !mobile
                     }
                 )
@@ -58,8 +58,8 @@
                 <button @click="navigateCallback('dashboard.orders.index')" :class="cn(
                     'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                     {
-                        'bg-amber-800 text-white': isActive('orders'),
-                        'text-gray-700 hover:bg-gray-100': !isActive('orders'),
+                        'bg-purple-600/80 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20': isActive('orders'),
+                        'text-gray-300 hover:bg-slate-700/50': !isActive('orders'),
                         'justify-center px-0': rail && !mobile
                     }
                 )
@@ -71,8 +71,8 @@
                 <button @click="navigateCallback('dashboard.users.index')" :class="cn(
                     'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                     {
-                        'bg-amber-800 text-white': isActive('users'),
-                        'text-gray-700 hover:bg-gray-100': !isActive('users'),
+                        'bg-purple-600/80 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20': isActive('users'),
+                        'text-gray-300 hover:bg-slate-700/50': !isActive('users'),
                         'justify-center px-0': rail && !mobile
                     }
                 )
@@ -84,8 +84,8 @@
                 <button @click="navigateCallback('dashboard.roles.index')" :class="cn(
                     'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                     {
-                        'bg-amber-800 text-white': isActive('roles'),
-                        'text-gray-700 hover:bg-gray-100': !isActive('roles'),
+                        'bg-purple-600/80 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20': isActive('roles'),
+                        'text-gray-300 hover:bg-slate-700/50': !isActive('roles'),
                         'justify-center px-0': rail && !mobile
                     }
                 )

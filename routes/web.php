@@ -26,11 +26,12 @@ Route::get('login', [AuthController::class, 'login'])
 Route::post('login', [AuthController::class, 'storeLogin'])
     ->name('login.store');
 
+// Cart routes (accessible to guests)
+Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+Route::resource('cart', CartController::class)->only(['store', 'update', 'destroy']);
+Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
+
 Route::middleware('auth')->group(function () {
-    // checkout
-    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
-    Route::resource('cart', CartController::class)->only(['store', 'update', 'destroy']);
-    Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
 
     // Orders
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');

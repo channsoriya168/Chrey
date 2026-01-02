@@ -17,26 +17,26 @@
         <!-- Table Card -->
         <div class="overflow-hidden">
             <!-- Search Section -->
-            <div class="flex items-center justify-between border-b border-gray-200 py-4">
+            <div class="flex items-center justify-between border-b border-slate-700/50 py-4">
                 <div class="flex items-center gap-4">
                     <!-- Status Filter -->
                     <select v-model="filter.status"
-                        class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 transition-colors focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 focus:outline-none">
-                        <option :value="null">ស្ថានភាពទាំងអស់</option>
-                        <option value="pending">កំពុងរង់ចាំ</option>
-                        <option value="processing">កំពុងដំណើរការ</option>
-                        <option value="shipped">កំពុងដឹកជញ្ជូន</option>
-                        <option value="completed">បានបញ្ចប់</option>
-                        <option value="cancelled">បានលុបចោល</option>
+                        class="rounded-lg border border-slate-600 bg-slate-800/80 px-4 py-2.5 text-sm text-gray-200 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none">
+                        <option :value="null" class="bg-slate-800 text-gray-200">ស្ថានភាពទាំងអស់</option>
+                        <option value="pending" class="bg-slate-800 text-gray-200">កំពុងរង់ចាំ</option>
+                        <option value="processing" class="bg-slate-800 text-gray-200">កំពុងដំណើរការ</option>
+                        <option value="shipped" class="bg-slate-800 text-gray-200">កំពុងដឹកជញ្ជូន</option>
+                        <option value="completed" class="bg-slate-800 text-gray-200">បានបញ្ចប់</option>
+                        <option value="cancelled" class="bg-slate-800 text-gray-200">បានលុបចោល</option>
                     </select>
 
                     <!-- Payment Status Filter -->
                     <select v-model="filter.payment_status"
-                        class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 transition-colors focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 focus:outline-none">
-                        <option :value="null">ស្ថានភាពទូទាត់ទាំងអស់</option>
-                        <option value="pending">រង់ចាំទូទាត់</option>
-                        <option value="paid">បានទូទាត់</option>
-                        <option value="failed">បរាជ័យ</option>
+                        class="rounded-lg border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-gray-200 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none">
+                        <option :value="null" class="bg-slate-800 text-gray-200">ស្ថានភាពទូទាត់ទាំងអស់</option>
+                        <option value="pending" class="bg-slate-800 text-gray-200">រង់ចាំទូទាត់</option>
+                        <option value="paid" class="bg-slate-800 text-gray-200">បានទូទាត់</option>
+                        <option value="failed" class="bg-slate-800 text-gray-200">បរាជ័យ</option>
                     </select>
                 </div>
 
@@ -44,7 +44,7 @@
                     <Search
                         class="pointer-events-none absolute top-1/2 left-3 z-10 h-5 w-5 -translate-y-1/2 text-gray-400" />
                     <input type="text" id="search" v-model="filter.search" placeholder="ស្វែងរកលេខបញ្ជាទិញ ឬអតិថិជន"
-                        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pr-4 pl-10 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 focus:outline-none" />
+                        class="w-full rounded-lg border border-slate-600 bg-slate-700/50 py-2.5 pr-4 pl-10 text-sm text-gray-200 placeholder-gray-400 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none" />
                 </div>
             </div>
 
@@ -54,25 +54,26 @@
                 @per-page-change="handlePerPageChange" @view="viewCallback" @delete="deleteCallback">
                 <!-- Custom Cell: Order Number -->
                 <template #cell-order_number="{ item }">
-                    <span class="text-sm font-semibold text-gray-900">{{ item.order_number }}</span>
+                    <span class="text-sm font-semibold text-gray-200">{{ item.order_number }}</span>
                 </template>
 
                 <!-- Custom Cell: User -->
                 <template #cell-user="{ item }">
                     <div class="flex flex-col gap-0.5">
-                        <span class="text-sm font-medium text-gray-900">{{ item.user?.name }}</span>
-                        <span class="text-xs text-gray-500">{{ item.user?.email }}</span>
+                        <span class="text-sm font-medium text-gray-200">{{ item.user?.name }}</span>
+                        <span class="text-xs text-gray-400">{{ item.user?.email }}</span>
                     </div>
                 </template>
 
                 <!-- Custom Cell: Items Count -->
                 <template #cell-items_count="{ item }">
-                    <span class="text-sm text-gray-900">{{ item.items_count }} items</span>
+                    <span class="text-sm text-gray-200">{{ item.items_count }} items</span>
                 </template>
 
                 <!-- Custom Cell: Total -->
                 <template #cell-total_amount="{ item }">
-                    <span class="text-sm font-semibold text-gray-900">${{ parseFloat(item.total_amount || 0).toFixed(2) }}</span>
+                    <span class="text-sm font-semibold text-gray-200">${{ parseFloat(item.total_amount || 0).toFixed(2)
+                    }}</span>
                 </template>
 
                 <!-- Custom Cell: Status -->
@@ -109,17 +110,17 @@
 
                 <!-- Custom Cell: Created At -->
                 <template #cell-created_at="{ item }">
-                    <span class="text-sm text-gray-600">{{ formatDate(item.created_at) }}</span>
+                    <span class="text-sm text-gray-300">{{ formatDate(item.created_at) }}</span>
                 </template>
 
                 <!-- Empty State Slot -->
                 <template #empty>
                     <div class="flex flex-col items-center justify-center py-12">
-                        <div class="mb-4 rounded-full bg-gray-100 p-6">
+                        <div class="mb-4 rounded-full bg-slate-700 p-6">
                             <ShoppingBag class="h-12 w-12 text-gray-400" />
                         </div>
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">គ្មានការបញ្ជាទិញទេ</h3>
-                        <p class="text-sm text-gray-500">រកមិនឃើញការបញ្ជាទិញណាមួយទេ។</p>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-200">គ្មានការបញ្ជាទិញទេ</h3>
+                        <p class="text-sm text-gray-400">រកមិនឃើញការបញ្ជាទិញណាមួយទេ។</p>
                     </div>
                 </template>
             </DataTable>

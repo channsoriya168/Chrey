@@ -261,11 +261,6 @@
 
     // Fetch cart count
     const fetchCartCount = async () => {
-        if (!authUser.value) {
-            cartCount.value = 0
-            return
-        }
-
         try {
             const response = await fetch('/api/cart/items')
             const data = await response.json()

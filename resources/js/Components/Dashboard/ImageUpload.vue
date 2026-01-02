@@ -69,7 +69,7 @@
             </div>
             <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200">
                 <div
-                    class="h-2 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 transition-all duration-300 ease-out"
+                    class="h-2 rounded-full bg-indigo-600 transition-all duration-300 ease-out"
                     :style="{ width: progress.percentage + '%' }"
                 ></div>
             </div>

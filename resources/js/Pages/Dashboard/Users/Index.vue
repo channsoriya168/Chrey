@@ -4,19 +4,13 @@
 
     <div class="space-y-6">
         <!-- Breadcrumb -->
-        <Breadcrumb>
-            <BreadcrumbList>
-                <BreadcrumbItem>
-                    <BreadcrumbLink :href="route('dashboard.index')">
-                        <span class="khmer-text">ទំព័រដើម</span>
-                    </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                    <BreadcrumbPage class="khmer-text">អ្នកប្រើប្រាស់</BreadcrumbPage>
-                </BreadcrumbItem>
-            </BreadcrumbList>
-        </Breadcrumb>
+        <DashboardBreadcrumb :items="[
+            {
+                label: 'ទំពៅរដើម',
+                href: route('dashboard.index')
+            },
+            { label: 'អ្នកប្រើប្រាស់' }
+        ]" />
 
         <!-- Header -->
         <div class="flex items-center justify-between">
@@ -26,7 +20,7 @@
             </div>
             <Link v-if="$page.props.auth.user.permissions.includes('create users')"
                 :href="route('dashboard.users.create')"
-                class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-white transition-colors hover:bg-gray-800">
+                class="inline-flex items-center gap-2 rounded-lg bg-purple-600/80 border border-purple-500/30 px-4 py-2.5 text-white transition-colors hover:bg-purple-600 shadow-lg shadow-purple-500/20">
                 <UserPlus class="h-4 w-4" />
                 <span class="khmer-text">បង្កើតអ្នកប្រើថ្មី</span>
             </Link>
@@ -42,27 +36,28 @@
                 <!-- Custom Cell: Name with Avatar -->
                 <template #cell-name="{ item }">
                     <div class="flex items-center">
-                        <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-900">
+                        <div
+                            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-purple-600/80 border border-purple-500/30">
                             <span class="text-sm font-semibold text-white">
                                 {{ item.name.charAt(0).toUpperCase() }}
                             </span>
                         </div>
                         <div class="ml-3">
-                            <div class="text-sm font-medium text-gray-900">{{ item.name }}</div>
+                            <div class="text-sm font-medium text-gray-200">{{ item.name }}</div>
                         </div>
                     </div>
                 </template>
 
                 <!-- Custom Cell: Email -->
                 <template #cell-email="{ item }">
-                    <div class="text-sm text-gray-700">{{ item.email }}</div>
+                    <div class="text-sm text-gray-300">{{ item.email }}</div>
                 </template>
 
                 <!-- Custom Cell: Roles -->
                 <template #cell-roles="{ item }">
                     <div class="flex flex-wrap gap-1">
                         <span v-for="role in item.roles" :key="role.id"
-                            class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+                            class="inline-flex items-center rounded-md bg-slate-700 px-2.5 py-0.5 text-xs font-medium text-gray-200">
                             {{ role.name }}
                         </span>
                         <span v-if="item.roles.length === 0" class="khmer-text text-xs text-gray-400">
@@ -74,10 +69,10 @@
                 <!-- Empty State -->
                 <template #empty>
                     <div class="flex flex-col items-center justify-center py-12">
-                        <div class="mb-4 rounded-full bg-gray-100 p-6">
+                        <div class="mb-4 rounded-full bg-slate-700 p-6">
                             <Users class="h-12 w-12 text-gray-400" />
                         </div>
-                        <h3 class="khmer-text mb-2 text-lg font-semibold text-gray-900">គ្មានអ្នកប្រើប្រាស់</h3>
+                        <h3 class="khmer-text mb-2 text-lg font-semibold text-gray-200">គ្មានអ្នកប្រើប្រាស់</h3>
                     </div>
                 </template>
 
@@ -105,14 +100,7 @@
 </template>
 
 <script setup>
-    import {
-        Breadcrumb,
-        BreadcrumbItem,
-        BreadcrumbLink,
-        BreadcrumbList,
-        BreadcrumbPage,
-        BreadcrumbSeparator
-    } from '@/Components/ui/breadcrumb'
+    import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
     import DataTable from '@/Components/ui/DataTable.vue'
     import { Head, Link, router } from '@inertiajs/vue3'
     import { Edit, Trash2, UserPlus, Users } from 'lucide-vue-next'

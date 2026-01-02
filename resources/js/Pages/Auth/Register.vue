@@ -47,15 +47,12 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <input v-model="form.name" v-bind="field" id="name" type="text"
+                                        <Input v-model="form.name" v-bind="field" id="name" type="text"
                                             autocomplete="name" placeholder="សូមបញ្ចូលឈ្មោះ" :class="[
-                                                'h-12 w-full rounded-lg border-2 pr-12 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white bg-slate-800/50',
-                                                'placeholder:font-normal placeholder:text-gray-500',
+                                                'h-12 w-full rounded-lg border-2 pr-12 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white bg-transparent',
                                                 errors.length || form.errors.name
-                                                    ? 'border-red-400 shadow-sm shadow-red-500/20 focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
-                                                    : meta.valid && meta.touched
-                                                        ? 'border-emerald-400 shadow-sm shadow-emerald-500/20 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20'
-                                                        : 'border-gray-600 shadow-sm hover:border-pink-400 hover:shadow-md focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20'
+                                                    ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50'
+                                                    : 'border-white focus:border-white focus:ring-2 focus:ring-white/50'
                                             ]" />
                                     </div>
                                     <!-- Error Message -->
@@ -88,15 +85,12 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <input v-model="form.email" v-bind="field" id="email" type="email"
+                                        <Input v-model="form.email" v-bind="field" id="email" type="email"
                                             autocomplete="email" placeholder="សូមបញ្ចូលអ៊ីម៉ែល" :class="[
-                                                'h-12 w-full rounded-lg border-2 pr-12 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white',
-                                                'placeholder:font-normal placeholder:text-gray-500',
+                                                'h-12 w-full rounded-lg border-2 pr-12 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white bg-transparent',
                                                 errors.length || form.errors.email
-                                                    ? 'border-red-400 shadow-sm shadow-red-500/20 focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
-                                                    : meta.valid && meta.touched
-                                                        ? 'border-emerald-400 shadow-sm shadow-emerald-500/20 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20'
-                                                        : 'border-gray-600 shadow-sm hover:border-pink-400 hover:shadow-md focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20'
+                                                    ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50'
+                                                    : 'border-white focus:border-white focus:ring-2 focus:ring-white/50'
                                             ]" />
                                     </div>
                                     <!-- Error Message -->
@@ -129,16 +123,13 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <input v-model="form.password" v-bind="field" id="password"
+                                        <Input v-model="form.password" v-bind="field" id="password"
                                             :type="showPassword ? 'text' : 'password'" autocomplete="new-password"
                                             placeholder="សូមបញ្ជូលពាក្យសម្ងាត់" :class="[
-                                                'h-12 w-full rounded-lg border-2 pr-20 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white',
-                                                'placeholder:font-normal placeholder:text-gray-500',
+                                                'h-12 w-full rounded-lg border-2 pr-20 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white bg-transparent',
                                                 errors.length || form.errors.password
-                                                    ? 'border-red-400 shadow-sm shadow-red-500/20 focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
-                                                    : meta.valid && meta.touched
-                                                        ? 'border-emerald-400 shadow-sm shadow-emerald-500/20 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20'
-                                                        : 'border-gray-600 shadow-sm hover:border-pink-400 hover:shadow-md focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20'
+                                                    ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50'
+                                                    : 'border-white focus:border-white focus:ring-2 focus:ring-white/50'
                                             ]" />
                                         <!-- Toggle Password Button -->
                                         <div class="absolute inset-y-0 right-0 z-10 flex items-center gap-1.5 pr-3">
@@ -206,17 +197,14 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <input v-model="form.password_confirmation" v-bind="field"
+                                        <Input v-model="form.password_confirmation" v-bind="field"
                                             id="password_confirmation"
                                             :type="showPasswordConfirmation ? 'text' : 'password'"
                                             autocomplete="new-password" placeholder="សូមបញ្ជាក់ពាក្យសម្ងាត់" :class="[
-                                                'h-12 w-full rounded-lg border-2 pr-20 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white',
-                                                'placeholder:font-normal placeholder:text-gray-500',
+                                                'h-12 w-full rounded-lg border-2 pr-20 pl-14 text-sm font-medium transition-all duration-300 outline-none text-white bg-transparent',
                                                 errors.length || form.errors.password_confirmation
-                                                    ? 'border-red-400  shadow-sm shadow-red-500/20 focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
-                                                    : meta.valid && meta.touched
-                                                        ? 'border-emerald-400 shadow-sm shadow-emerald-500/20 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20'
-                                                        : 'border-gray-600 shadow-sm hover:border-pink-400 hover:shadow-md focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20'
+                                                    ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50'
+                                                    : 'border-white focus:border-white focus:ring-2 focus:ring-white/50'
                                             ]" />
                                         <!-- Toggle Password Button -->
                                         <div class="absolute inset-y-0 right-0 z-10 flex items-center gap-1.5 pr-3">
@@ -372,6 +360,7 @@
 
 <script setup>
     import FlashMessage from '@/Components/FlashMessage.vue'
+    import { Input } from '@/Components/ui/input'
     import { Label } from '@/Components/ui/label'
     import { Head, Link, useForm } from '@inertiajs/vue3'
     import { ref } from 'vue'
