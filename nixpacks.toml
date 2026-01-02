@@ -1,5 +1,5 @@
-[variables]
-NIXPACKS_NO_LARAVEL_AUTODETECT = '1'
+[providers]
+laravel = false
 
 [phases.setup]
 nixPkgs = ['nodejs_20', 'php83', 'php83Packages.composer', 'bash']
