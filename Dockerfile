@@ -38,5 +38,5 @@ RUN chown -R www-data:www-data /app \
 # Expose port
 EXPOSE 8080
 
-# Start command - run migrations, seeders, then start server
-CMD ["sh", "-c", "echo '=== Starting Application ===' && echo 'DB_CONNECTION:' $DB_CONNECTION && echo 'PORT:' ${PORT:-8080} && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+# Start command - run migrations, seeders, storage link, then start server
+CMD ["sh", "-c", "echo '=== Starting Application ===' && echo 'DB_CONNECTION:' $DB_CONNECTION && echo 'PORT:' ${PORT:-8080} && php artisan storage:link && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]

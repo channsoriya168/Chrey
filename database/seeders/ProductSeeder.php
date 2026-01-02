@@ -24,7 +24,7 @@ class ProductSeeder extends Seeder
                 'stock' => 100,
                 'size' => 'តូច',
                 'image_url' => [
-                    '/products/Espresso.png'
+                    '/storage/products/hot.png'
                 ],
             ],
             [
@@ -37,7 +37,7 @@ class ProductSeeder extends Seeder
                 'stock' => 80,
                 'size' => 'មធ្យម',
                 'image_url' => [
-                    '/products/Latte.png'
+                    '/storage/products/Latte.png'
                 ],
             ],
             [
@@ -50,7 +50,7 @@ class ProductSeeder extends Seeder
                 'stock' => 120,
                 'size' => 'មធ្យម',
                 'image_url' => [
-                    '/products/hot.png'
+                    '/storage/products/hot.png'
                 ],
             ],
             [
@@ -63,7 +63,7 @@ class ProductSeeder extends Seeder
                 'stock' => 90,
                 'size' => 'មធ្យម',
                 'image_url' => [
-                    '/products/hot lata.png'
+                    '/storage/products/hot lata.png'
                 ],
             ],
             [
@@ -76,7 +76,7 @@ class ProductSeeder extends Seeder
                 'stock' => 60,
                 'size' => 'ធំ',
                 'image_url' => [
-                    '/products/01.png'
+                    '/storage/products/01.png'
                 ],
             ],
             [
@@ -89,7 +89,7 @@ class ProductSeeder extends Seeder
                 'stock' => 70,
                 'size' => 'ធំ',
                 'image_url' => [
-                    '/products/02.png'
+                    '/storage/products/02.png'
                 ],
             ],
         ];
