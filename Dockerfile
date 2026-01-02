@@ -39,4 +39,4 @@ RUN chown -R www-data:www-data /app \
 EXPOSE 8080
 
 # Start command - run migrations then start server
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+CMD ["sh", "-c", "echo '=== Starting Application ===' && echo 'DB_CONNECTION:' $DB_CONNECTION && echo 'PORT:' ${PORT:-8080} && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
