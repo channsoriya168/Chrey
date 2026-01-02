@@ -11,6 +11,56 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
     /**
+     * Transfer guest cart to authenticated user
+     */
+    private function transferGuestCartToUser()
+    {
+        if (!auth()->check()) {
+            return;
+        }
+
+        $sessionId = session()->getId();
+        $guestCart = Cart::with(['cartItems'])
+            ->where('session_id', $sessionId)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$guestCart || $guestCart->cartItems->isEmpty()) {
+            return;
+        }
+
+        // Find or create user cart
+        $userCart = Cart::firstOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'status' => 'pending'
+            ]
+        );
+
+        // Transfer/merge cart items
+        foreach ($guestCart->cartItems as $guestItem) {
+            $existingItem = $userCart->cartItems()
+                ->where('product_id', $guestItem->product_id)
+                ->first();
+
+            if ($existingItem) {
+                // Merge quantities
+                $existingItem->update([
+                    'quantity' => $existingItem->quantity + $guestItem->quantity,
+                    'price' => $guestItem->price
+                ]);
+            } else {
+                // Move item to user cart
+                $guestItem->update(['cart_id' => $userCart->id]);
+            }
+        }
+
+        // Delete guest cart
+        $guestCart->cartItems()->delete();
+        $guestCart->delete();
+    }
+
+    /**
      * Display a listing of user orders.
      */
     public function index()
@@ -70,6 +120,9 @@ class OrderController extends Controller
         $request->validate([
             'payment_method' => 'required|in:khqr'
         ]);
+
+        // Transfer guest cart to user if exists
+        $this->transferGuestCartToUser();
 
         $cart = Cart::with(['cartItems.product'])
             ->where('user_id', auth()->id())

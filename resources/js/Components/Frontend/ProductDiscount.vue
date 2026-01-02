@@ -87,7 +87,12 @@
     // Function to get the image URL
     const getImageUrl = (product) => {
         if (product.image_url && Array.isArray(product.image_url) && product.image_url.length > 0) {
-            return product.image_url[0]
+            const imageUrl = product.image_url[0]
+            // If the URL doesn't start with http or /, prepend /storage/
+            if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                return `/storage/${imageUrl}`
+            }
+            return imageUrl
         }
         return '/images/placeholder.png' // Fallback image
     }

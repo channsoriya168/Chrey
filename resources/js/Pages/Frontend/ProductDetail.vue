@@ -262,16 +262,30 @@
     function getProductImages() {
         if (props.product.data.image_url) {
             if (Array.isArray(props.product.data.image_url) && props.product.data.image_url.length > 0) {
-                return props.product.data.image_url.map((path) => path)
+                return props.product.data.image_url.map((path) => {
+                    if (!path.startsWith('http') && !path.startsWith('/')) {
+                        return `/storage/${path}`
+                    }
+                    return path
+                })
             }
             if (typeof props.product.data.image_url === 'string') {
                 try {
                     const parsed = JSON.parse(props.product.data.image_url)
                     if (Array.isArray(parsed) && parsed.length > 0) {
-                        return parsed.map((path) => path)
+                        return parsed.map((path) => {
+                            if (!path.startsWith('http') && !path.startsWith('/')) {
+                                return `/storage/${path}`
+                            }
+                            return path
+                        })
                     }
                 } catch (e) {
-                    return [props.product.image_url]
+                    const imageUrl = props.product.image_url
+                    if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                        return [`/storage/${imageUrl}`]
+                    }
+                    return [imageUrl]
                 }
             }
         }
@@ -296,18 +310,31 @@
         // Check if image_url exists and is an array with items
         if (product.image_url) {
             if (Array.isArray(product.image_url) && product.image_url.length > 0) {
-                return product.image_url[0]
+                const imageUrl = product.image_url[0]
+                // If the URL doesn't start with http or /, prepend /storage/
+                if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                    return `/storage/${imageUrl}`
+                }
+                return imageUrl
             }
             // If it's a string (in case it wasn't properly parsed)
             if (typeof product.image_url === 'string') {
                 try {
                     const parsed = JSON.parse(product.image_url)
                     if (Array.isArray(parsed) && parsed.length > 0) {
-                        return parsed[0]
+                        const imageUrl = parsed[0]
+                        if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                            return `/storage/${imageUrl}`
+                        }
+                        return imageUrl
                     }
                 } catch (e) {
                     // If it's just a plain URL string
-                    return product.image_url
+                    const imageUrl = product.image_url
+                    if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                        return `/storage/${imageUrl}`
+                    }
+                    return imageUrl
                 }
             }
         }

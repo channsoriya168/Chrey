@@ -37,7 +37,7 @@
                                         {{ t('home.hero.slide2.title') }}<br />
                                         <span
                                             class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-pink-400">{{
-                                            t('home.hero.slide2.subtitle') }}</span>
+                                                t('home.hero.slide2.subtitle') }}</span>
                                     </h1>
                                     <p
                                         class="hidden text-sm text-white/90 sm:block sm:text-base md:text-lg drop-shadow-lg">
@@ -235,12 +235,12 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onUnmounted, computed } from 'vue'
-    import { Link, router } from '@inertiajs/vue3'
-    import { useI18n } from 'vue-i18n'
     import firstImage from '@/../images/01.png'
     import secondImage from '@/../images/02.png'
     import ProductDiscount from '@/Components/Frontend/ProductDiscount.vue'
+    import { Link } from '@inertiajs/vue3'
+    import { computed, onMounted, onUnmounted, ref } from 'vue'
+    import { useI18n } from 'vue-i18n'
 
     const { t } = useI18n()
 
@@ -348,18 +348,31 @@
         // Check if image_url exists and is an array with items
         if (product.image_url) {
             if (Array.isArray(product.image_url) && product.image_url.length > 0) {
-                return product.image_url[0]
+                const imageUrl = product.image_url[0]
+                // If the URL doesn't start with http or /, prepend /storage/
+                if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                    return `/storage/${imageUrl}`
+                }
+                return imageUrl
             }
             // If it's a string (in case it wasn't properly parsed)
             if (typeof product.image_url === 'string') {
                 try {
                     const parsed = JSON.parse(product.image_url)
                     if (Array.isArray(parsed) && parsed.length > 0) {
-                        return parsed[0]
+                        const imageUrl = parsed[0]
+                        if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                            return `/storage/${imageUrl}`
+                        }
+                        return imageUrl
                     }
                 } catch (e) {
                     // If it's just a plain URL string
-                    return product.image_url
+                    const imageUrl = product.image_url
+                    if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                        return `/storage/${imageUrl}`
+                    }
+                    return imageUrl
                 }
             }
         }

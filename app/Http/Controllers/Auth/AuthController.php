@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,52 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
+    /**
+     * Transfer guest cart to authenticated user
+     */
+    private function transferGuestCartToUser($oldSessionId = null)
+    {
+        $sessionId = $oldSessionId ?? session()->getId();
+        $guestCart = Cart::with(['cartItems'])
+            ->where('session_id', $sessionId)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$guestCart || $guestCart->cartItems->isEmpty()) {
+            return;
+        }
+
+        // Find or create user cart
+        $userCart = Cart::firstOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'status' => 'pending'
+            ]
+        );
+
+        // Transfer/merge cart items
+        foreach ($guestCart->cartItems as $guestItem) {
+            $existingItem = $userCart->cartItems()
+                ->where('product_id', $guestItem->product_id)
+                ->first();
+
+            if ($existingItem) {
+                // Merge quantities
+                $existingItem->update([
+                    'quantity' => $existingItem->quantity + $guestItem->quantity,
+                    'price' => $guestItem->price
+                ]);
+            } else {
+                // Move item to user cart
+                $guestItem->update(['cart_id' => $userCart->id]);
+            }
+        }
+
+        // Delete guest cart
+        $guestCart->cartItems()->delete();
+        $guestCart->delete();
+    }
+
     // Show login page
     public function login()
     {
@@ -32,6 +79,9 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        // Save old session ID before login
+        $oldSessionId = session()->getId();
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -40,6 +90,9 @@ class AuthController extends Controller
 
         // Log the user in
         Auth::login($user);
+
+        // Transfer guest cart to user using old session ID
+        $this->transferGuestCartToUser($oldSessionId);
 
         return redirect()->route('home')
             ->with('success', 'គណនីបានបង្កើតដោយជោគជ័យ! សូមស្វាគមន៍។');
@@ -53,8 +106,14 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
+        // Save old session ID before login
+        $oldSessionId = session()->getId();
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
+            // Transfer guest cart to user using old session ID
+            $this->transferGuestCartToUser($oldSessionId);
 
             // Get user name
             $userName = auth()->user()->name;

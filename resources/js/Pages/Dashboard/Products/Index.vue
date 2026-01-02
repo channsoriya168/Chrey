@@ -37,7 +37,8 @@
                     <div class="flex-shrink-0">
                         <div v-if="item.image_url && item.image_url.length > 0"
                             class="h-20 w-20 overflow-hidden rounded-lg border border-slate-600 bg-slate-700 shadow-sm">
-                            <img :src="`${item.image_url[0]}`" :alt="item.name" class="h-full w-full object-cover" />
+                            <img :src="getImageUrl(item.image_url[0])" :alt="item.name"
+                                class="h-full w-full object-cover" />
                         </div>
                         <div v-else
                             class="flex h-20 w-20 items-center justify-center rounded-lg border border-slate-600 bg-slate-700">
@@ -245,5 +246,19 @@
                 per_page: perPage
             }
         })
+    }
+
+    /**
+     * Get image URL with storage prefix if needed
+     *
+     * @param {String} imageUrl
+     * @return {String}
+     */
+    const getImageUrl = (imageUrl) => {
+        if (!imageUrl) return ''
+        if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+            return `/storage/${imageUrl}`
+        }
+        return imageUrl
     }
 </script>
