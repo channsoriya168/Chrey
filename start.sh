@@ -16,10 +16,13 @@ if [ -z "$DB_HOST" ]; then
     echo "WARNING: Database variables not set. App may not work properly."
 fi
 
-# Clear any cached config
-echo "Clearing configuration cache..."
+# Clear all caches aggressively
+echo "Clearing all caches..."
 php artisan config:clear || true
 php artisan cache:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
+rm -rf bootstrap/cache/*.php || true
 
 # Generate routes file
 echo "Generating Ziggy routes..."
