@@ -14,5 +14,10 @@ cmds = [
     'php artisan storage:link || true'
 ]
 
+[phases.deploy]
+cmds = [
+    'php artisan migrate --force'
+]
+
 [start]
 cmd = 'bash start.sh'
