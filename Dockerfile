@@ -30,8 +30,12 @@ RUN composer install --optimize-autoloader --no-interaction
 RUN npm install
 RUN npm run build
 
+# Copy startup script
+COPY docker-start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
 # Expose port
 EXPOSE 8080
 
-# Start command - run migrations then start server
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT}"]
+# Start command
+ENTRYPOINT ["/usr/local/bin/start.sh"]
