@@ -5,10 +5,15 @@ echo "==================================="
 echo "Railway Deployment - Starting App"
 echo "==================================="
 
+# Test database connection first
+echo "Testing database connection..."
+php artisan db:show || echo "Warning: Could not show database info"
+
 echo "Environment check:"
 echo "APP_KEY: ${APP_KEY:0:20}..."
 echo "DB_HOST: $DB_HOST"
 echo "DB_DATABASE: $DB_DATABASE"
+echo "DB_USERNAME: $DB_USERNAME"
 echo "PORT: $PORT"
 echo "==================================="
 
@@ -37,21 +42,25 @@ php artisan ziggy:generate || echo "Warning: Ziggy generation failed"
 
 # Run migrations if database is configured
 echo "==================================="
-echo "CHECKING DATABASE AND RUNNING MIGRATIONS"
+echo "RUNNING DATABASE MIGRATIONS"
 echo "==================================="
 if [ -n "$DB_HOST" ]; then
     echo "Database host found: $DB_HOST"
-    echo "Running migrations..."
-    php artisan migrate --force 2>&1 | tee migration.log
-    MIGRATION_EXIT_CODE=${PIPESTATUS[0]}
-    if [ $MIGRATION_EXIT_CODE -ne 0 ]; then
-        echo "ERROR: Migration failed with code $MIGRATION_EXIT_CODE"
-        cat migration.log
+    echo "Attempting migrations..."
+    
+    # Try migration with verbose output
+    php artisan migrate --force --verbose
+    
+    if [ $? -eq 0 ]; then
+        echo "✓ Migrations completed successfully!"
+    else
+        echo "ERROR: Migrations failed!"
+        echo "Trying to show database status..."
+        php artisan migrate:status || true
         exit 1
     fi
-    echo "✓ Migrations completed successfully"
 else
-    echo "ERROR: Database not configured!"
+    echo "ERROR: DB_HOST not set!"
     exit 1
 fi
 echo "==================================="

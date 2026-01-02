@@ -11,9 +11,8 @@ cmds = [
 [phases.build]
 cmds = [
     'npm run build',
-    'php artisan storage:link || true',
-    'chmod +x migrate.sh start.sh'
+    'php artisan storage:link || true'
 ]
 
 [start]
-cmd = 'bash migrate.sh && bash start.sh'
+cmd = 'bash start.sh'
