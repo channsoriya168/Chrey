@@ -11,7 +11,10 @@ cmds = [
 [phases.build]
 cmds = [
     'npm run build',
-    'php artisan storage:link || true'
+    'php artisan storage:link || true',
+    'php artisan config:clear || true',
+    'php artisan route:clear || true',
+    'php artisan view:clear || true'
 ]
 
 [start]
