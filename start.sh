@@ -5,6 +5,9 @@ echo "==================================="
 echo "Railway Deployment - Starting App"
 echo "==================================="
 
+# Force file-based sessions until migrations complete
+export SESSION_DRIVER=file
+
 # Check if required env vars are set
 if [ -z "$APP_KEY" ]; then
     echo "ERROR: APP_KEY is not set!"
@@ -23,6 +26,10 @@ php artisan cache:clear || true
 php artisan route:clear || true
 php artisan view:clear || true
 rm -rf bootstrap/cache/*.php || true
+
+# Force SESSION_DRIVER to file (override any cached config)
+export SESSION_DRIVER=file
+echo "Forced SESSION_DRIVER=file"
 
 # Generate routes file
 echo "Generating Ziggy routes..."
@@ -44,5 +51,6 @@ fi
 
 # Start the server
 echo "Starting PHP server on 0.0.0.0:${PORT}..."
+echo "SESSION_DRIVER is set to: $SESSION_DRIVER"
 echo "==================================="
 exec php artisan serve --host=0.0.0.0 --port="${PORT}"
