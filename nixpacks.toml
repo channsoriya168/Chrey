@@ -20,4 +20,4 @@ cmds = [
 ]
 
 [start]
-cmd = 'bash start.sh'
+cmd = 'SESSION_DRIVER=file bash start.sh'
