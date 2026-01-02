@@ -95,7 +95,12 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-            Product::create($product);
+
+            // Use updateOrCreate to avoid duplicates (based on unique code)
+            Product::updateOrCreate(
+                ['code' => $product['code']],
+                $product
+            );
         }
     }
 }
