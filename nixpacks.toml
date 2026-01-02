@@ -15,4 +15,4 @@ cmds = [
 ]
 
 [start]
-cmd = 'bash start.sh'
+cmd = 'bash -x start.sh'
