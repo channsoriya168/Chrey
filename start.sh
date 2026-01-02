@@ -28,9 +28,15 @@ php artisan ziggy:generate || echo "Warning: Ziggy generation failed"
 # Run migrations if database is configured
 if [ -n "$DB_HOST" ]; then
     echo "Running migrations..."
-    php artisan migrate --force || echo "Warning: Migration failed - check database connection"
+    php artisan migrate --force
+    if [ $? -ne 0 ]; then
+        echo "ERROR: Migration failed!"
+        exit 1
+    fi
+    echo "Migrations completed successfully"
 else
-    echo "Skipping migrations - no database configured"
+    echo "ERROR: Database not configured!"
+    exit 1
 fi
 
 # Start the server
