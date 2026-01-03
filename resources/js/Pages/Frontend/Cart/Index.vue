@@ -30,7 +30,7 @@
                                 <!-- Product Image -->
                                 <div
                                     class="h-24 w-24 md:h-28 md:w-28 flex-shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 ring-2 ring-fuchsia-500/30">
-                                    <img :src="getCartImageUrl(item.product) || '/placeholder.jpg'"
+                                    <img :src="item.product.first_image || '/placeholder.jpg'"
                                         :alt="item.product.name"
                                         class="h-full w-full object-cover transition-transform duration-500 hover:scale-110" />
                                 </div>
@@ -43,8 +43,20 @@
                                                 item.product.name }}</h3>
                                             <p class="text-sm text-gray-400">
                                                 {{ t('product.available') }}: <span
-                                                    class="text-green-400 font-semibold">{{ item.product.stock }}</span>
+                                                    :class="item.quantity > item.product.stock ? 'text-red-400' : 'text-green-400'"
+                                                    class="font-semibold">{{ item.product.stock }}</span>
                                             </p>
+                                            <!-- Stock Warning -->
+                                            <div v-if="item.quantity > item.product.stock"
+                                                class="mt-2 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-1.5">
+                                                <svg class="h-4 w-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                </svg>
+                                                <span class="text-xs font-semibold text-red-400">
+                                                    {{ t('cart.item.stockWarning') }}
+                                                </span>
+                                            </div>
                                         </div>
                                         <div class="text-right">
                                             <p
@@ -71,9 +83,10 @@
                                                     </svg>
                                                 </button>
                                                 <input type="number" :value="item.quantity"
-                                                    @change="updateQuantity(item, $event.target.value)"
+                                                    @input="validateQuantity(item, $event)"
+                                                    @blur="resetInvalidQuantity(item, $event)"
                                                     class="w-12 sm:w-16 border-x border-slate-700/50 bg-transparent py-2 sm:py-2.5 text-center text-sm sm:text-base font-semibold text-white focus:outline-none"
-                                                    min="1" />
+                                                    min="1" :max="item.product.stock" />
                                                 <button @click="increaseQuantity(item)"
                                                     :disabled="item.quantity >= item.product.stock"
                                                     class="px-3 py-2 sm:px-4 sm:py-2.5 text-gray-300 transition-all hover:bg-fuchsia-500/20 hover:text-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95">
@@ -90,7 +103,7 @@
                                         </div>
 
                                         <!-- Delete Button -->
-                                        <button @click="removeItem(item)"
+                                        <button @click="confirmRemoveItem(item)"
                                             class="flex items-center justify-center gap-2 rounded-xl bg-red-500/10 border border-red-500/30 px-3 sm:px-4 py-2.5 min-h-[44px] text-red-400 transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:scale-95">
                                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -194,6 +207,52 @@
                     </a>
                 </div>
             </div>
+
+            <!-- Confirmation Modal -->
+            <Transition name="modal">
+                <div v-if="showConfirmModal"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+                    @click.self="showConfirmModal = false">
+                    <div
+                        class="w-full max-w-md rounded-3xl bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm border-2 border-red-500/30 p-8 shadow-2xl shadow-red-500/20">
+                        <!-- Icon -->
+                        <div class="mb-6 flex justify-center">
+                            <div class="rounded-full bg-gradient-to-br from-red-500/20 to-red-600/20 p-5 ring-4 ring-red-500/30 animate-pulse">
+                                <svg class="h-16 w-16 text-red-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Title -->
+                        <h3 class="mb-4 text-center text-2xl font-bold text-white">
+                            {{ t('cart.confirm.removeTitle') }}
+                        </h3>
+
+                        <!-- Message -->
+                        <p class="mb-3 text-center text-base text-gray-300">
+                            {{ t('cart.confirm.removeMessage') }}
+                        </p>
+                        <p class="mb-6 text-center text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400">
+                            "{{ itemToRemove?.product?.name }}"
+                        </p>
+
+                        <!-- Buttons -->
+                        <div class="flex gap-3">
+                            <button @click="showConfirmModal = false"
+                                class="flex-1 rounded-2xl bg-slate-700/80 border-2 border-slate-600/50 px-6 py-4 font-bold text-white transition-all duration-200 hover:bg-slate-600/80 hover:border-slate-500 hover:scale-[1.02] active:scale-95 shadow-lg">
+                                {{ t('cart.confirm.cancel') }}
+                            </button>
+                            <button @click="removeItem(itemToRemove)"
+                                class="flex-1 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 font-bold text-white shadow-xl shadow-red-500/40 transition-all duration-200 hover:from-red-600 hover:to-red-700 hover:scale-[1.02] hover:shadow-red-500/60 active:scale-95">
+                                {{ t('cart.confirm.remove') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
         </div>
     </div>
 </template>
@@ -215,6 +274,13 @@
     })
 
     const isCheckingOut = ref(false)
+    const showConfirmModal = ref(false)
+    const itemToRemove = ref(null)
+
+    const confirmRemoveItem = (item) => {
+        itemToRemove.value = item
+        showConfirmModal.value = true
+    }
 
     const decreaseQuantity = (item) => {
         if (item.quantity > 1) {
@@ -232,9 +298,15 @@
 
     const updateQuantity = (item, value) => {
         const quantity = parseInt(value)
-        if (quantity > 0 && quantity <= item.product.stock) {
-            updateItemQuantity(item, quantity)
+        if (quantity < 1) {
+            toast.error(t('cart.item.minQuantity'))
+            return
         }
+        if (quantity > item.product.stock) {
+            toast.error(t('cart.item.exceedsStock', { available: item.product.stock }))
+            return
+        }
+        updateItemQuantity(item, quantity)
     }
 
     const updateItemQuantity = (item, quantity) => {
@@ -243,28 +315,27 @@
         }, {
             preserveState: true,
             preserveScroll: true,
-            onSuccess: () => {
-                toast.success(t('cart.notifications.quantityUpdated'))
-            },
-            onError: () => {
+            onError: (errors) => {
+                console.error('Update failed:', errors)
                 toast.error(t('cart.notifications.updateFailed'))
             }
         })
     }
 
     const removeItem = (item) => {
-        if (confirm(t('cart.item.removeConfirm'))) {
-            router.delete(route('cart.destroy', item.id), {
-                preserveState: true,
-                preserveScroll: true,
-                onSuccess: () => {
-                    toast.success(t('cart.notifications.itemRemoved'))
-                },
-                onError: () => {
-                    toast.error(t('cart.notifications.removeFailed'))
-                }
-            })
-        }
+        showConfirmModal.value = false
+        router.delete(route('cart.destroy', item.id), {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success(t('cart.notifications.itemRemoved'))
+                itemToRemove.value = null
+            },
+            onError: (errors) => {
+                console.error('Remove failed:', errors)
+                toast.error(t('cart.notifications.removeFailed'))
+            }
+        })
     }
 
     const checkout = () => {
@@ -284,21 +355,9 @@
             }
         })
     }
-
-    const getCartImageUrl = (product) => {
-        if (product.image_url && Array.isArray(product.image_url) && product.image_url.length > 0) {
-            const imageUrl = product.image_url[0]
-            if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-                return `/storage/${imageUrl}`
-            }
-            return imageUrl
-        }
-        return '/placeholder.jpg'
-    }
 </script>
 
 <style scoped>
-
     /* Remove number input spinner arrows */
     input[type='number']::-webkit-inner-spin-button,
     input[type='number']::-webkit-outer-spin-button {
@@ -309,5 +368,27 @@
     input[type='number'] {
         -moz-appearance: textfield;
         appearance: textfield;
+    }
+
+    /* Modal transition animations */
+    .modal-enter-active,
+    .modal-leave-active {
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-enter-active > div,
+    .modal-leave-active > div {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .modal-enter-from,
+    .modal-leave-to {
+        opacity: 0;
+    }
+
+    .modal-enter-from > div,
+    .modal-leave-to > div {
+        transform: scale(0.9);
+        opacity: 0;
     }
 </style>

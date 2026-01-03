@@ -33,7 +33,7 @@
             }
         },
         "products": {
-            "featured": "ផលិតផលពិសេស",
+            "featured": "ផលិតផលដែលបានណែនាំ",
             "seeAll": "មើលទាំងអស់",
             "reviews": "ការវាយតម្លៃ"
         },
@@ -60,6 +60,9 @@
             "decrease": "បន្ថយចំនួន",
             "increase": "បន្ថែមចំនួន",
             "maxStock": "បានដល់ចំនួនអតិបរមា",
+            "minQuantity": "ចំនួនត្រូវតែមានយ៉ាងតិច 1",
+            "exceedsStock": "មានតែ {available} ក្នុងស្តុក",
+            "stockWarning": "ចំនួនលើសពីស្តុក!",
             "removeConfirm": "លុបផលិតផលចេញពីកន្ត្រក?",
             "removeDescription": "{name} នឹងត្រូវបានលុបចេញពីកន្ត្រករបស់អ្នក",
             "removeButton": "លុប",
@@ -77,6 +80,12 @@
         "checkout": {
             "button": "បន្តទៅការទូទាត់",
             "processing": "កំពុងដំណើរការ..."
+        },
+        "confirm": {
+            "removeTitle": "លុបផលិតផល?",
+            "removeMessage": "តើអ្នកប្រាកដថាចង់លុប",
+            "cancel": "បោះបង់",
+            "remove": "លុប"
         },
         "notifications": {
             "updated": "កន្ត្រកត្រូវបានធ្វើបច្ចុប្បន្នភាព",
@@ -99,5 +108,6 @@
         "sku": "លេខកូដ",
         "quantity": "ចំនួន",
         "available": "មានចំនួន"
-    }
+    },
+    "Special Offers": "ការផ្តល់ជូនពិសេស"
 }

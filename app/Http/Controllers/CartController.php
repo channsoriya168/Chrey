@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
@@ -29,6 +30,18 @@ class CartController extends Controller
     }
 
     /**
+     * Format cart items with product resources
+     */
+    private function formatCartItems($cartItems)
+    {
+        return $cartItems->map(function ($item) {
+            $itemArray = $item->toArray();
+            $itemArray['product'] = (new ProductResource($item->product))->resolve();
+            return $itemArray;
+        });
+    }
+
+    /**
      * Display the cart page
      */
     public function index()
@@ -36,13 +49,14 @@ class CartController extends Controller
         $cart = $this->getCart();
 
         $cartItems = $cart ? $cart->cartItems : collect();
+        $formattedCartItems = $this->formatCartItems($cartItems);
 
         $subtotal = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
         });
 
         return inertia('Frontend/Cart/Index', [
-            'cartItems' => $cartItems,
+            'cartItems' => $formattedCartItems,
             'subtotal' => $subtotal,
             'total' => $subtotal,
             'discount' => 0,
@@ -189,7 +203,8 @@ class CartController extends Controller
             'price' => $product->discount_price ?? $product->price
         ]);
 
-        return back()->with('success', 'Cart updated successfully!');
+        // Redirect back - Inertia will automatically reload props from index()
+        return redirect()->route('cart.index');
     }
 
     /**
@@ -213,6 +228,7 @@ class CartController extends Controller
 
         $cartItem->delete();
 
-        return back()->with('success', 'Item removed from cart successfully!');
+        // Redirect back - Inertia will automatically reload props from index()
+        return redirect()->route('cart.index');
     }
 }

@@ -158,14 +158,14 @@
                         You May Also Like</h2>
                     <p class="mt-2 text-base text-gray-300 md:text-lg">Discover more amazing products</p>
                 </div>
-                <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+                <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                     <Link v-for="relatedProduct in relatedProducts" :key="relatedProduct.id"
                         :href="`/product/${relatedProduct.slug}`"
                         class="group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 shadow-lg shadow-slate-900/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-fuchsia-500/10 hover:border-fuchsia-500/30">
                         <!-- Image Container -->
                         <div
                             class="relative aspect-square bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
-                            <img :src="getImageUrl(relatedProduct)" :alt="relatedProduct.name"
+                            <img :src="relatedProduct.first_image" :alt="relatedProduct.name"
                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                             <!-- Overlay on hover -->
                             <div
@@ -191,10 +191,9 @@
                             <div class="flex items-baseline gap-2">
                                 <span
                                     class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-xl">
-                                    ${{ relatedProduct.discount_price || relatedProduct.price }}
+                                    ${{ relatedProduct.display_price }}
                                 </span>
-                                <span
-                                    v-if="relatedProduct.discount_price && relatedProduct.discount_price < relatedProduct.price"
+                                <span v-if="relatedProduct.has_discount"
                                     class="text-sm text-gray-500 line-through md:text-base">
                                     ${{ relatedProduct.price }}
                                 </span>
@@ -224,8 +223,8 @@
 
     // Initialize quantity and selected image
     const quantity = ref(1)
-    const productImages = ref(getProductImages())
-    const selectedImage = ref(productImages.value[0])
+    const productImages = ref(props.product.data.image_url || [])
+    const selectedImage = ref(productImages.value[0] || props.product.data.first_image)
     const isAddingToCart = ref(false)
 
     // Add to cart function
@@ -258,40 +257,6 @@
         )
     }
 
-    // Get all product images
-    function getProductImages() {
-        if (props.product.data.image_url) {
-            if (Array.isArray(props.product.data.image_url) && props.product.data.image_url.length > 0) {
-                return props.product.data.image_url.map((path) => {
-                    if (!path.startsWith('http') && !path.startsWith('/')) {
-                        return `/storage/${path}`
-                    }
-                    return path
-                })
-            }
-            if (typeof props.product.data.image_url === 'string') {
-                try {
-                    const parsed = JSON.parse(props.product.data.image_url)
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        return parsed.map((path) => {
-                            if (!path.startsWith('http') && !path.startsWith('/')) {
-                                return `/storage/${path}`
-                            }
-                            return path
-                        })
-                    }
-                } catch (e) {
-                    const imageUrl = props.product.image_url
-                    if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-                        return [`/storage/${imageUrl}`]
-                    }
-                    return [imageUrl]
-                }
-            }
-        }
-        return ['']
-    }
-
     // Quantity controls
     const incrementQuantity = () => {
         if (quantity.value < props.product.data.stock) {
@@ -303,43 +268,6 @@
         if (quantity.value > 1) {
             quantity.value--
         }
-    }
-
-    // Get image URL (first image from array or placeholder)
-    const getImageUrl = (product) => {
-        // Check if image_url exists and is an array with items
-        if (product.image_url) {
-            if (Array.isArray(product.image_url) && product.image_url.length > 0) {
-                const imageUrl = product.image_url[0]
-                // If the URL doesn't start with http or /, prepend /storage/
-                if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-                    return `/storage/${imageUrl}`
-                }
-                return imageUrl
-            }
-            // If it's a string (in case it wasn't properly parsed)
-            if (typeof product.image_url === 'string') {
-                try {
-                    const parsed = JSON.parse(product.image_url)
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        const imageUrl = parsed[0]
-                        if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-                            return `/storage/${imageUrl}`
-                        }
-                        return imageUrl
-                    }
-                } catch (e) {
-                    // If it's just a plain URL string
-                    const imageUrl = product.image_url
-                    if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-                        return `/storage/${imageUrl}`
-                    }
-                    return imageUrl
-                }
-            }
-        }
-        // Fallback to placeholder
-        return 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop'
     }
 </script>
 

@@ -59,7 +59,10 @@
             "remove": "Remove item",
             "decrease": "Decrease quantity",
             "increase": "Increase quantity",
-            "maxStock": "Max stock",
+            "maxStock": "Maximum stock reached",
+            "minQuantity": "Quantity must be at least 1",
+            "exceedsStock": "Only {available} items available in stock",
+            "stockWarning": "Quantity exceeds available stock!",
             "removeConfirm": "Remove item from cart?",
             "removeDescription": "{name} will be removed from your cart",
             "removeButton": "Remove",
@@ -77,6 +80,12 @@
         "checkout": {
             "button": "Proceed to Checkout",
             "processing": "Processing..."
+        },
+        "confirm": {
+            "removeTitle": "Remove Item?",
+            "removeMessage": "Are you sure you want to remove",
+            "cancel": "Cancel",
+            "remove": "Remove"
         },
         "notifications": {
             "updated": "Cart updated",
@@ -99,5 +108,6 @@
         "sku": "SKU",
         "quantity": "Quantity",
         "available": "Available"
-    }
+    },
+    "Special Offers": "Special Offers"
 }
