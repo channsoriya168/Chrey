@@ -11,8 +11,8 @@
                 <div class="flex flex-shrink-0 items-center">
                     <Link href="/" class="group flex items-center gap-3">
                         <div
-                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-500 shadow-lg shadow-fuchsia-500/30 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-fuchsia-500/50">
-                            <span class="text-xl font-bold text-white">C</span>
+                            class="flex h-14 w-14 items-center justify-center rounded-xl overflow-hidden bg-white border border-pink-500/30 shadow-fuchsia-500/30 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-fuchsia-500/50">
+                            <img :src="logo" alt="Chrey Logo" class="h-full w-full object-contain" />
                         </div>
                         <span
                             class="text-2xl font-bold bg-gradient-to-r from-fuchsia-400 to-pink-400 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105">
@@ -202,6 +202,7 @@
     </nav>
 </template>
 <script setup>
+    import logo from '@/../images/logo_chrey.png'
     import { getCurrentLanguage, languages } from '@/composables/useLanguages'
     import { Icon } from '@iconify/vue'
     import { Link, router, usePage } from '@inertiajs/vue3'

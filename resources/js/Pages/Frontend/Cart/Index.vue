@@ -1,4 +1,6 @@
 <template>
+
+    <Head :title="t('cart.title')" />
     <div class="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-950">
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <!-- Breadcrumb -->
@@ -30,8 +32,7 @@
                                 <!-- Product Image -->
                                 <div
                                     class="h-24 w-24 md:h-28 md:w-28 flex-shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 ring-2 ring-fuchsia-500/30">
-                                    <img :src="item.product.first_image || '/placeholder.jpg'"
-                                        :alt="item.product.name"
+                                    <img :src="item.product.first_image || '/placeholder.jpg'" :alt="item.product.name"
                                         class="h-full w-full object-cover transition-transform duration-500 hover:scale-110" />
                                 </div>
 
@@ -49,8 +50,10 @@
                                             <!-- Stock Warning -->
                                             <div v-if="item.quantity > item.product.stock"
                                                 class="mt-2 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-1.5">
-                                                <svg class="h-4 w-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                <svg class="h-4 w-4 text-red-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
                                                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                                 </svg>
                                                 <span class="text-xs font-semibold text-red-400">
@@ -75,21 +78,20 @@
                                             <div
                                                 class="flex items-center overflow-hidden rounded-xl bg-slate-900/80 border border-slate-700/50 shadow-lg">
                                                 <button @click="decreaseQuantity(item)"
-                                                    class="px-3 py-2 sm:px-4 sm:py-2.5 text-gray-300 transition-all hover:bg-fuchsia-500/20 hover:text-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95">
+                                                    class="px-4 py-3.5 text-gray-300 transition-all hover:bg-fuchsia-500/20 hover:text-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95">
                                                     <svg class="h-4 w-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2" d="M20 12H4" />
                                                     </svg>
                                                 </button>
-                                                <input type="number" :value="item.quantity"
-                                                    @input="validateQuantity(item, $event)"
-                                                    @blur="resetInvalidQuantity(item, $event)"
+                                                <input v-model.number="item.quantity" type="number"
                                                     class="w-12 sm:w-16 border-x border-slate-700/50 bg-transparent py-2 sm:py-2.5 text-center text-sm sm:text-base font-semibold text-white focus:outline-none"
-                                                    min="1" :max="item.product.stock" />
+                                                    min="1" :max="item.product.stock"
+                                                    @change="handleQuantityChange(item)" />
                                                 <button @click="increaseQuantity(item)"
                                                     :disabled="item.quantity >= item.product.stock"
-                                                    class="px-3 py-2 sm:px-4 sm:py-2.5 text-gray-300 transition-all hover:bg-fuchsia-500/20 hover:text-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95">
+                                                    class="px-4 py-3.5 text-gray-300 transition-all hover:bg-fuchsia-500/20 hover:text-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95">
                                                     <svg class="h-4 w-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -109,7 +111,8 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
-                                            <span class="hidden sm:inline font-semibold">Remove</span>
+                                            <span class="hidden sm:inline font-semibold">{{ $t('cart.confirm.remove')
+                                            }}</span>
                                         </button>
                                     </div>
                                 </div>
@@ -217,7 +220,8 @@
                         class="w-full max-w-md rounded-3xl bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm border-2 border-red-500/30 p-8 shadow-2xl shadow-red-500/20">
                         <!-- Icon -->
                         <div class="mb-6 flex justify-center">
-                            <div class="rounded-full bg-gradient-to-br from-red-500/20 to-red-600/20 p-5 ring-4 ring-red-500/30 animate-pulse">
+                            <div
+                                class="rounded-full bg-gradient-to-br from-red-500/20 to-red-600/20 p-5 ring-4 ring-red-500/30 animate-pulse">
                                 <svg class="h-16 w-16 text-red-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -235,7 +239,8 @@
                         <p class="mb-3 text-center text-base text-gray-300">
                             {{ t('cart.confirm.removeMessage') }}
                         </p>
-                        <p class="mb-6 text-center text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400">
+                        <p
+                            class="mb-6 text-center text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400">
                             "{{ itemToRemove?.product?.name }}"
                         </p>
 
@@ -258,7 +263,7 @@
 </template>
 
 <script setup>
-    import { router } from '@inertiajs/vue3'
+    import { Head, router } from '@inertiajs/vue3'
     import { ref } from 'vue'
     import { useI18n } from 'vue-i18n'
     import { toast } from 'vue-sonner'
@@ -292,21 +297,29 @@
         if (item.quantity < item.product.stock) {
             updateItemQuantity(item, item.quantity + 1)
         } else {
-            toast.error(t('cart.item.maxStock'))
+            toast.error(`Cannot add more. Only ${item.product.stock} items available in stock.`)
         }
     }
 
-    const updateQuantity = (item, value) => {
-        const quantity = parseInt(value)
-        if (quantity < 1) {
-            toast.error(t('cart.item.minQuantity'))
+    const handleQuantityChange = (item) => {
+        // Validate quantity
+        if (!item.quantity || item.quantity < 1) {
+            item.quantity = 1
+            toast.warning('Quantity must be at least 1')
             return
         }
-        if (quantity > item.product.stock) {
-            toast.error(t('cart.item.exceedsStock', { available: item.product.stock }))
-            return
+
+        if (item.quantity > item.product.stock) {
+            const previousQuantity = item.quantity
+            item.quantity = item.product.stock
+            toast.error(`Only ${item.product.stock} items available in stock. Quantity adjusted from ${previousQuantity} to ${item.product.stock}.`)
+            if (item.product.stock === 0) {
+                toast.error('This item is out of stock')
+                return
+            }
         }
-        updateItemQuantity(item, quantity)
+
+        updateItemQuantity(item, item.quantity)
     }
 
     const updateItemQuantity = (item, quantity) => {
@@ -315,9 +328,16 @@
         }, {
             preserveState: true,
             preserveScroll: true,
+            onSuccess: () => {
+                toast.success(`Quantity updated to ${quantity}`)
+            },
             onError: (errors) => {
                 console.error('Update failed:', errors)
-                toast.error(t('cart.notifications.updateFailed'))
+                if (errors.quantity) {
+                    toast.error(errors.quantity)
+                } else {
+                    toast.error('Failed to update quantity. Please try again.')
+                }
             }
         })
     }
@@ -358,6 +378,7 @@
 </script>
 
 <style scoped>
+
     /* Remove number input spinner arrows */
     input[type='number']::-webkit-inner-spin-button,
     input[type='number']::-webkit-outer-spin-button {
@@ -376,8 +397,8 @@
         transition: opacity 0.3s ease;
     }
 
-    .modal-enter-active > div,
-    .modal-leave-active > div {
+    .modal-enter-active>div,
+    .modal-leave-active>div {
         transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
@@ -386,8 +407,8 @@
         opacity: 0;
     }
 
-    .modal-enter-from > div,
-    .modal-leave-to > div {
+    .modal-enter-from>div,
+    .modal-leave-to>div {
         transform: scale(0.9);
         opacity: 0;
     }

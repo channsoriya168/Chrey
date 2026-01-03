@@ -43,8 +43,7 @@
                                         class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-pink-400">{{
                                             $t('home.hero.slide2.subtitle') }}</span>
                                 </h1>
-                                <p
-                                    class="hidden text-sm text-white/90 sm:block sm:text-base md:text-lg drop-shadow-lg">
+                                <p class="hidden text-sm text-white/90 sm:block sm:text-base md:text-lg drop-shadow-lg">
                                     {{ $t('home.hero.slide2.description') }}
                                 </p>
                             </div>
@@ -70,27 +69,27 @@
 </template>
 
 <script setup>
-import firstImage from '@/../images/01.png'
-import secondImage from '@/../images/02.png'
-import { onMounted, onUnmounted, ref } from 'vue'
+    import firstImage from '@/../images/01.png'
+    import secondImage from '@/../images/image1.png'
+    import { onMounted, onUnmounted, ref } from 'vue'
 
-const currentSlide = ref(0)
-let slideInterval = null
+    const currentSlide = ref(0)
+    let slideInterval = null
 
-// Auto-rotate carousel
-onMounted(() => {
-    slideInterval = setInterval(() => {
-        currentSlide.value = (currentSlide.value + 1) % 2
-    }, 5000)
-})
+    // Auto-rotate carousel
+    onMounted(() => {
+        slideInterval = setInterval(() => {
+            currentSlide.value = (currentSlide.value + 1) % 2
+        }, 5000)
+    })
 
-onUnmounted(() => {
-    if (slideInterval) {
-        clearInterval(slideInterval)
-    }
-})
+    onUnmounted(() => {
+        if (slideInterval) {
+            clearInterval(slideInterval)
+        }
+    })
 </script>
 
 <style scoped>
-/* Carousel styles are handled by Tailwind classes */
+    /* Carousel styles are handled by Tailwind classes */
 </style>

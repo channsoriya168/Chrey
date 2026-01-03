@@ -15,14 +15,16 @@
         " class="shadow-lg shadow-slate-900/50">
         <!-- Header section with logo/title -->
         <div :class="cn('flex items-center border-b border-slate-700/50 p-4', { 'justify-center': rail && !mobile })">
-            <div :class="cn('flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600/80 border border-purple-500/30', {
+            <div :class="cn('flex h-10 w-10 items-center justify-center rounded-lg overflow-hidden bg-white border border-purple-500/30', {
                 'mr-0': rail && !mobile,
                 'mr-3': !rail || mobile
             })
                 ">
-                <GraduationCap class="h-5 w-5 text-white" />
+                <img :src="logo" alt="Chrey Logo" class="h-full w-full object-contain" />
             </div>
-            <div v-if="!rail || mobile" class="khmer-text text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">ជ្រៃ</div>
+            <div v-if="!rail || mobile"
+                class="khmer-text text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                Chrey</div>
         </div>
 
         <!-- Main Navigation -->
@@ -101,9 +103,10 @@
 </template>
 
 <script setup>
+    import logo from '@/../images/logo_chrey.png'
     import { cn } from '@/lib/utils'
     import { router, usePage } from '@inertiajs/vue3'
-    import { GraduationCap, LayoutDashboard, Package, Shield, ShoppingBag, Users } from 'lucide-vue-next'
+    import { LayoutDashboard, Package, Shield, ShoppingBag, Users } from 'lucide-vue-next'
     import { computed, onMounted, onUnmounted, ref, toRefs } from 'vue'
 
     const props = defineProps({
