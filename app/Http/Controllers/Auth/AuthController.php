@@ -20,7 +20,7 @@ class AuthController extends Controller
         $sessionId = $oldSessionId ?? session()->getId();
         $guestCart = Cart::with(['cartItems'])
             ->where('session_id', $sessionId)
-            ->where('status', 'pending')
+            ->where('status', 'active')
             ->first();
 
         if (!$guestCart || $guestCart->cartItems->isEmpty()) {
@@ -31,7 +31,7 @@ class AuthController extends Controller
         $userCart = Cart::firstOrCreate(
             [
                 'user_id' => auth()->id(),
-                'status' => 'pending'
+                'status' => 'active'
             ]
         );
 

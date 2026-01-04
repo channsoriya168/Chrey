@@ -15,7 +15,7 @@
             <!-- Header -->
             <div class="mb-6 sm:mb-8 text-center">
                 <h1
-                    class="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-4xl">
+                    class="text-2xl leading-relaxed sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400  to-pink-400 md:text-4xl">
                     {{ t('cart.title') }}
                 </h1>
             </div>
@@ -74,7 +74,7 @@
                                         <div class="flex items-center gap-2 sm:gap-3">
                                             <span class="hidden sm:inline text-sm font-semibold text-gray-300">{{
                                                 t('product.quantity')
-                                                }}:</span>
+                                            }}:</span>
                                             <div
                                                 class="flex items-center overflow-hidden rounded-xl bg-slate-900/80 border border-slate-700/50 shadow-lg">
                                                 <button @click="decreaseQuantity(item)"
@@ -112,7 +112,7 @@
                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                             <span class="hidden sm:inline font-semibold">{{ $t('cart.confirm.remove')
-                                            }}</span>
+                                                }}</span>
                                         </button>
                                     </div>
                                 </div>
@@ -132,18 +132,14 @@
 
                         <div class="space-y-4 border-b border-slate-700/50 pb-6 mb-6">
                             <div class="flex justify-between text-sm">
-                                <span class="text-gray-300">{{ t('cart.summary.subtotal') }}</span>
-                                <span class="font-bold text-white">${{ subtotal.toFixed(2) }}</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-300">{{ t('cart.summary.total') }}</span>
-                                <span class="font-bold text-white">${{ total.toFixed(2) }}</span>
+                                <span class="text-gray-300">{{ t('cart.summary.total') }}($)</span>
+                                <span class="font-bold text-white">${{ total.dollar.toFixed(2) }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-300 font-semibold">{{ t('cart.summary.grandTotal') }}</span>
+                                <span class="text-gray-300 font-semibold">{{ t('cart.summary.total') }}(៛)</span>
                                 <span
                                     class="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400">
-                                    {{ (total * 4050).toFixed(0) }} ៛
+                                    {{ total.riel.toFixed(0) }} ៛
                                 </span>
                             </div>
                             <div v-if="discount > 0" class="flex justify-between text-sm">
@@ -152,25 +148,16 @@
                             </div>
                         </div>
 
-                        <button @click="checkout" :disabled="isCheckingOut"
-                            class="group flex w-full items-center justify-center gap-2 sm:gap-3 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-4 sm:px-6 py-3.5 sm:py-4 min-h-[52px] font-bold text-white shadow-2xl shadow-fuchsia-500/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-fuchsia-500/50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100">
-                            <svg v-if="!isCheckingOut" class="h-6 w-6 transition-transform group-hover:scale-110"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button @click="proceedToCheckout"
+                            class="group flex w-full items-center justify-center gap-2 sm:gap-3 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-4 sm:px-6 py-3.5 sm:py-4 min-h-[52px] font-bold text-white shadow-2xl shadow-fuchsia-500/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-fuchsia-500/50 active:scale-[0.98]">
+                            <svg class="h-6 w-6 transition-transform group-hover:scale-110" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
-                            <svg v-else class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            <span class="text-base sm:text-lg">{{ isCheckingOut ? 'Processing...' :
-                                t('cart.checkout.button') + ' ('
-                                + count + ')' }}</span>
-                            <svg v-if="!isCheckingOut" class="h-5 w-5 transition-transform group-hover:translate-x-1"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <span class="text-base sm:text-lg">{{ t('cart.checkout.button') }} ({{ count }})</span>
+                            <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
                             </svg>
@@ -272,13 +259,11 @@
 
     const props = defineProps({
         cartItems: Array,
-        subtotal: Number,
-        total: Number,
+        total: Object,
         discount: Number,
         count: Number
     })
 
-    const isCheckingOut = ref(false)
     const showConfirmModal = ref(false)
     const itemToRemove = ref(null)
 
@@ -326,7 +311,6 @@
         router.put(route('cart.update', item.id), {
             quantity
         }, {
-            preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
                 toast.success(`Quantity updated to ${quantity}`)
@@ -345,7 +329,6 @@
     const removeItem = (item) => {
         showConfirmModal.value = false
         router.delete(route('cart.destroy', item.id), {
-            preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
                 toast.success(t('cart.notifications.itemRemoved'))
@@ -358,22 +341,8 @@
         })
     }
 
-    const checkout = () => {
-        isCheckingOut.value = true
-        router.post(route('checkout'), {
-            payment_method: 'khqr'
-        }, {
-            onSuccess: () => {
-                toast.success(t('cart.notifications.orderPlaced'))
-            },
-            onError: () => {
-                toast.error(t('cart.notifications.checkoutFailed'))
-                isCheckingOut.value = false
-            },
-            onFinish: () => {
-                isCheckingOut.value = false
-            }
-        })
+    const proceedToCheckout = () => {
+        router.visit(route('checkout.address'))
     }
 </script>
 

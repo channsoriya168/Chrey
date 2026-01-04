@@ -13,7 +13,7 @@
         </div>
 
         <!-- Product Detail Section -->
-        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
                 <!-- Product Images -->
                 <div class="space-y-4">
@@ -155,8 +155,7 @@
                 <div class="mb-8 md:mb-10 text-center">
                     <h2
                         class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-4xl">
-                        You May Also Like</h2>
-                    <p class="mt-2 text-base text-gray-300 md:text-lg">Discover more amazing products</p>
+                        {{ $t("You May Also Like") }}</h2>
                 </div>
                 <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                     <Link v-for="relatedProduct in relatedProducts" :key="relatedProduct.id"

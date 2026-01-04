@@ -8,22 +8,22 @@ class Address extends Model
 {
     protected $fillable = [
         'user_id',
-        'type',
-        'full_name',
         'phone',
-        'address_line1',
-        'address_line2',
-        'city',
-        'state_province',
-        'postal_code',
-        'country',
-        'is_default',
+        'province',
+        'district',
+        'commune',
+        'village',
+        'note',
     ];
 
-    protected $casts = [
-        'is_default' => 'boolean',
+    protected $appends = [
+        'formatted_address',
+        'full_address'
     ];
 
+    /**
+     * Relationships
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -34,8 +34,31 @@ class Address extends Model
         return $this->hasMany(Order::class, 'shipping_address_id');
     }
 
-    public function billingOrders()
+    /**
+     * Scopes
+     */
+    public function scopeForUser($query, $userId)
     {
-        return $this->hasMany(Order::class, 'billing_address_id');
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Accessors
+     */
+    public function getFormattedAddressAttribute()
+    {
+        $parts = array_filter([
+            $this->village,
+            $this->commune,
+            $this->district,
+            $this->province,
+        ]);
+
+        return implode(', ', $parts);
+    }
+
+    public function getFullAddressAttribute()
+    {
+        return $this->formatted_address;
     }
 }

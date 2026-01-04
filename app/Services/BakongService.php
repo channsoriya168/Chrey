@@ -31,17 +31,13 @@ class BakongService
     public function generateKHQR($data)
     {
         try {
-            // Determine currency code (840 = USD, 116 = KHR)
-            $currencyCode = null;
-            if (isset($data['currency'])) {
-                $currencyCode = strtoupper($data['currency']) === 'USD' ? 840 : 116;
-            }
-
+            // Create merchant info for KHQR generation
+            // Currency: KHQRData::CURRENCY_USD (840) for USD, KHQRData::CURRENCY_KHR (116) for Riel
             $marchant = new IndividualInfo(
                 bakongAccountID: $this->merchantId,
                 merchantName: $this->merchantName,
                 merchantCity: $this->merchantCity,
-                currency: $currencyCode,
+                currency: KHQRData::CURRENCY_USD, // USD payment
                 amount: (float) $data['amount'],
             );
 
@@ -50,18 +46,11 @@ class BakongService
 
             // Check if generation was successful
             if ($khqrResponse->status['code'] !== 0) {
-                Log::error('Bakong KHQR generation failed', [
-                    'status' => $khqrResponse->status,
-                    'response' => (string) $khqrResponse
-                ]);
                 return null;
             }
 
             // Access data directly from the response object
             if (!isset($khqrResponse->data['qr'])) {
-                Log::error('Bakong KHQR generation failed - no QR in response', [
-                    'response' => (string) $khqrResponse
-                ]);
                 return null;
             }
 
@@ -73,14 +62,11 @@ class BakongService
                 ->size(300)
                 ->generate($khqrString);
 
-            Log::info('Bakong KHQR Response', [
-                'khqr_generated' => !empty($khqrString),
-                'qr_svg_generated' => !empty($qrCodeSvg),
-                'md5' => $md5Hash
-            ]);
+            // Explicitly convert to string to avoid any object issues
+            $qrCodeSvgString = (string) $qrCodeSvg;
 
             return [
-                'qr' => $qrCodeSvg,
+                'qr' => $qrCodeSvgString,
                 'khqr_string' => $khqrString,
                 'md5' => $md5Hash,
                 'transactionId' => 'KHQR-' . strtoupper(uniqid()),
@@ -103,35 +89,27 @@ class BakongService
      * @param string $transactionId
      * @return array|null
      */
-    public function checkPaymentStatus($transactionId)
+    public function checkPaymentStatus(string $md5)
     {
-        try {
-            // For KHQR, payment status needs to be checked via webhook or manual verification
-            // This is a placeholder that returns pending status
+        $token = env('BAKONG_TOKEN');
+        $bakong = new BakongKHQR($token);
+
+        $response = $bakong->checkTransactionByMD5($md5);
+
+        // API-level error
+        if ($response['status']['code'] !== 0) {
             return [
-                'status' => 'pending',
-                'transactionId' => $transactionId
+                'status' => 'error',
+                'message' => $response['status']['message']
             ];
-        } catch (\Exception $e) {
-            Log::error('Bakong payment status check error', [
-                'message' => $e->getMessage()
-            ]);
-
-            return null;
         }
-    }
 
-    /**
-     * Verify webhook signature
-     *
-     * @param array $payload
-     * @param string $signature
-     * @return bool
-     */
-    public function verifyWebhookSignature($payload, $signature)
-    {
-        $apiKey = config('services.bakong.api_key');
-        $expectedSignature = hash_hmac('sha256', json_encode($payload), $apiKey);
-        return hash_equals($expectedSignature, $signature);
+        // Payment status from Bakong
+        return [
+            'status' => strtolower($response['data']['status']), // success | pending | failed
+            'transaction_id' => $response['data']['transactionId'] ?? null,
+            'amount' => $response['data']['amount'] ?? null,
+            'currency' => $response['data']['currency'] ?? null
+        ];
     }
 }

@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-BrbNzAgT.css",
+    "file": "assets/app-Dn0N34oT.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -8,21 +8,26 @@
     "file": "assets/01-CQs8enQp.png",
     "src": "resources/images/01.png"
   },
-  "resources/images/02.png": {
-    "file": "assets/02-TpOvxun-.png",
-    "src": "resources/images/02.png"
+  "resources/images/image1.png": {
+    "file": "assets/image1-DkptxZkm.png",
+    "src": "resources/images/image1.png"
+  },
+  "resources/images/logo_chrey.png": {
+    "file": "assets/logo_chrey-xJREZ7di.png",
+    "src": "resources/images/logo_chrey.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-Cz-Dm8sb.js",
+    "file": "assets/app-BIAkdRpJ.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
-      "assets/app-CdyBEjQ6.css"
+      "assets/app-CZdWI6dZ.css"
     ],
     "assets": [
+      "assets/logo_chrey-xJREZ7di.png",
       "assets/01-CQs8enQp.png",
-      "assets/02-TpOvxun-.png"
+      "assets/image1-DkptxZkm.png"
     ]
   }
 }

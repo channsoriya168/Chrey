@@ -75,13 +75,19 @@
                             <!-- User dropdown -->
                             <div class="relative" ref="userMenu">
                                 <button @click="toggleUserMenu"
-                                    class="flex items-center justify-center rounded-xl p-3 text-gray-300 transition-all duration-200 hover:bg-fuchsia-500/10 hover:text-fuchsia-400 hover:shadow-md"
+                                    class="flex items-center justify-center rounded-full w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white font-bold text-sm transition-all duration-200 hover:shadow-lg hover:scale-110"
                                     :title="authUser ? authUser.name : ''">
-                                    <Icon icon="heroicons:user-circle-solid" class="h-6 w-6" />
+                                    {{ getUserInitial }}
                                 </button>
 
                                 <div v-if="showUserMenu"
                                     class="absolute right-0 z-10 mt-3 w-56 rounded-2xl bg-slate-800/95 backdrop-blur-sm border border-fuchsia-500/20 py-2 shadow-2xl shadow-fuchsia-500/20">
+                                    <!-- Profile link -->
+                                    <Link :href="route('profile.index')"
+                                        class="flex items-center gap-3 px-4 py-3 mx-1 rounded-xl text-sm font-medium text-gray-300 transition-all duration-150 hover:bg-fuchsia-500/10 hover:text-fuchsia-400">
+                                        <Icon icon="heroicons:user" class="h-5 w-5" />
+                                        Profile
+                                    </Link>
                                     <!-- My Orders link -->
                                     <Link :href="route('orders.index')"
                                         v-if="authUser && !authUser.roles.includes('admin')"
@@ -143,8 +149,8 @@
                     <!-- Auth Button Mobile -->
                     <div v-if="authUser" class="relative" ref="userMenuMobile">
                         <button @click="toggleUserMenu"
-                            class="flex items-center justify-center rounded-full p-2 text-gray-300 transition-all duration-200 hover:bg-fuchsia-500/10 hover:text-fuchsia-400">
-                            <Icon icon="heroicons:user-circle-solid" class="h-7 w-7" />
+                            class="flex items-center justify-center rounded-full w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white font-bold text-sm transition-all duration-200 hover:shadow-lg hover:scale-110">
+                            {{ getUserInitial }}
                         </button>
                     </div>
                     <div v-else>
@@ -180,6 +186,11 @@
         <!-- User Menu Dropdown for Mobile -->
         <div v-if="showUserMenu && authUser"
             class="absolute right-4 top-20 z-50 mt-2 w-52 rounded-xl bg-slate-800/95 backdrop-blur-sm border border-fuchsia-500/20 py-2 shadow-2xl shadow-fuchsia-500/20 md:hidden">
+            <Link :href="route('profile.index')" @click="closeMenus"
+                class="flex items-center gap-3 px-4 py-3 mx-1 rounded-xl text-sm text-gray-300 transition-all duration-150 hover:bg-fuchsia-500/10 hover:text-fuchsia-400">
+                <Icon icon="heroicons:user" class="h-5 w-5" />
+                Profile
+            </Link>
             <Link :href="route('orders.index')" @click="closeMenus"
                 v-if="authUser && authUser.roles && !authUser.roles.includes('admin')"
                 class="flex items-center gap-3 px-4 py-3 mx-1 rounded-xl text-sm text-gray-300 transition-all duration-150 hover:bg-fuchsia-500/10 hover:text-fuchsia-400">
@@ -218,6 +229,14 @@
     // computed safe reference to authenticated user (may be null)
     const authUser = computed(() => {
         return page && page.props && page.props.auth && page.props.auth.user ? page.props.auth.user : null
+    })
+
+    // Get user initial (first letter of name)
+    const getUserInitial = computed(() => {
+        if (authUser.value && authUser.value.name) {
+            return authUser.value.name.charAt(0).toUpperCase()
+        }
+        return 'U'
     })
 
     // Dynamic pages based on current locale

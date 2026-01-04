@@ -15,12 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('product_name')->comment('ឈ្មោះផលិតផលនៅពេលទិញ');
-            $table->string('product_code')->comment('លេខកូដផលិតផលនៅពេលទិញ');
             $table->integer('quantity')->comment('ចំនួន');
-            $table->decimal('unit_price', 10, 2)->comment('តម្លៃឯកតា');
-            $table->decimal('subtotal', 10, 2)->comment('សរុបរង');
-            $table->decimal('discount', 10, 2)->default(0)->comment('បញ្ចុះតម្លៃ');
+            $table->decimal('price', 10, 2)->comment('តម្លៃឯកតា');
             $table->decimal('total', 10, 2)->comment('តម្លៃសរុប');
             $table->timestamps();
         });

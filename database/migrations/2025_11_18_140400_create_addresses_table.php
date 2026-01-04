@@ -14,16 +14,12 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('type', ['shipping', 'billing', 'both'])->default('both')->comment('ប្រភេទអាសយដ្ឋាន');
-            $table->string('full_name')->comment('ឈ្មោះពេញ');
             $table->string('phone')->comment('លេខទូរស័ព្ទ');
-            $table->text('address_line1')->comment('អាសយដ្ឋានទី១');
-            $table->text('address_line2')->nullable()->comment('អាសយដ្ឋានទី២');
-            $table->string('city')->comment('ក្រុង/ខេត្ត');
-            $table->string('state_province')->nullable()->comment('រដ្ឋ/ខេត្ត');
-            $table->string('postal_code')->nullable()->comment('លេខកូដប្រៃសណីយ៍');
-            $table->string('country')->default('Cambodia')->comment('ប្រទេស');
-            $table->boolean('is_default')->default(false)->comment('អាសយដ្ឋានលំនាំដើម');
+            $table->string('province')->comment('ខេត្ត/ទីក្រុង');
+            $table->string('district')->nullable()->comment('ស្រុក/ខណ្ឌ');
+            $table->string('commune')->nullable()->comment('ឃុំ/សង្កាត់');
+            $table->string('village')->nullable()->comment('ភូមិ/សង្កាត់');
+            $table->string('note')->nullable()->comment('កំណត់ចំណាំ');
             $table->timestamps();
         });
     }

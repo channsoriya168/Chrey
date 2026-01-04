@@ -6,25 +6,26 @@ use App\Http\Resources\ProductResource;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Services\CurrencyService;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
     /**
-     * Get or create cart for current user/session
+     * Get or create cart for current user or guest session
      */
     private function getCart()
     {
         if (auth()->check()) {
             return Cart::with(['cartItems.product'])
                 ->where('user_id', auth()->id())
-                ->where('status', 'pending')
+                ->where('status', 'active')
                 ->first();
         } else {
             $sessionId = session()->getId();
             return Cart::with(['cartItems.product'])
                 ->where('session_id', $sessionId)
-                ->where('status', 'pending')
+                ->where('status', 'active')
                 ->first();
         }
     }
@@ -51,14 +52,18 @@ class CartController extends Controller
         $cartItems = $cart ? $cart->cartItems : collect();
         $formattedCartItems = $this->formatCartItems($cartItems);
 
-        $subtotal = $cartItems->sum(function ($item) {
+        $totalDollar = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
         });
 
+        $totalRiel = CurrencyService::usdToKhr($totalDollar);
+
         return inertia('Frontend/Cart/Index', [
             'cartItems' => $formattedCartItems,
-            'subtotal' => $subtotal,
-            'total' => $subtotal,
+            'total' => [
+                'dollar' => $totalDollar,
+                'riel' => $totalRiel
+            ],
             'discount' => 0,
             'count' => $cartItems->count()
         ]);
@@ -73,14 +78,18 @@ class CartController extends Controller
 
         $cartItems = $cart ? $cart->cartItems : collect([]);
 
-        $subtotal = $cartItems->sum(function ($item) {
+        $totalDollar = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
         });
 
+        $totalRiel = CurrencyService::usdToKhr($totalDollar);
+
         return response()->json([
             'cartItems' => $cartItems,
-            'subtotal' => $subtotal,
-            'total' => $subtotal,
+            'total' => [
+                'dollar' => $totalDollar,
+                'riel' => $totalRiel
+            ],
             'count' => $cartItems->count()
         ]);
     }
@@ -107,15 +116,15 @@ class CartController extends Controller
         $product = Product::findOrFail($validated['product_id']);
 
         if ($product->stock < $validated['quantity']) {
-            return back()->with('error', 'Insufficient stock available');
+            return back()->with('error', 'messages.cart.insufficient_stock');
         }
 
-        // Find or create a pending cart for the user or guest
+        // Find or create an active cart for authenticated user or guest
         if (auth()->check()) {
             $cart = Cart::firstOrCreate(
                 [
                     'user_id' => auth()->id(),
-                    'status' => 'pending'
+                    'status' => 'active'
                 ]
             );
         } else {
@@ -123,7 +132,7 @@ class CartController extends Controller
             $cart = Cart::firstOrCreate(
                 [
                     'session_id' => $sessionId,
-                    'status' => 'pending'
+                    'status' => 'active'
                 ]
             );
         }
@@ -136,7 +145,7 @@ class CartController extends Controller
             $newQuantity = $cartItem->quantity + $validated['quantity'];
 
             if ($product->stock < $newQuantity) {
-                return back()->with('error', 'Cannot add more items. Stock limit reached.');
+                return back()->with('error', 'messages.cart.stock_limit_reached');
             }
 
             $cartItem->update([
@@ -152,23 +161,7 @@ class CartController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Product added to cart successfully!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cart $cart)
-    {
-        //
+        return back()->with('success', 'messages.cart.added');
     }
 
     /**

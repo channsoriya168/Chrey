@@ -78,9 +78,10 @@
             "discount": "Discount"
         },
         "checkout": {
-            "button": "Proceed to Checkout",
+            "button": "Checkout",
             "processing": "Processing..."
         },
+        "You May Also Like": "You May Also Like",
         "confirm": {
             "removeTitle": "Remove Item?",
             "removeMessage": "Are you sure you want to remove",
@@ -104,10 +105,118 @@
             "loadFailed": "Failed to load cart"
         }
     },
+    "checkout": {
+        "title": "Checkout",
+        "breadcrumb": {
+            "home": "Home",
+            "cart": "Cart",
+            "checkout": "Checkout"
+        },
+        "delivery": {
+            "title": "Delivery Information",
+            "subtitle": "Fields marked with * are required",
+            "phone": "Phone Number",
+            "province": "Province / City",
+            "district": "District / Khan",
+            "commune": "Commune / Sangkat",
+            "village": "Village / Street",
+            "note": "Delivery Instructions (Optional)",
+            "noteHelper": "Help our delivery team find you easier",
+            "notePlaceholder": "e.g., Please call when you arrive, Gate code: 1234, Near the blue building",
+            "provincePlaceholder": "e.g., Phnom Penh, Siem Reap",
+            "districtPlaceholder": "e.g., Chamkar Mon",
+            "communePlaceholder": "e.g., Tonle Bassac",
+            "villagePlaceholder": "e.g., Street 240, Village 5"
+        },
+        "summary": {
+            "title": "Order Summary",
+            "subtotal": "Subtotal",
+            "shipping": "Shipping",
+            "shippingFree": "Free",
+            "discount": "Discount",
+            "total": "Total",
+            "quantity": "Qty"
+        },
+        "button": {
+            "placeOrder": "Place Order",
+            "processing": "Processing...",
+            "backToCart": "Back to Cart"
+        },
+        "security": "Secure checkout",
+        "validation": {
+            "phoneRequired": "Please fill in phone number",
+            "provinceRequired": "Please fill in province/city"
+        }
+    },
     "product": {
         "sku": "SKU",
         "quantity": "Quantity",
         "available": "Available"
     },
-    "Special Offers": "Special Offers"
+    "Special Offers": "Special Offers",
+    "flash": {
+        "success": {
+            "title": "Success!",
+            "dismiss": "Dismiss"
+        },
+        "error": {
+            "title": "Error!",
+            "dismiss": "Dismiss"
+        },
+        "warning": {
+            "title": "Warning!",
+            "dismiss": "Dismiss"
+        },
+        "info": {
+            "title": "Information",
+            "dismiss": "Dismiss"
+        }
+    },
+    "messages": {
+        "auth": {
+            "registered": "Account created successfully! Welcome.",
+            "welcome_back": "Welcome back, {name}!",
+            "logout": "You have logged out successfully. See you again!",
+            "invalid_credentials": "Email or password is incorrect. Please try again."
+        },
+        "profile": {
+            "updated": "Profile updated successfully!",
+            "password_updated": "Password updated successfully!"
+        },
+        "cart": {
+            "added": "Product added to cart successfully!",
+            "insufficient_stock": "Insufficient stock available",
+            "stock_limit_reached": "Cannot add more items. Stock limit reached.",
+            "empty": "Your cart is empty",
+            "insufficient_stock_for": "Insufficient stock for {product}"
+        },
+        "order": {
+            "placed": "Order placed successfully!",
+            "failed": "Failed to place order: {error}",
+            "status_updated": "Order status updated successfully!",
+            "payment_updated": "Payment status updated successfully!",
+            "deleted": "Order deleted successfully!"
+        },
+        "payment": {
+            "invalid_method": "Invalid payment method",
+            "qr_failed": "Failed to generate payment QR code. Please try again."
+        },
+        "product": {
+            "created": "Product created successfully.",
+            "updated": "Product updated successfully.",
+            "deleted": "Product deleted successfully."
+        },
+        "user": {
+            "created": "User created successfully.",
+            "updated": "User updated successfully.",
+            "deleted": "User deleted successfully.",
+            "cannot_delete_self": "You cannot delete yourself."
+        },
+        "role": {
+            "created": "Role created successfully.",
+            "updated": "Role updated successfully.",
+            "deleted": "Role deleted successfully.",
+            "cannot_delete_admin": "Cannot delete admin role."
+        }
+    }
 }

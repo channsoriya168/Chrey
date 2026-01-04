@@ -6,16 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('session_id')->nullable()->comment('For guest carts before login');
+            $table->enum('status', ['active', 'checked_out'])
+                ->default('active')
+                ->comment('active: User is shopping | checked_out: Order placed & paid');
+
             $table->timestamps();
+
+            // Indexes for finding carts
+            $table->index(['user_id', 'status']);
+            $table->index(['session_id', 'status']);
         });
     }
 

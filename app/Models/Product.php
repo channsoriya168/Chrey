@@ -15,7 +15,15 @@ class Product extends Model
         'discount_price_percent' => 'decimal:2',
     ];
 
-    
+    protected $appends = ['first_image'];
+
+    public function getFirstImageAttribute()
+    {
+        if (is_array($this->image_url) && count($this->image_url) > 0) {
+            return $this->image_url[0];
+        }
+        return null;
+    }
 
     public function ratings()
     {

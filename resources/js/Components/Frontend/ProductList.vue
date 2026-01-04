@@ -1,6 +1,6 @@
 <template>
-    <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 md:pb-6 lg:px-8">
-        <div class="mb-8 text-center md:mb-10">
+    <div class="mx-auto max-w-7xl px-4 pb-4 sm:px-6 md:pb-6 lg:px-8">
+        <div class="mb-4 text-left md:mb-4">
             <h2
                 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-4xl leading-relaxed ">
                 {{ $t('home.products.featured') }}</h2>

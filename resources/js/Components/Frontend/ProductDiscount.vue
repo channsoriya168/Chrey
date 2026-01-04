@@ -1,12 +1,12 @@
 <template>
     <div v-if="discountProducts.length > 0" class="mx-auto max-w-7xl px-4 py-6 sm:px-4 lg:px-8">
-        <div class="mb-8 text-center md:mb-10">
+        <div class="mb-4 text-left md:mb-4">
             <h2
                 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-4xl leading-relaxed ">
                 {{ $t("Special Offers") }}</h2>
         </div>
 
-        <div class="flex gap-5 overflow-x-auto pb-4 scrollbar-hide md:gap-6" style="scroll-behavior: smooth;">
+        <div class="flex gap-5 overflow-x-auto pb-1 scrollbar-hide md:gap-6" style="scroll-behavior: smooth;">
             <Link v-for="(product, index) in discountProducts" :key="'discount-' + product.id"
                 :href="`/product/${product.slug}`"
                 class="group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-fuchsia-500/20 shadow-lg shadow-fuchsia-500/10 transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-fuchsia-500/20 hover:border-fuchsia-500/40 flex-shrink-0 w-[180px] sm:w-[220px] md:w-[260px] lg:w-[280px] discount-card-slide-in"

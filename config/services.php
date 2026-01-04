@@ -34,6 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'exchange' => [
+        'api_key' => env('EXCHANGE_RATE_API_KEY'),
+    ],
 
     'bakong' => [
         'api_key' => env('BAKONG_API_KEY'),
