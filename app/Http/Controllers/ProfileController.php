@@ -16,9 +16,6 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Get user statistics
-        $stats = $this->getUserStatistics($user->id);
-
         return Inertia::render('Frontend/Profile/Index', [
             'user' => [
                 'id' => $user->id,
@@ -26,28 +23,8 @@ class ProfileController extends Controller
                 'email' => $user->email,
                 'roles' => $user->roles->pluck('name')->toArray(),
                 'created_at' => $user->created_at,
-            ],
-            'stats' => $stats
+            ]
         ]);
-    }
-
-    /**
-     * Get user statistics
-     */
-    private function getUserStatistics($userId)
-    {
-        // Get total orders count
-        $totalOrders = Order::where('user_id', $userId)->count();
-
-        // Get total spent (sum of all completed/paid orders)
-        $totalSpent = Order::where('user_id', $userId)
-            ->whereIn('status', ['completed', 'paid', 'processing', 'shipped'])
-            ->sum('total_amount');
-
-        return [
-            'totalOrders' => $totalOrders,
-            'totalSpent' => number_format($totalSpent, 2)
-        ];
     }
 
     /**

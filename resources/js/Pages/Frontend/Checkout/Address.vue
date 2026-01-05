@@ -194,7 +194,7 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-xs font-semibold text-white mb-1 line-clamp-2">{{ item.product.name
-                                    }}</p>
+                                        }}</p>
                                     <div class="flex items-center justify-between">
                                         <p class="text-xs text-gray-400">{{ $t('checkout.summary.quantity') }}: {{
                                             item.quantity }}</p>
@@ -237,7 +237,7 @@
                                 </path>
                             </svg>
                             <span>{{ isSubmitting ? $t('checkout.button.processing') : $t('checkout.button.placeOrder')
-                                }}</span>
+                            }}</span>
                         </button>
 
                         <!-- Back to Cart Link -->
@@ -256,7 +256,7 @@
         </div>
 
         <!-- KHQR Payment Modal -->
-        <KhqrPaymentModal :show="showPaymentModal" :order="currentOrder" :qrData="qrData" @close="closePaymentModal" />
+        <KhqrPaymentModal :show="showPaymentModal" :cart="currentCart" :qrData="qrData" @close="closePaymentModal" />
     </div>
 </template>
 
@@ -291,7 +291,7 @@
     const isSubmitting = ref(false)
 
     const showPaymentModal = ref(false)
-    const currentOrder = ref({})
+    const currentCart = ref({})
     const qrData = ref('')
     const md5 = ref('')
 
@@ -317,7 +317,7 @@
 
             if (response.data.success) {
                 // Set current order with QR code
-                currentOrder.value = response.data.cart
+                currentCart.value = response.data.cart
 
                 // Store md5 for payment status checking
                 md5.value = response.data.md5
@@ -356,10 +356,10 @@
     }
 
     setInterval(async () => {
-        if (showPaymentModal.value && currentOrder.value.id && md5.value) {
+        if (showPaymentModal.value && currentCart.value.id && md5.value) {
             try {
                 const response = await axios.get(route('payment.status', {
-                    cart: currentOrder.value.id,
+                    cart: currentCart.value.id,
                     md5: md5.value
                 }), {
                     headers: {

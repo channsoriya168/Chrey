@@ -137,14 +137,21 @@
                             </svg>
                             <span>{{ isAddingToCart ? 'Adding...' : 'Add to Cart' }}</span>
                         </button>
-                        <button @click="buyNow" :disabled="product.data.stock === 0 || isAddingToCart"
+                        <button @click="buyNow" :disabled="product.data.stock === 0 || isBuyingNow"
                             class="group flex items-center justify-center space-x-2 rounded-2xl bg-slate-800/80 backdrop-blur-sm border-2 border-fuchsia-500/50 px-8 py-4 font-bold text-fuchsia-400 shadow-lg shadow-fuchsia-500/10 transition-all duration-300 hover:scale-[1.02] hover:bg-fuchsia-500/10 hover:shadow-fuchsia-500/20 disabled:cursor-not-allowed disabled:opacity-60">
-                            <svg class="h-6 w-6 transition-transform group-hover:scale-110" fill="none"
+                            <svg v-if="!isBuyingNow" class="h-6 w-6 transition-transform group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
-                            <span class="hidden sm:inline">Buy Now</span>
+                            <svg v-else class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            <span class="hidden sm:inline">{{ isBuyingNow ? 'Processing...' : 'Buy Now' }}</span>
                         </button>
                     </div>
                 </div>
@@ -225,6 +232,7 @@
     const productImages = ref(props.product.data.image_url || [])
     const selectedImage = ref(productImages.value[0] || props.product.data.first_image)
     const isAddingToCart = ref(false)
+    const isBuyingNow = ref(false)
 
     // Add to cart function
     const addToCart = () => {
@@ -269,16 +277,16 @@
         }
     }
 
-    // Buy Now function - Add to cart and redirect to checkout
+    // Buy Now function - Directly go to checkout with this product only
     const buyNow = () => {
-        if (props.product.data.stock < 1 || isAddingToCart.value) {
+        if (props.product.data.stock < 1 || isBuyingNow.value) {
             return
         }
 
-        isAddingToCart.value = true
+        isBuyingNow.value = true
 
         router.post(
-            '/cart',
+            '/buy-now',
             {
                 product_id: props.product.data.id,
                 quantity: quantity.value
@@ -286,11 +294,10 @@
             {
                 preserveScroll: true,
                 onSuccess: () => {
-                    // Redirect to checkout address page
-                    router.visit('/checkout/address')
+                    isBuyingNow.value = false
                 },
                 onError: () => {
-                    isAddingToCart.value = false
+                    isBuyingNow.value = false
                 }
             }
         )

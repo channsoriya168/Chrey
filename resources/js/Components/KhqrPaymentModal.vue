@@ -23,7 +23,7 @@
                                 <p class="text-sm text-gray-400 mb-2">Total Amount</p>
                                 <p
                                     class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400">
-                                    ${{ order.total_amount?.toFixed(2) || '0.00' }}
+                                    ${{ cart.total_amount?.toFixed(2) || '0.00' }}
                                 </p>
                             </div>
 
@@ -57,7 +57,7 @@
             type: Boolean,
             default: false
         },
-        order: {
+        cart: {
             type: Object,
             default: () => ({})
         },

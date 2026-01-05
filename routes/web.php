@@ -33,6 +33,9 @@ Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 Route::resource('cart', CartController::class)->only(['store', 'update', 'destroy']);
 Route::get('api/cart/items', [CartController::class, 'getCartItems'])->name('api.cart.items');
 
+// Buy Now route (bypasses cart)
+Route::post('buy-now', [OrderController::class, 'buyNow'])->name('buy-now');
+
 Route::middleware('auth')->group(function () {
 
     // Profile

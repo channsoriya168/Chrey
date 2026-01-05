@@ -73,26 +73,82 @@ class OrderController extends Controller
     // ============================================================================
 
     /**
+     * Buy Now - Store product in session and redirect to checkout
+     */
+    public function buyNow(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        // Get the product and check stock
+        $product = \App\Models\Product::findOrFail($validated['product_id']);
+
+        if ($product->stock < $validated['quantity']) {
+            return back()->with('error', 'Insufficient stock available');
+        }
+
+        // Store buy now data in session
+        session()->put('buy_now', [
+            'product_id' => $product->id,
+            'quantity' => $validated['quantity'],
+            'price' => $product->discount_price ?? $product->price,
+        ]);
+
+        // Redirect to login if not authenticated, otherwise go to checkout
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('info', 'Please login to complete your purchase');
+        }
+
+        return redirect()->route('checkout.address');
+    }
+
+    /**
      * Show checkout address page
      */
     public function showAddressPage()
     {
         $this->transferGuestCartToUser();
 
-        $cart = $this->getUserActiveCart();
+        // Check if this is a buy now checkout
+        $buyNowData = session()->get('buy_now');
 
-        if (!$cart || $cart->cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Your cart is empty');
+        if ($buyNowData) {
+            // Buy Now checkout - use session data
+            $product = \App\Models\Product::findOrFail($buyNowData['product_id']);
+
+            // Create a temporary cart item structure for the frontend
+            $cartItems = collect([
+                (object)[
+                    'id' => null, // No cart item ID for buy now
+                    'product_id' => $product->id,
+                    'quantity' => $buyNowData['quantity'],
+                    'price' => $buyNowData['price'],
+                    'product' => $product,
+                ]
+            ]);
+
+            $totalDollar = $buyNowData['price'] * $buyNowData['quantity'];
+        } else {
+            // Normal cart checkout
+            $cart = $this->getUserActiveCart();
+
+            if (!$cart || $cart->cartItems->isEmpty()) {
+                return redirect()->route('cart.index')->with('error', 'Your cart is empty');
+            }
+
+            $cartItems = $cart->cartItems;
+            $totalDollar = $this->calculateCartTotal($cart);
         }
 
-        $totalDollar = $this->calculateCartTotal($cart);
-
         return inertia('Frontend/Checkout/Address', [
-            'cartItems' => $cart->cartItems,
+            'cartItems' => $cartItems,
             'total' => [
                 'dollar' => $totalDollar,
                 'riel' => CurrencyService::usdToKhr($totalDollar),
             ],
+            'isBuyNow' => $buyNowData ? true : false,
         ]);
     }
 
@@ -102,13 +158,6 @@ class OrderController extends Controller
      */
     public function checkout(Request $request)
     {
-
-        $cart = $this->getUserActiveCart();
-
-        if (!$cart || $cart->cartItems->isEmpty()) {
-            return $this->jsonOrRedirect($request, false, 'Your cart is empty', 400);
-        }
-
         // Validate address data
         $validated = $request->validate([
             'phone' => 'required|string|max:20',
@@ -118,6 +167,9 @@ class OrderController extends Controller
             'village' => 'nullable|string|max:100',
             'note' => 'nullable|string|max:500',
         ]);
+
+        // Check if this is a buy now checkout
+        $buyNowData = session()->get('buy_now');
 
         try {
             DB::beginTransaction();
@@ -133,7 +185,35 @@ class OrderController extends Controller
                 'note' => $validated['note'] ?? null,
             ]);
 
-            $totalAmount = $this->calculateCartTotal(cart: $cart);
+            if ($buyNowData) {
+                // Buy Now checkout - create temporary cart
+                $cart = Cart::create([
+                    'user_id' => auth()->id(),
+                    'status' => 'active',
+                ]);
+
+                // Add the buy now item to the cart
+                $cart->cartItems()->create([
+                    'product_id' => $buyNowData['product_id'],
+                    'quantity' => $buyNowData['quantity'],
+                    'price' => $buyNowData['price'],
+                ]);
+
+                $totalAmount = $buyNowData['price'] * $buyNowData['quantity'];
+
+                // Clear buy now session data
+                session()->forget('buy_now');
+            } else {
+                // Normal cart checkout
+                $cart = $this->getUserActiveCart();
+
+                if (!$cart || $cart->cartItems->isEmpty()) {
+                    return $this->jsonOrRedirect($request, false, 'Your cart is empty', 400);
+                }
+
+                $totalAmount = $this->calculateCartTotal($cart);
+            }
+
             $khqrData = $this->generatePaymentQR($totalAmount);
 
             // Ensure QR data is a string
