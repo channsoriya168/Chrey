@@ -16,6 +16,8 @@ Route::get('/', [FrontEndController::class, 'index'])->name('home');
 
 Route::get('product/{slug}', [FrontEndController::class, 'productDetail'])->name('product.detail');
 
+Route::get('products/discounts', [FrontEndController::class, 'discountProducts'])->name('products.discounts');
+
 Route::get('register', [AuthController::class, 'register'])
     ->name('register');
 Route::post('register', [AuthController::class, 'storeRegister'])
@@ -45,7 +47,6 @@ Route::middleware('auth')->group(function () {
     // Checkout flow
     Route::get('checkout/address', [OrderController::class, 'showAddressPage'])->name('checkout.address');
     Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
-    Route::get('checkout/status', [OrderController::class, 'checkoutStatus'])->name('checkout.status');
 
     // Payment - KHQR
     Route::get('payment/status/{cart}', [OrderController::class, 'checkPaymentStatus'])->name('payment.status');

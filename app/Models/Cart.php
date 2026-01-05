@@ -14,6 +14,8 @@ class Cart extends Model
         'user_id',
         'session_id',
         'status',
+        'pending_address_id',
+        'md5',
     ];
 
     /**
@@ -30,6 +32,14 @@ class Cart extends Model
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    /**
+     * Get the pending address for checkout
+     */
+    public function pendingAddress()
+    {
+        return $this->belongsTo(Address::class, 'pending_address_id');
     }
 
 

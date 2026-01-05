@@ -194,7 +194,7 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-xs font-semibold text-white mb-1 line-clamp-2">{{ item.product.name
-                                        }}</p>
+                                    }}</p>
                                     <div class="flex items-center justify-between">
                                         <p class="text-xs text-gray-400">{{ $t('checkout.summary.quantity') }}: {{
                                             item.quantity }}</p>
@@ -237,7 +237,7 @@
                                 </path>
                             </svg>
                             <span>{{ isSubmitting ? $t('checkout.button.processing') : $t('checkout.button.placeOrder')
-                            }}</span>
+                                }}</span>
                         </button>
 
                         <!-- Back to Cart Link -->
@@ -256,14 +256,13 @@
         </div>
 
         <!-- KHQR Payment Modal -->
-        <KhqrPaymentModal :show="showPaymentModal" :order="currentOrder" :qrData="qrData" @close="closePaymentModal"
-            @payment-success="handlePaymentSuccess" />
+        <KhqrPaymentModal :show="showPaymentModal" :order="currentOrder" :qrData="qrData" @close="closePaymentModal" />
     </div>
 </template>
 
 <script setup>
     import KhqrPaymentModal from '@/Components/KhqrPaymentModal.vue'
-    import { Head, router } from '@inertiajs/vue3'
+    import { Head } from '@inertiajs/vue3'
     import axios from 'axios'
     import { computed, ref } from 'vue'
     import { useI18n } from 'vue-i18n'
@@ -294,6 +293,7 @@
     const showPaymentModal = ref(false)
     const currentOrder = ref({})
     const qrData = ref('')
+    const md5 = ref('')
 
     const isFormValid = computed(() => {
         return form.value.phone.trim() !== '' && form.value.province.trim() !== ''
@@ -309,7 +309,7 @@
 
         try {
 
-            const response = await axios.post(route('checkout'), {
+            const response = await axios.post(route('checkout'), form.value, {
                 headers: {
                     'Accept': 'application/json'
                 }
@@ -318,6 +318,9 @@
             if (response.data.success) {
                 // Set current order with QR code
                 currentOrder.value = response.data.cart
+
+                // Store md5 for payment status checking
+                md5.value = response.data.md5
 
                 // Ensure qrData is a string
                 if (typeof response.data.qrData === 'string') {
@@ -352,16 +355,33 @@
         showPaymentModal.value = false
     }
 
-    const handlePaymentSuccess = (data) => {
-        showPaymentModal.value = false
+    setInterval(async () => {
+        if (showPaymentModal.value && currentOrder.value.id && md5.value) {
+            try {
+                const response = await axios.get(route('payment.status', {
+                    cart: currentOrder.value.id,
+                    md5: md5.value
+                }), {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
 
-        // Redirect to checkout page
-        if (data.redirect) {
-            window.location.href = data.redirect
-        } else {
-            router.visit(route('checkout.address'))
+                console.log('Payment status:', response.data.status)
+
+                if (response.data.status === 'paid') {
+                    toast.success(t('cart.notifications.paymentSuccess'))
+                    showPaymentModal.value = false
+                    window.location.href = '/'
+                }
+            } catch (error) {
+                console.error('Payment status check error:', error)
+                if (error.response) {
+                    console.error('Error response:', error.response.data)
+                }
+            }
         }
-    }
+    }, 5000)
 </script>
 
 <style scoped>

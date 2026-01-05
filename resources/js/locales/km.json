@@ -1,4 +1,6 @@
 {
+    "View All": "មើលទាំងអស់",
+    "You May Also Like": "អ្នកអាចចូលចិត្ត",
     "nav": {
         "brand": "ឆ្រី",
         "menu": {
@@ -68,7 +70,7 @@
             "removeButton": "លុប",
             "cancel": "បោះបង់"
         },
-        "You May Also Like": "អ្នកអាចចូលចិត្ត",
+        
         "summary": {
             "title": "សង្ខេបការបញ្ជាទិញ",
             "subtotal": "សរុបរង",

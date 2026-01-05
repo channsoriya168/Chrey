@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Address;
 use App\Services\BakongService;
 use App\Services\CurrencyService;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -101,28 +102,51 @@ class OrderController extends Controller
      */
     public function checkout(Request $request)
     {
+
         $cart = $this->getUserActiveCart();
 
         if (!$cart || $cart->cartItems->isEmpty()) {
             return $this->jsonOrRedirect($request, false, 'Your cart is empty', 400);
         }
 
-        $stockValidation = $this->validateCartStock($cart);
-        if ($stockValidation !== true) {
-            return $this->jsonOrRedirect($request, false, $stockValidation, 400);
-        }
+        // Validate address data
+        $validated = $request->validate([
+            'phone' => 'required|string|max:20',
+            'province' => 'required|string|max:100',
+            'district' => 'nullable|string|max:100',
+            'commune' => 'nullable|string|max:100',
+            'village' => 'nullable|string|max:100',
+            'note' => 'nullable|string|max:500',
+        ]);
 
         try {
             DB::beginTransaction();
 
+            // Create address
+            $address = Address::create([
+                'user_id' => auth()->id(),
+                'phone' => $validated['phone'],
+                'province' => $validated['province'],
+                'district' => $validated['district'] ?? null,
+                'commune' => $validated['commune'] ?? null,
+                'village' => $validated['village'] ?? null,
+                'note' => $validated['note'] ?? null,
+            ]);
+
             $totalAmount = $this->calculateCartTotal(cart: $cart);
             $khqrData = $this->generatePaymentQR($totalAmount);
-
-            DB::commit();
 
             // Ensure QR data is a string
             $qrDataString = (string) $khqrData['qr'];
             $md5 = $khqrData['md5'] ?? null;
+
+            // Update cart with address and md5
+            $cart->update([
+                'pending_address_id' => $address->id,
+                'md5' => $md5,
+            ]);
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
@@ -168,11 +192,25 @@ class OrderController extends Controller
             try {
                 DB::beginTransaction();
 
+                // Get address from cart relationship
+                $cart->load('pendingAddress');
+
+                if (!$cart->pendingAddress) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Address data not found. Please start checkout again.'
+                    ], 400);
+                }
+
+                $address = $cart->pendingAddress;
+                $totalAmount = $this->calculateCartTotal($cart);
+
                 // Create order
                 $order = Order::create([
                     'user_id' => auth()->id(),
                     'order_number' => 'ORD-' . strtoupper(uniqid()),
                     'status' => 'pending',
+                    'shipping_address_id' => $address->id,
                     'bakong_transaction_id' => $md5,
                 ]);
 
@@ -191,6 +229,16 @@ class OrderController extends Controller
                     $cartItem->product->decrement('stock', $cartItem->quantity);
                 }
 
+                // Send Telegram notification
+                app(TelegramService::class)->sendMessage(
+                    "✅ <b>KHQR Payment Success</b>\n"
+                        . "Order: #{$order->id}\n"
+                        . "Amount: {$totalAmount} USD\n"
+                        . "Phone: {$address->phone}\n"
+                        . "Address: {$address->province}, {$address->district}, {$address->commune}, {$address->village}\n"
+                        . ($address->note ? "Note: {$address->note}\n" : "")
+                );
+
                 // Clear cart
                 $cart->cartItems()->delete();
                 $cart->update(['status' => 'completed']);
@@ -198,10 +246,9 @@ class OrderController extends Controller
                 DB::commit();
 
                 return response()->json([
-                    'status' => 'success',
+                    'status' => 'paid',
                     'message' => 'Payment successful',
                     'order_id' => $order->id,
-                    'redirect' => route('orders.show', $order)
                 ]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -294,20 +341,6 @@ class OrderController extends Controller
     private function calculateCartTotal(Cart $cart)
     {
         return $cart->cartItems->sum(fn($item) => $item->price * $item->quantity);
-    }
-
-
-    /**
-     * Validate cart stock availability
-     */
-    private function validateCartStock(Cart $cart)
-    {
-        foreach ($cart->cartItems as $item) {
-            if ($item->product->stock < $item->quantity) {
-                return "Insufficient stock for {$item->product->name}. Available: {$item->product->stock}, Required: {$item->quantity}";
-            }
-        }
-        return true;
     }
 
 

@@ -1,15 +1,23 @@
 <template>
     <div v-if="discountProducts.length > 0" class="mx-auto max-w-7xl px-4 py-6 sm:px-4 lg:px-8">
-        <div class="mb-4 text-left md:mb-4">
+        <div class="mb-4 flex items-center justify-between md:mb-4">
             <h2
-                class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-4xl leading-relaxed ">
+                class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-4xl leading-relaxed">
                 {{ $t("Special Offers") }}</h2>
+            <Link href="/products/discounts"
+                class="group flex items-center space-x-2 rounded-xl bg-gradient-to-r from-fuchsia-500/10 to-pink-500/10 border border-fuchsia-500/30 px-4 py-2 text-sm font-semibold text-fuchsia-400 transition-all duration-300 hover:from-fuchsia-500/20 hover:to-pink-500/20 hover:border-fuchsia-500/50 hover:shadow-lg hover:shadow-fuchsia-500/20">
+                <span>{{ $t("View All") }}</span>
+                <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </Link>
         </div>
 
-        <div class="flex gap-5 overflow-x-auto pb-1 scrollbar-hide md:gap-6" style="scroll-behavior: smooth;">
+        <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 md:gap-6 lg:grid-cols-4">
             <Link v-for="(product, index) in discountProducts" :key="'discount-' + product.id"
                 :href="`/product/${product.slug}`"
-                class="group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-fuchsia-500/20 shadow-lg shadow-fuchsia-500/10 transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-fuchsia-500/20 hover:border-fuchsia-500/40 flex-shrink-0 w-[180px] sm:w-[220px] md:w-[260px] lg:w-[280px] discount-card-slide-in"
+                class="group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-fuchsia-500/20 shadow-lg shadow-fuchsia-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-fuchsia-500/20 hover:border-fuchsia-500/40 discount-card-slide-in"
                 :style="`animation-delay: ${index * 80}ms`">
                 <!-- Image Container -->
                 <div class="relative aspect-square bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
@@ -45,16 +53,14 @@
                     </div>
 
                     <!-- Price -->
-                    <div class="flex flex-col gap-1">
-                        <div class="flex items-baseline gap-1.5">
-                            <span
-                                class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-2xl">
-                                ${{ product.display_price }}
-                            </span>
-                            <span class="text-xs text-gray-500 line-through md:text-base">
-                                ${{ product.price }}
-                            </span>
-                        </div>
+                    <div class="flex items-baseline gap-1.5">
+                        <span
+                            class="text-base font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 md:text-xl">
+                            ${{ product.display_price }}
+                        </span>
+                        <span class="text-xs text-gray-500 line-through md:text-base">
+                            ${{ product.price }}
+                        </span>
                     </div>
                 </div>
             </Link>
@@ -74,17 +80,21 @@
 </script>
 
 <style scoped>
-
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
+/* Discount Card Slide In Animation */
+@keyframes discountCardSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
     }
 
-    /* Hide scrollbar for IE, Edge and Firefox */
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        /* IE and Edge */
-        scrollbar-width: none;
-        /* Firefox */
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
+}
+
+.discount-card-slide-in {
+    animation: discountCardSlideIn 0.5s ease-out forwards;
+    opacity: 0;
+}
 </style>

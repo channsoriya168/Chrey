@@ -15,18 +15,15 @@
 import HeroCarousel from '@/Components/Frontend/HeroCarousel.vue'
 import ProductDiscount from '@/Components/Frontend/ProductDiscount.vue'
 import ProductList from '@/Components/Frontend/ProductList.vue'
-import { computed } from 'vue'
 
-const props = defineProps({
+defineProps({
     products: {
         type: Object,
         required: true
+    },
+    discountProducts: {
+        type: Array,
+        default: () => []
     }
-})
-
-// Filter products with discounts
-const discountProducts = computed(() => {
-    if (!props.products || !props.products.data) return []
-    return props.products.data.filter(product => product.has_discount)
 })
 </script>

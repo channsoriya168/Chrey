@@ -137,14 +137,14 @@
                             </svg>
                             <span>{{ isAddingToCart ? 'Adding...' : 'Add to Cart' }}</span>
                         </button>
-                        <button
-                            class="group flex items-center justify-center space-x-2 rounded-2xl bg-slate-800/80 backdrop-blur-sm border-2 border-fuchsia-500/50 px-8 py-4 font-bold text-fuchsia-400 shadow-lg shadow-fuchsia-500/10 transition-all duration-300 hover:scale-[1.02] hover:bg-fuchsia-500/10 hover:shadow-fuchsia-500/20">
+                        <button @click="buyNow" :disabled="product.data.stock === 0 || isAddingToCart"
+                            class="group flex items-center justify-center space-x-2 rounded-2xl bg-slate-800/80 backdrop-blur-sm border-2 border-fuchsia-500/50 px-8 py-4 font-bold text-fuchsia-400 shadow-lg shadow-fuchsia-500/10 transition-all duration-300 hover:scale-[1.02] hover:bg-fuchsia-500/10 hover:shadow-fuchsia-500/20 disabled:cursor-not-allowed disabled:opacity-60">
                             <svg class="h-6 w-6 transition-transform group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
-                            <span class="hidden sm:inline">Wishlist</span>
+                            <span class="hidden sm:inline">Buy Now</span>
                         </button>
                     </div>
                 </div>
@@ -267,6 +267,33 @@
         if (quantity.value > 1) {
             quantity.value--
         }
+    }
+
+    // Buy Now function - Add to cart and redirect to checkout
+    const buyNow = () => {
+        if (props.product.data.stock < 1 || isAddingToCart.value) {
+            return
+        }
+
+        isAddingToCart.value = true
+
+        router.post(
+            '/cart',
+            {
+                product_id: props.product.data.id,
+                quantity: quantity.value
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    // Redirect to checkout address page
+                    router.visit('/checkout/address')
+                },
+                onError: () => {
+                    isAddingToCart.value = false
+                }
+            }
+        )
     }
 </script>
 

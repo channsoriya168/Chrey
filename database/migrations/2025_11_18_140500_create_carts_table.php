@@ -16,11 +16,18 @@ return new class extends Migration
                 ->default('active')
                 ->comment('active: User is shopping | checked_out: Order placed & paid');
 
+            // Link to address for checkout
+            $table->foreignId('pending_address_id')->nullable()->constrained('addresses')->onDelete('set null');
+
+            // Payment tracking
+            $table->string('md5')->nullable()->unique();
+
             $table->timestamps();
 
             // Indexes for finding carts
             $table->index(['user_id', 'status']);
             $table->index(['session_id', 'status']);
+            $table->index('md5');
         });
     }
 
