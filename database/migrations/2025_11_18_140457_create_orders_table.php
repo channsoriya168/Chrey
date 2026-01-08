@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('order_number')->unique()->comment('លេខកូដការបញ្ជាទិញ');
-            $table->enum('status', ['pending', 'processing', 'completed', 'cancelled', 'refunded'])->default('pending')->comment('ស្ថានភាពការបញ្ជាទិញ');
+            $table->enum('status', ['paid', 'completed'])->default('paid')->comment('ស្ថានភាពការបញ្ជាទិញ - paid: payment received, completed: delivered');
             $table->string('bakong_transaction_id')->nullable()->comment('Bakong Transaction ID');
             $table->text('bakong_qr_data')->nullable()->comment('KHQR Code Data');
             $table->foreignId('shipping_address_id')->nullable()->constrained('addresses')->onDelete('set null')->comment('អាសយដ្ឋានដឹកជញ្ជូន');

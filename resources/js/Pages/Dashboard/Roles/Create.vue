@@ -1,11 +1,28 @@
 <template>
-    <DashboardLayout>
-        <div class="p-6">
-            <div class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-200">Create Role</h1>
-            </div>
+    <Head title="បង្កើតតួនាទីថ្មី" />
 
-            <div class="max-w-4xl rounded-lg border border-slate-700/50 bg-slate-800/80 backdrop-blur-sm p-6 shadow-lg shadow-slate-900/50">
+    <div class="space-y-6">
+        <!-- Breadcrumb -->
+        <DashboardBreadcrumb :items="[
+            {
+                label: 'ទំពៅរដើម',
+                href: route('dashboard.index')
+            },
+            {
+                label: 'តួនាទី',
+                href: route('dashboard.roles.index')
+            },
+            { label: 'បង្កើតថ្មី' }
+        ]" />
+
+        <!-- Header -->
+        <div>
+            <h1 class="text-2xl font-bold text-white">បង្កើតតួនាទីថ្មី</h1>
+            <p class="mt-1 text-sm text-slate-400">បំពេញព័ត៌មានដើម្បីបង្កើតតួនាទីថ្មី</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="max-w-4xl rounded-xl border border-slate-700/50 bg-slate-800/80 backdrop-blur-sm p-8 shadow-lg shadow-slate-900/50">
                 <form @submit.prevent="submit">
                     <div class="mb-6">
                         <Label for="name" class="text-gray-200">Role Name</Label>
@@ -18,11 +35,24 @@
                     </div>
 
                     <div class="mb-6">
-                        <Label class="mb-4 block text-gray-200">Permissions</Label>
+                        <div class="mb-4 flex items-center justify-between">
+                            <Label class="text-gray-200">Permissions</Label>
+                            <button type="button" @click="toggleAllPermissions"
+                                class="rounded-lg border border-purple-500/30 bg-purple-600/20 px-3 py-1.5 text-sm text-purple-300 hover:bg-purple-600/30 transition-colors">
+                                {{ allPermissionsSelected ? 'Uncheck All' : 'Check All' }}
+                            </button>
+                        </div>
                         <div class="space-y-4">
-                            <div v-for="(groupPermissions, group) in permissions" :key="group">
-                                <h3 class="mb-2 font-medium text-gray-300 capitalize">{{ group }}</h3>
-                                <div class="grid grid-cols-1 gap-2 pl-4 md:grid-cols-2 lg:grid-cols-3">
+                            <div v-for="(groupPermissions, group) in permissions" :key="group"
+                                class="rounded-lg border border-slate-700/50 bg-slate-900/30 p-4">
+                                <div class="mb-3 flex items-center justify-between">
+                                    <h3 class="font-medium text-gray-300 capitalize">{{ group }}</h3>
+                                    <button type="button" @click="toggleGroupPermissions(group)"
+                                        class="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+                                        {{ isGroupSelected(group) ? 'Uncheck Group' : 'Check Group' }}
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
                                     <div v-for="permission in groupPermissions" :key="permission.id"
                                         class="flex items-center">
                                         <input :id="`permission-${permission.id}`" v-model="form.permissions"
@@ -53,14 +83,14 @@
                 </form>
             </div>
         </div>
-    </DashboardLayout>
 </template>
 
 <script setup>
     import { Input } from '@/Components/ui/input'
     import { Label } from '@/Components/ui/label'
-    import DashboardLayout from '@/Layouts/DashboardLayout.vue'
-    import { Link, useForm } from '@inertiajs/vue3'
+    import DashboardBreadcrumb from '@/Components/Dashboard/DashboardBreadcrumb.vue'
+    import { Head, Link, useForm } from '@inertiajs/vue3'
+    import { computed } from 'vue'
 
     const props = defineProps({
         permissions: Object
@@ -70,6 +100,53 @@
         name: '',
         permissions: []
     })
+
+    // Get all permission names as a flat array
+    const allPermissionNames = computed(() => {
+        return Object.values(props.permissions).flat().map(p => p.name)
+    })
+
+    // Check if all permissions are selected
+    const allPermissionsSelected = computed(() => {
+        return allPermissionNames.value.length > 0 &&
+               form.permissions.length === allPermissionNames.value.length
+    })
+
+    // Toggle all permissions
+    const toggleAllPermissions = () => {
+        if (allPermissionsSelected.value) {
+            form.permissions = []
+        } else {
+            form.permissions = [...allPermissionNames.value]
+        }
+    }
+
+    // Check if all permissions in a group are selected
+    const isGroupSelected = (group) => {
+        const groupPermissionNames = props.permissions[group].map(p => p.name)
+        return groupPermissionNames.every(name => form.permissions.includes(name))
+    }
+
+    // Toggle all permissions in a specific group
+    const toggleGroupPermissions = (group) => {
+        const groupPermissionNames = props.permissions[group].map(p => p.name)
+
+        if (isGroupSelected(group)) {
+            // Remove all group permissions
+            form.permissions = form.permissions.filter(
+                name => !groupPermissionNames.includes(name)
+            )
+        } else {
+            // Add all group permissions
+            const newPermissions = [...form.permissions]
+            groupPermissionNames.forEach(name => {
+                if (!newPermissions.includes(name)) {
+                    newPermissions.push(name)
+                }
+            })
+            form.permissions = newPermissions
+        }
+    }
 
     const submit = () => {
         form.post(route('dashboard.roles.store'))

@@ -294,6 +294,7 @@
     const currentCart = ref({})
     const qrData = ref('')
     const md5 = ref('')
+    const pollingInterval = ref(null)
 
     const isFormValid = computed(() => {
         return form.value.phone.trim() !== '' && form.value.province.trim() !== ''
@@ -323,29 +324,23 @@
                 md5.value = response.data.md5
 
                 // Ensure qrData is a string
-                if (typeof response.data.qrData === 'string') {
-                    qrData.value = response.data.qrData
-                } else if (response.data.qrData) {
-                    console.error('QR Data is not a string:', typeof response.data.qrData, response.data.qrData)
-                    qrData.value = String(response.data.qrData)
-                }
+                qrData.value = typeof response.data.qrData === 'string'
+                    ? response.data.qrData
+                    : String(response.data.qrData || '')
 
                 // Show payment modal
                 showPaymentModal.value = true
 
+                // Start polling for payment status
+                startPaymentPolling()
+
                 toast.success(t('cart.notifications.orderPlaced'))
             } else {
-                console.error('Checkout failed:', response.data)
                 toast.error(response.data.message || t('cart.notifications.checkoutFailed'))
             }
         } catch (error) {
-            console.error('Checkout error:', error)
-            if (error.response) {
-                console.error('Error response:', error.response.data)
-                toast.error(error.response.data.message || t('cart.notifications.checkoutFailed'))
-            } else {
-                toast.error(t('cart.notifications.checkoutFailed'))
-            }
+            const errorMessage = error.response?.data?.message || t('cart.notifications.checkoutFailed')
+            toast.error(errorMessage)
         } finally {
             isSubmitting.value = false
         }
@@ -353,10 +348,20 @@
 
     const closePaymentModal = () => {
         showPaymentModal.value = false
+        stopPaymentPolling()
     }
 
-    setInterval(async () => {
-        if (showPaymentModal.value && currentCart.value.id && md5.value) {
+    const startPaymentPolling = () => {
+        // Clear any existing interval first
+        stopPaymentPolling()
+
+        // Start new polling interval
+        pollingInterval.value = setInterval(async () => {
+            if (!showPaymentModal.value || !currentCart.value.id || !md5.value) {
+                stopPaymentPolling()
+                return
+            }
+
             try {
                 const response = await axios.get(route('payment.status', {
                     cart: currentCart.value.id,
@@ -367,21 +372,24 @@
                     }
                 })
 
-                console.log('Payment status:', response.data.status)
-
                 if (response.data.status === 'paid') {
+                    stopPaymentPolling()
                     toast.success(t('cart.notifications.paymentSuccess'))
                     showPaymentModal.value = false
                     window.location.href = '/'
                 }
             } catch (error) {
-                console.error('Payment status check error:', error)
-                if (error.response) {
-                    console.error('Error response:', error.response.data)
-                }
+                // Silent fail - polling will retry
             }
+        }, 5000)
+    }
+
+    const stopPaymentPolling = () => {
+        if (pollingInterval.value) {
+            clearInterval(pollingInterval.value)
+            pollingInterval.value = null
         }
-    }, 5000)
+    }
 </script>
 
 <style scoped>

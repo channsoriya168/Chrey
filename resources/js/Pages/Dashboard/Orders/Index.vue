@@ -23,20 +23,8 @@
                     <select v-model="filter.status"
                         class="rounded-lg border border-slate-600 bg-slate-800/80 px-4 py-2.5 text-sm text-gray-200 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none">
                         <option :value="null" class="bg-slate-800 text-gray-200">ស្ថានភាពទាំងអស់</option>
-                        <option value="pending" class="bg-slate-800 text-gray-200">កំពុងរង់ចាំ</option>
-                        <option value="processing" class="bg-slate-800 text-gray-200">កំពុងដំណើរការ</option>
-                        <option value="shipped" class="bg-slate-800 text-gray-200">កំពុងដឹកជញ្ជូន</option>
-                        <option value="completed" class="bg-slate-800 text-gray-200">បានបញ្ចប់</option>
-                        <option value="cancelled" class="bg-slate-800 text-gray-200">បានលុបចោល</option>
-                    </select>
-
-                    <!-- Payment Status Filter -->
-                    <select v-model="filter.payment_status"
-                        class="rounded-lg border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-gray-200 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none">
-                        <option :value="null" class="bg-slate-800 text-gray-200">ស្ថានភាពទូទាត់ទាំងអស់</option>
-                        <option value="pending" class="bg-slate-800 text-gray-200">រង់ចាំទូទាត់</option>
                         <option value="paid" class="bg-slate-800 text-gray-200">បានទូទាត់</option>
-                        <option value="failed" class="bg-slate-800 text-gray-200">បរាជ័យ</option>
+                        <option value="completed" class="bg-slate-800 text-gray-200">បានដឹកជញ្ជូន</option>
                     </select>
                 </div>
 
@@ -80,31 +68,13 @@
                 <template #cell-status="{ item }">
                     <span :class="[
                         'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
-                        item.status === 'pending'
-                            ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
-                            : item.status === 'processing'
-                                ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 ring-inset'
-                                : item.status === 'shipped'
-                                    ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-600/20 ring-inset'
-                                    : item.status === 'completed'
-                                        ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
-                                        : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
+                        item.status === 'paid'
+                            ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 ring-inset'
+                            : item.status === 'completed'
+                                ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
+                                : 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 ring-inset'
                     ]">
                         {{ item.status }}
-                    </span>
-                </template>
-
-                <!-- Custom Cell: Payment Status -->
-                <template #cell-payment_status="{ item }">
-                    <span :class="[
-                        'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
-                        item.payment_status === 'pending'
-                            ? 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset'
-                            : item.payment_status === 'paid'
-                                ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
-                                : 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
-                    ]">
-                        {{ item.payment_status }}
                     </span>
                 </template>
 
@@ -155,8 +125,7 @@
             default: () => ({
                 per_page: 10,
                 search: null,
-                status: null,
-                payment_status: null
+                status: null
             })
         }
     })
@@ -166,8 +135,7 @@
 
     const filter = ref({
         search: props.filters?.search || null,
-        status: props.filters?.status || null,
-        payment_status: props.filters?.payment_status || null
+        status: props.filters?.status || null
     })
 
     // Table columns configuration
@@ -191,10 +159,6 @@
         {
             key: 'status',
             label: 'ស្ថានភាព'
-        },
-        {
-            key: 'payment_status',
-            label: 'ស្ថានភាពទូទាត់'
         },
         {
             key: 'created_at',

@@ -254,6 +254,7 @@ class OrderController extends Controller
      */
     public function checkPaymentStatus(Cart $cart, Request $request)
     {
+
         $this->authorizeCartAccess($cart);
 
         $md5 = $request->query('md5');
@@ -265,12 +266,46 @@ class OrderController extends Controller
             ], 400);
         }
 
+        // Verify md5 matches the cart's md5
+        if ($cart->md5 !== $md5) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid payment reference'
+            ], 400);
+        }
+
+        // Check if cart is already checked out (order completed)
+        if ($cart->status === 'checked_out') {
+            // Cart already processed, check if order exists
+            $existingOrder = Order::where('bakong_transaction_id', $md5)->first();
+
+            if ($existingOrder) {
+                return response()->json([
+                    'status' => 'paid',
+                    'message' => 'Payment already processed',
+                    'order_id' => $existingOrder->id,
+                ]);
+            }
+        }
+
         $payment = $this->bakongService->checkPaymentStatus($md5);
 
         // ✅ SUCCESS
         if ($payment['status'] === 'success') {
             try {
                 DB::beginTransaction();
+
+                // Check if order already exists for this transaction (idempotency)
+                $existingOrder = Order::where('bakong_transaction_id', $md5)->first();
+
+                if ($existingOrder) {
+                    DB::commit();
+                    return response()->json([
+                        'status' => 'paid',
+                        'message' => 'Payment already processed',
+                        'order_id' => $existingOrder->id,
+                    ]);
+                }
 
                 // Get address from cart relationship
                 $cart->load('pendingAddress');
@@ -289,7 +324,7 @@ class OrderController extends Controller
                 $order = Order::create([
                     'user_id' => auth()->id(),
                     'order_number' => 'ORD-' . strtoupper(uniqid()),
-                    'status' => 'pending',
+                    'status' => 'paid',
                     'shipping_address_id' => $address->id,
                     'bakong_transaction_id' => $md5,
                 ]);
@@ -308,7 +343,9 @@ class OrderController extends Controller
                     // Update product stock
                     $cartItem->product->decrement('stock', $cartItem->quantity);
                 }
-
+                // Clear cart
+                $cart->cartItems()->delete();
+                $cart->update(['status' => 'checked_out']);
                 // Send Telegram notification
                 app(TelegramService::class)->sendMessage(
                     "✅ <b>KHQR Payment Success</b>\n"
@@ -318,10 +355,6 @@ class OrderController extends Controller
                         . "Address: {$address->province}, {$address->district}, {$address->commune}, {$address->village}\n"
                         . ($address->note ? "Note: {$address->note}\n" : "")
                 );
-
-                // Clear cart
-                $cart->cartItems()->delete();
-                $cart->update(['status' => 'completed']);
 
                 DB::commit();
 

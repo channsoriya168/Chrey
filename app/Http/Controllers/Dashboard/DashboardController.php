@@ -18,28 +18,41 @@ class DashboardController extends Controller
         $users = User::count();
         $products = Product::count();
         $totalOrders = Order::count();
-        $pendingOrders = Order::where('status', 'pending')->count();
+        $pendingOrders = Order::where('status', 'paid')->count();
 
-        // Revenue statistics
-        $totalRevenue = Order::where('payment_status', 'paid')->sum('total_amount');
-        $monthlyRevenue = Order::where('payment_status', 'paid')
-            ->whereMonth('created_at', now()->month)
+        // Revenue statistics - calculate from order_items using Eloquent
+        $totalRevenue = Order::with('orderItems')
+            ->get()
+            ->sum(function ($order) {
+                return $order->orderItems->sum('total');
+            });
+
+        $monthlyRevenue = Order::whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->sum('total_amount');
+            ->with('orderItems')
+            ->get()
+            ->sum(function ($order) {
+                return $order->orderItems->sum('total');
+            });
 
         // Sales trend (last 7 days)
         $salesTrend = Order::where('created_at', '>=', now()->subDays(7))
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as orders, SUM(total_amount) as revenue')
-            ->groupBy('date')
-            ->orderBy('date', 'asc')
+            ->with('orderItems')
             ->get()
-            ->map(function ($item) {
+            ->groupBy(function ($order) {
+                return $order->created_at->format('Y-m-d');
+            })
+            ->map(function ($orders, $date) {
                 return [
-                    'date' => date('M d', strtotime($item->date)),
-                    'orders' => $item->orders,
-                    'revenue' => (float) $item->revenue,
+                    'date' => date('M d', strtotime($date)),
+                    'orders' => $orders->count(),
+                    'revenue' => (float) $orders->sum(function ($order) {
+                        return $order->orderItems->sum('total');
+                    }),
                 ];
-            });
+            })
+            ->sortBy('date')
+            ->values();
 
         // Fill missing dates with zero values
         $last7Days = collect();
@@ -68,16 +81,6 @@ class DashboardController extends Controller
                 ];
             });
 
-        // Payment status distribution
-        $ordersByPaymentStatus = Order::selectRaw('payment_status, COUNT(*) as count')
-            ->groupBy('payment_status')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'name' => ucfirst($item->payment_status),
-                    'value' => $item->count,
-                ];
-            });
 
         // Top selling products (last 30 days)
         $topProducts = DB::table('order_items')
@@ -97,7 +100,7 @@ class DashboardController extends Controller
             });
 
         // Recent orders
-        $recentOrders = Order::with('user')
+        $recentOrders = Order::with(['user', 'orderItems'])
             ->latest()
             ->limit(5)
             ->get()
@@ -106,9 +109,8 @@ class DashboardController extends Controller
                     'id' => $order->id,
                     'order_number' => $order->order_number,
                     'customer' => $order->user->name ?? 'Guest',
-                    'total' => $order->total_amount,
+                    'total' => $order->orderItems->sum('total'),
                     'status' => $order->status,
-                    'payment_status' => $order->payment_status,
                     'created_at' => $order->created_at->format('M d, Y'),
                 ];
             });
@@ -125,7 +127,6 @@ class DashboardController extends Controller
             'charts' => [
                 'salesTrend' => $last7Days,
                 'ordersByStatus' => $ordersByStatus,
-                'ordersByPaymentStatus' => $ordersByPaymentStatus,
                 'topProducts' => $topProducts,
             ],
             'recentOrders' => $recentOrders,

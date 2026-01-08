@@ -118,16 +118,6 @@
                 </div>
             </div>
 
-            <!-- Payment Status Donut Chart -->
-            <div class="rounded-2xl bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 p-6 shadow-lg shadow-slate-900/50">
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-white">Payment Status</h2>
-                    <CreditCard class="h-5 w-5 text-blue-400" />
-                </div>
-                <div class="h-80">
-                    <Doughnut :data="paymentStatusData" :options="doughnutChartOptions" />
-                </div>
-            </div>
         </div>
 
         <!-- Recent Orders Table -->
@@ -148,7 +138,6 @@
                             <th class="pb-3 font-medium">Customer</th>
                             <th class="pb-3 font-medium">Amount</th>
                             <th class="pb-3 font-medium">Status</th>
-                            <th class="pb-3 font-medium">Payment</th>
                             <th class="pb-3 font-medium">Date</th>
                         </tr>
                     </thead>
@@ -168,15 +157,10 @@
                                     {{ order.status }}
                                 </span>
                             </td>
-                            <td class="py-4">
-                                <span :class="getPaymentStatusBadgeClass(order.payment_status)">
-                                    {{ order.payment_status }}
-                                </span>
-                            </td>
                             <td class="py-4 text-gray-400">{{ order.created_at }}</td>
                         </tr>
                         <tr v-if="recentOrders.length === 0">
-                            <td colspan="6" class="py-8 text-center text-gray-400">
+                            <td colspan="5" class="py-8 text-center text-gray-400">
                                 No recent orders
                             </td>
                         </tr>
@@ -197,10 +181,9 @@ import {
     DollarSign,
     TrendingUp,
     PieChart as PieChartIcon,
-    BarChart3,
-    CreditCard
+    BarChart3
 } from 'lucide-vue-next'
-import { Line, Bar, Pie, Doughnut } from 'vue-chartjs'
+import { Line, Bar, Pie } from 'vue-chartjs'
 import {
     Chart as ChartJS,
     Title,
@@ -246,7 +229,6 @@ const props = defineProps({
         default: () => ({
             salesTrend: [],
             ordersByStatus: [],
-            ordersByPaymentStatus: [],
             topProducts: []
         })
     },
@@ -258,7 +240,6 @@ const props = defineProps({
 
 // Colors for charts
 const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444']
-const PAYMENT_COLORS = ['#f59e0b', '#10b981', '#ef4444']
 
 // Get current date in a nice format
 const currentDate = computed(() => {
@@ -397,60 +378,13 @@ const barChartOptions = {
     }
 }
 
-// Payment Status Chart Data
-const paymentStatusData = computed(() => ({
-    labels: props.charts.ordersByPaymentStatus.map(item => item.name),
-    datasets: [
-        {
-            data: props.charts.ordersByPaymentStatus.map(item => item.value),
-            backgroundColor: PAYMENT_COLORS,
-            borderWidth: 0
-        }
-    ]
-}))
-
-const doughnutChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: {
-            position: 'bottom'
-        },
-        tooltip: {
-            callbacks: {
-                label: function (context) {
-                    const label = context.label || ''
-                    const value = context.parsed || 0
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0)
-                    const percentage = ((value / total) * 100).toFixed(0)
-                    return `${label}: ${value} (${percentage}%)`
-                }
-            }
-        }
-    },
-    cutout: '60%'
-}
-
 // Status badge classes
 const getStatusBadgeClass = (status) => {
     const baseClasses = 'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium'
     const statusClasses = {
-        pending: 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset',
-        processing: 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 ring-inset',
-        shipped: 'bg-purple-50 text-purple-700 ring-1 ring-purple-600/20 ring-inset',
-        completed: 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset',
-        cancelled: 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
+        paid: 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 ring-inset',
+        completed: 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset'
     }
-    return `${baseClasses} ${statusClasses[status] || statusClasses.pending}`
-}
-
-const getPaymentStatusBadgeClass = (status) => {
-    const baseClasses = 'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium'
-    const statusClasses = {
-        pending: 'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 ring-inset',
-        paid: 'bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset',
-        failed: 'bg-red-50 text-red-700 ring-1 ring-red-600/20 ring-inset'
-    }
-    return `${baseClasses} ${statusClasses[status] || statusClasses.pending}`
+    return `${baseClasses} ${statusClasses[status] || statusClasses.paid}`
 }
 </script>
